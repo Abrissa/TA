@@ -1,0 +1,6 @@
+{
+  "name": "MI AL-AHMAD",
+  "description": "Website Resmi MI AL-AHMAD - Membentuk Generasi Qur'ani dan Berprestasi",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
