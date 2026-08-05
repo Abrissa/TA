@@ -3,6 +3,7 @@ import { PageTab, Article } from './types';
 import { MainLayout } from './components/layouts/MainLayout';
 
 import { HomeView } from './views/HomeView';
+import { ArticleDetailView } from './views/ArticleDetailView';
 import { VisiMisiView } from './views/VisiMisiView';
 import { TeachersView } from './views/TeachersView';
 import { AchievementView } from './views/AchievementView';
@@ -15,7 +16,6 @@ export default function App() {
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
-  // Dynamic Document Title based on Active Tab
   useEffect(() => {
     const titles: Record<PageTab, string> = {
       beranda: "MI AL-AHMAD | Membentuk Generasi Qur'ani & Berprestasi",
@@ -27,11 +27,22 @@ export default function App() {
       alumni: "Jejak Alumni | MI AL-AHMAD",
       'form-alumni': "Pendataan Alumni | MI AL-AHMAD",
     };
-    document.title = titles[activeTab] || "MI AL-AHMAD";
-  }, [activeTab]);
+    document.title =
+      selectedArticle && activeTab === 'artikel'
+        ? `${selectedArticle.title} | MI AL-AHMAD`
+        : titles[activeTab] || 'MI AL-AHMAD';
+  }, [activeTab, selectedArticle]);
+
+  useEffect(() => {
+    if (activeTab !== 'artikel' && selectedArticle) {
+      setSelectedArticle(null);
+    }
+  }, [activeTab, selectedArticle]);
 
   const handleSelectArticle = (art: Article) => {
+    setActiveTab('artikel');
     setSelectedArticle(art);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -40,8 +51,6 @@ export default function App() {
       setActiveTab={setActiveTab}
       isContactOpen={isContactOpen}
       setIsContactOpen={setIsContactOpen}
-      selectedArticle={selectedArticle}
-      setSelectedArticle={setSelectedArticle}
     >
       {activeTab === 'beranda' && (
         <HomeView
@@ -69,7 +78,20 @@ export default function App() {
         <AchievementView onOpenContact={() => setIsContactOpen(true)} />
       )}
 
-      {activeTab === 'artikel' && <NewsView onSelectArticle={handleSelectArticle} />}
+      {activeTab === 'artikel' && !selectedArticle && (
+        <NewsView onSelectArticle={handleSelectArticle} />
+      )}
+
+      {activeTab === 'artikel' && selectedArticle && (
+        <ArticleDetailView
+          article={selectedArticle}
+          onBack={() => {
+            setSelectedArticle(null);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onSelectArticle={handleSelectArticle}
+        />
+      )}
 
       {activeTab === 'alumni' && <AlumniView setActiveTab={setActiveTab} />}
 
