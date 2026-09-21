@@ -75,11 +75,17 @@ export default function App() {
       )}
 
       {activeTab === 'prestasi' && (
-        <AchievementView onOpenContact={() => setIsContactOpen(true)} />
+        <AchievementView
+          onOpenContact={() => setIsContactOpen(true)}
+          setActiveTab={setActiveTab}
+        />
       )}
 
       {activeTab === 'artikel' && !selectedArticle && (
-        <NewsView onSelectArticle={handleSelectArticle} />
+        <NewsView
+          onSelectArticle={handleSelectArticle}
+          setActiveTab={setActiveTab}
+        />
       )}
 
       {activeTab === 'artikel' && selectedArticle && (
@@ -95,7 +101,7 @@ export default function App() {
 
       {activeTab === 'alumni' && <AlumniView setActiveTab={setActiveTab} />}
 
-      {activeTab === 'form-alumni' && <AlumniFormView />}
+      {activeTab === 'form-alumni' && <AlumniFormView setActiveTab={setActiveTab} />}
     </MainLayout>
   );
 }

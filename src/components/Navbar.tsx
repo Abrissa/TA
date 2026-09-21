@@ -74,12 +74,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
 
       {/* 1. TOP UTILITY HEADER BAR (FORMAL SCHOOL INFORMATION) */}
-      <div className="bg-gradient-to-r from-[#059669] via-[#10b981] to-[#047857] text-white text-xs py-2 px-4 border-b border-emerald-900/40 hidden md:block">
+      <div className="bg-gradient-to-r from-[#059669] via-[#10b981] to-[#047857] text-white text-xs sm:text-sm py-2 px-4 border-b border-emerald-900/40 hidden md:block">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
 
           {/* Left: Official Codes & Accreditation */}
           <div className="flex items-center gap-4 text-emerald-100 font-medium">
-            <span className="flex items-center gap-1.5 bg-emerald-900/60 px-2.5 py-0.5 rounded text-[11px] font-semibold text-emerald-200 border border-emerald-700/50">
+            <span className="flex items-center gap-1.5 bg-emerald-900/60 px-2.5 py-0.5 rounded text-xs font-bold text-emerald-200 border border-emerald-700/50">
               <Award className="w-3.5 h-3.5 text-amber-300" />
               Akreditasi {SCHOOL_INFO.accreditation}
             </span>
@@ -126,7 +126,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
               <span className="block font-extrabold text-xl sm:text-2xl text-emerald-700 tracking-tight font-heading leading-none">
                 MI AL-AHMAD
               </span>
-              <span className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mt-1 font-body">
+              <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1 font-body">
                 Madrasah Ibtidaiyah Sidoarjo
               </span>
             </div>
@@ -138,7 +138,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
             {/* Beranda */}
             <button
               onClick={() => handleNavClick('beranda')}
-              className={`px-3 py-2 text-sm font-semibold transition-colors cursor-pointer ${
+              className={`px-3 py-2 text-[15px] font-semibold transition-colors cursor-pointer ${
                 activeTab === 'beranda'
                   ? 'text-emerald-700 font-bold'
                   : 'text-slate-600 hover:text-emerald-600'
@@ -156,7 +156,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
             >
               <button
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                className={`px-3 py-2 text-sm font-semibold transition-colors flex items-center gap-1 cursor-pointer ${
+                className={`px-3 py-2 text-[15px] font-semibold transition-colors flex items-center gap-1 cursor-pointer ${
                   isProfileActive
                     ? 'text-emerald-700 font-bold'
                     : 'text-slate-600 hover:text-emerald-600'
@@ -172,7 +172,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
               {profileDropdownOpen && (
                 <div className="absolute top-full left-0 w-64 pt-2 z-50">
                   <div className="bg-white rounded-xl shadow-xl border border-slate-200 p-2 space-y-0.5">
-                    <div className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                    <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-500 border-b border-slate-100">
                       Informasi Kelembagaan
                     </div>
                     {profileSubItems.map((subItem) => {
@@ -191,7 +191,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
                             <span>{subItem.label}</span>
                             {isSubActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>}
                           </div>
-                          <div className="text-[11px] text-slate-500 font-normal leading-tight mt-0.5">
+                          <div className="text-xs text-slate-500 font-normal leading-tight mt-0.5">
                             {subItem.desc}
                           </div>
                         </button>
@@ -205,7 +205,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
             {/* Prestasi */}
             <button
               onClick={() => handleNavClick('prestasi')}
-              className={`px-3 py-2 text-sm font-semibold transition-colors cursor-pointer ${
+              className={`px-3 py-2 text-[15px] font-semibold transition-colors cursor-pointer ${
                 activeTab === 'prestasi'
                   ? 'text-emerald-700 font-bold'
                   : 'text-slate-600 hover:text-emerald-600'
@@ -217,7 +217,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
             {/* Berita & Artikel */}
             <button
               onClick={() => handleNavClick('artikel')}
-              className={`px-3 py-2 text-sm font-semibold transition-colors cursor-pointer ${
+              className={`px-3 py-2 text-[15px] font-semibold transition-colors cursor-pointer ${
                 activeTab === 'artikel'
                   ? 'text-emerald-700 font-bold'
                   : 'text-slate-600 hover:text-emerald-600'
@@ -229,7 +229,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
             {/* Form Alumni */}
             <button
               onClick={() => handleNavClick('form-alumni')}
-              className={`px-3 py-2 text-sm font-semibold transition-colors cursor-pointer ${
+              className={`px-3 py-2 text-[15px] font-semibold transition-colors cursor-pointer ${
                 activeTab === 'form-alumni'
                   ? 'text-emerald-700 font-bold'
                   : 'text-slate-600 hover:text-emerald-600'
@@ -244,7 +244,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
           <div className="hidden md:flex items-center gap-3">
             <button
               onClick={onOpenContact}
-              className="px-4 py-2 rounded-lg text-sm font-bold bg-gradient-to-r from-[#059669] to-[#047857] text-white hover:from-[#047857] hover:to-[#065f46] transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+              className="px-4 py-2.5 rounded-xl text-[15px] font-bold bg-gradient-to-r from-[#059669] to-[#047857] text-white hover:from-[#047857] hover:to-[#065f46] transition-all flex items-center gap-2 shadow-xs cursor-pointer"
             >
               <FileText className="w-4 h-4 text-amber-300" />
               Info PPDB & Kontak
@@ -268,12 +268,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-3 shadow-md">
-          <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-[#059669] flex items-center justify-between">
+          <div className="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200 text-sm text-[#059669] flex items-center justify-between">
             <div>
               <p className="font-bold">NPSN: {SCHOOL_INFO.npsn} | NSM: {SCHOOL_INFO.nsm}</p>
-              <p className="text-[11px] text-slate-600">Akreditasi {SCHOOL_INFO.accreditation}</p>
+              <p className="text-xs text-slate-600">Akreditasi {SCHOOL_INFO.accreditation}</p>
             </div>
-            <span className="px-2 py-0.5 rounded bg-emerald-200 text-[#059669] font-bold text-[10px]">TERDAFTAR</span>
+            <span className="px-2.5 py-1 rounded bg-emerald-200 text-[#059669] font-bold text-xs">TERDAFTAR</span>
           </div>
 
           <div className="space-y-1">

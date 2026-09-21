@@ -34,7 +34,7 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
             className="space-y-5 text-center lg:col-span-4 lg:text-left"
           >
             <div>
-              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white px-4 py-2 text-xs font-bold text-slate-800 shadow-xs">
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white px-4 py-2 text-sm font-bold text-slate-800 shadow-xs">
                 <Award className="h-4 w-4 text-amber-500" />
                 <span>MI AL-AHMAD SIDOARJO</span>
               </span>
@@ -44,7 +44,7 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
               </h2>
             </div>
 
-            <p className="text-xs leading-relaxed text-slate-600 sm:text-sm">
+            <p className="text-sm leading-relaxed text-slate-700 sm:text-base">
               "Yuk, jelajahi serunya dunia sekolah di MI AL-AHMAD Sidoarjo! 🎓 ✨ Temukan informasi
               tentang program keunggulan Tahfidz, fasilitas modern, kegiatan siswa, dan prestasi
               terbaru. Klik tombol di bawah ini untuk tahu lebih banyak."
@@ -53,7 +53,7 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
             <div className="flex justify-center pt-2 lg:justify-start">
               <button
                 onClick={() => setActiveTab('visi-misi')}
-                className="flex cursor-pointer items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 px-7 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl"
+                className="flex cursor-pointer items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 px-7 py-3.5 text-base font-bold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl"
               >
                 <span>Baca Selengkapnya</span>
                 <ArrowUpRight className="h-4 w-4" />

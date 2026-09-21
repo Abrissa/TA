@@ -19,13 +19,23 @@ export interface Facility {
 export interface Achievement {
   id: string;
   title: string;
-  category: 'Provinsi' | 'Kabupaten' | 'Nasional' | 'Juara Umum' | 'Internasional';
+  category: 'Provinsi' | 'Kabupaten' | 'Nasional' | 'Juara Umum' | 'Internasional' | 'Kecamatan' | 'Regional' | 'Se-Pulau Jawa' | string;
   date: string;
   description: string;
   winner: string;
   winnerRole?: string;
   imageUrl?: string;
   year?: string;
+  rank?: string;
+  event?: string;
+  details?: string[];
+  medals?: {
+    gold?: number;
+    silver?: number;
+    bronze?: number;
+    total?: number;
+  };
+  highlight?: string;
 }
 
 export interface Article {
@@ -39,6 +49,10 @@ export interface Article {
   authorRole: string;
   imageUrl: string;
   isFeatured?: boolean;
+  readTime?: string;
+  sourceUrl?: string;
+  sourceName?: string;
+  tags?: string[];
 }
 
 export interface AlumniProfile {

@@ -1,5 +1,16 @@
-import React from 'react';
-import { ArrowLeft, ArrowUpRight, Calendar, ChevronRight, MessageSquare, User } from 'lucide-react';
+import React, { useState } from 'react';
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  User,
+  Share2,
+  Check,
+  ExternalLink,
+  Bookmark,
+  ChevronRight,
+  Quote,
+} from 'lucide-react';
 import { Article } from '../types';
 import { ARTICLES_DATA, SCHOOL_INFO } from '../data/mockData';
 
@@ -14,182 +25,261 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
   onBack,
   onSelectArticle,
 }) => {
-  const whatsappNumber = SCHOOL_INFO.whatsapp.replace(/\D/g, '');
-  const relatedArticles = ARTICLES_DATA.filter((item) => item.id !== article.id).slice(0, 3);
+  const [copied, setCopied] = useState(false);
+
+  const relatedArticles = ARTICLES_DATA.filter((item) => item.id !== article.id).slice(0, 4);
+
   const paragraphs = article.content
     .split(/\n\s*\n/)
     .map((paragraph) => paragraph.trim())
     .filter(Boolean);
 
-  return (
-    <article className="pb-16">
-      <section className="relative overflow-hidden border-b border-slate-200 bg-slate-950">
-        <img
-          src={article.imageUrl}
-          alt={article.title}
-          className="absolute inset-0 h-full w-full object-cover opacity-55"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20" />
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-        <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+  const handleShareWA = () => {
+    const text = encodeURIComponent(
+      `*${article.title}*\n\n${article.excerpt}\n\nBaca selengkapnya di MI AL-AHMAD: ${window.location.href}`
+    );
+    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+  };
+
+  return (
+    <article className="pb-20 bg-slate-50/50 min-h-screen">
+      {/* Top Breadcrumb & Navigation */}
+      <div className="bg-white border-b border-slate-200 sticky top-16 z-20 backdrop-blur-md bg-white/90">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
           <button
             onClick={onBack}
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/15"
+            className="inline-flex items-center gap-2 text-sm sm:text-base font-bold text-slate-700 hover:text-emerald-700 transition-colors cursor-pointer"
           >
-            <ArrowLeft className="h-4 w-4" />
-            Kembali ke Berita
+            <ArrowLeft className="w-5 h-5" />
+            <span>Kembali ke Berita</span>
           </button>
 
-          <div className="mt-8 max-w-4xl space-y-5 text-white">
-            <div className="flex flex-wrap items-center gap-3 text-xs font-semibold">
-              <span className="rounded-full bg-emerald-400/15 px-3 py-1 text-emerald-100 ring-1 ring-emerald-300/25">
-                {article.category}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleCopyLink}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white text-sm font-bold text-slate-700 hover:border-emerald-500 hover:text-emerald-700 transition-all cursor-pointer shadow-2xs"
+              title="Salin Tautan Berita"
+            >
+              {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
+              <span>{copied ? 'Tersalin!' : 'Bagikan'}</span>
+            </button>
+            <button
+              onClick={handleShareWA}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition-all cursor-pointer shadow-xs"
+              title="Bagikan ke WhatsApp"
+            >
+              WhatsApp
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Article Header Banner */}
+      <section className="bg-gradient-to-b from-slate-900 via-emerald-950 to-slate-900 text-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-b-4 border-amber-400">
+        <div className="max-w-4xl mx-auto space-y-5">
+          <div className="flex flex-wrap items-center gap-2.5 text-sm font-medium">
+            <span className="px-3.5 py-1 rounded-full bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">
+              {article.category}
+            </span>
+            <span className="flex items-center gap-1.5 text-slate-300">
+              <Calendar className="w-4 h-4 text-amber-300" />
+              {article.date}
+            </span>
+            {article.readTime && (
+              <span className="flex items-center gap-1.5 text-slate-300">
+                <Clock className="w-4 h-4 text-amber-300" />
+                {article.readTime}
               </span>
-              <span className="inline-flex items-center gap-1 text-slate-200">
-                <Calendar className="h-3.5 w-3.5" />
-                {article.date}
+            )}
+            {article.sourceName && (
+              <span className="px-3 py-1 rounded-lg bg-white/10 text-emerald-200 text-xs font-semibold">
+                Sumber: {article.sourceName}
               </span>
-              <span className="inline-flex items-center gap-1 text-slate-200">
-                <User className="h-3.5 w-3.5" />
-                {article.author}
-              </span>
+            )}
+          </div>
+
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black font-heading leading-tight text-white tracking-tight">
+            {article.title}
+          </h1>
+
+          <p className="text-slate-200 text-base sm:text-lg leading-relaxed max-w-3xl">
+            {article.excerpt}
+          </p>
+
+          <div className="pt-3 flex items-center gap-3.5 border-t border-white/15">
+            <div className="w-11 h-11 rounded-full bg-emerald-700 flex items-center justify-center text-white font-bold text-base">
+              <User className="w-5 h-5" />
             </div>
-
-            <h1 className="max-w-3xl text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-              {article.title}
-            </h1>
-
-            <p className="max-w-3xl text-sm leading-relaxed text-slate-200 sm:text-base">
-              {article.excerpt}
-            </p>
+            <div>
+              <p className="text-base font-bold text-white">{article.author}</p>
+              <p className="text-sm text-emerald-200 font-medium">{article.authorRole}</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="relative -mt-10">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
-          <div className="lg:col-span-8">
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <div className="border-b border-slate-100 bg-slate-50 px-6 py-4 sm:px-8">
-                <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
-                  Ringkasan Artikel
-                </p>
-                <p className="mt-2 text-base font-semibold leading-relaxed text-slate-900 sm:text-lg">
-                  {article.excerpt}
-                </p>
+      {/* Main Content Layout */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Article Body */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Featured Image */}
+            <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-lg bg-slate-950">
+              <img
+                src={article.imageUrl}
+                alt={article.title}
+                className="w-full max-h-[480px] object-cover object-center"
+              />
+            </div>
+
+            {/* Content Container */}
+            <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 p-6 sm:p-10 shadow-xs space-y-6">
+              {/* Highlight Excerpt Lead */}
+              <div className="p-6 rounded-2xl bg-emerald-50/80 border border-emerald-100 text-emerald-950 font-semibold text-base sm:text-lg leading-relaxed">
+                {article.excerpt}
               </div>
 
-              <div className="space-y-5 px-6 py-6 sm:px-8 sm:py-8">
-                {paragraphs.map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className="text-sm leading-8 text-slate-700 sm:text-[15px]"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+              {/* Body Paragraphs */}
+              <div className="space-y-6 text-slate-800 text-base sm:text-lg leading-relaxed font-body">
+                {paragraphs.map((para, idx) => {
+                  // Check if paragraph contains quote characters
+                  const isQuote = para.startsWith('“') || para.startsWith('"') || para.includes('“');
+                  if (isQuote && para.length > 80) {
+                    return (
+                      <div
+                        key={idx}
+                        className="my-6 p-6 sm:p-7 rounded-2xl bg-slate-50 border-l-4 border-amber-400 space-y-2 relative"
+                      >
+                        <Quote className="w-7 h-7 text-amber-500/60 mb-1" />
+                        <p className="italic text-slate-800 font-medium text-base sm:text-lg leading-relaxed">
+                          {para}
+                        </p>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <p key={idx} className="leading-relaxed">
+                      {para}
+                    </p>
+                  );
+                })}
+              </div>
+
+              {/* Tags & Source */}
+              <div className="pt-6 border-t border-slate-200 space-y-4">
+                {article.tags && (
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <span className="text-sm font-bold text-slate-600">Topik Terkait:</span>
+                    {article.tags.map((tag, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className="px-3.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-sm font-semibold hover:bg-emerald-50 hover:text-emerald-800 transition-colors"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {article.sourceUrl && (
+                  <div className="p-5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm">
+                    <div>
+                      <p className="font-bold text-slate-900 text-base">Publikasi Eksternal Terverifikasi</p>
+                      <p className="text-slate-600 text-sm">Berita ini telah dimuat di media daring nasional.</p>
+                    </div>
+                    <a
+                      href={article.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-colors shrink-0"
+                    >
+                      <span>Lihat Artikel Asli di Media</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                )}
+              </div>
+
+              {/* Bottom Back Button */}
+              <div className="pt-4 flex items-center justify-between">
+                <button
+                  onClick={onBack}
+                  className="inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:text-emerald-800 hover:underline cursor-pointer"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Kembali ke Semua Berita
+                </button>
               </div>
             </div>
           </div>
 
+          {/* Sidebar */}
           <aside className="lg:col-span-4 space-y-6">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
-                Info Artikel
-              </p>
-              <div className="mt-4 space-y-4 text-sm">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 rounded-lg bg-emerald-50 p-2 text-emerald-600">
-                    <Calendar className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Tanggal Terbit
-                    </p>
-                    <p className="mt-1 font-semibold text-slate-900">{article.date}</p>
-                  </div>
+            {/* Author Card */}
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-xs space-y-4">
+              <span className="text-sm font-bold uppercase tracking-wider text-emerald-700">
+                Tentang Liputan
+              </span>
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 font-black flex items-center justify-center text-lg">
+                  {article.author.charAt(0)}
                 </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 rounded-lg bg-emerald-50 p-2 text-emerald-600">
-                    <User className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Penulis
-                    </p>
-                    <p className="mt-1 font-semibold text-slate-900">{article.author}</p>
-                    <p className="text-xs text-slate-500">{article.authorRole}</p>
-                  </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-base">{article.author}</h4>
+                  <p className="text-sm text-slate-500 font-medium">{article.authorRole}</p>
                 </div>
               </div>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Dipublikasikan melalui kanal informasi resmi MI AL-AHMAD Krian untuk menyebarkan kabar prestasi dan kegiatan positif madrasah.
+              </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
-                Artikel Terkait
-              </p>
+            {/* Related Articles */}
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 className="font-bold font-heading text-slate-900 text-lg">
+                  Kabar & Prestasi Lainnya
+                </h3>
+              </div>
 
-              <div className="mt-4 space-y-3">
-                {relatedArticles.map((related) => (
-                  <button
-                    key={related.id}
-                    onClick={() => onSelectArticle(related)}
-                    className="group flex w-full items-center gap-3 rounded-xl border border-slate-200 p-3 text-left transition-colors hover:border-emerald-300 hover:bg-emerald-50/60"
+              <div className="space-y-3.5">
+                {relatedArticles.map((rel) => (
+                  <div
+                    key={rel.id}
+                    onClick={() => {
+                      onSelectArticle(rel);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="flex items-center gap-3.5 p-2.5 rounded-xl hover:bg-emerald-50/60 transition-colors cursor-pointer group"
                   >
                     <img
-                      src={related.imageUrl}
-                      alt={related.title}
-                      className="h-16 w-16 shrink-0 rounded-lg object-cover"
+                      src={rel.imageUrl}
+                      alt={rel.title}
+                      className="w-16 h-16 rounded-lg object-cover shrink-0 group-hover:scale-105 transition-transform"
                     />
-                    <div className="min-w-0 flex-1">
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-600">
-                        {related.category}
-                      </div>
-                      <p className="mt-1 line-clamp-2 text-sm font-semibold leading-snug text-slate-900 group-hover:text-emerald-700">
-                        {related.title}
-                      </p>
-                      <p className="mt-1 text-[11px] text-slate-500">{related.date}</p>
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <span className="text-xs font-bold text-amber-700 uppercase">
+                        {rel.category}
+                      </span>
+                      <h4 className="text-sm font-bold text-slate-900 line-clamp-2 group-hover:text-emerald-700 transition-colors">
+                        {rel.title}
+                      </h4>
+                      <p className="text-xs text-slate-500">{rel.date}</p>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-emerald-600" />
-                  </button>
+                  </div>
                 ))}
               </div>
             </div>
-
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">
-                Akses Cepat
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-slate-700">
-                Ingin melihat semua berita yang sudah tayang? Buka daftar artikel untuk mencari topik lain.
-              </p>
-              <button
-                onClick={onBack}
-                className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 transition-colors hover:text-emerald-800"
-              >
-                Lihat daftar artikel
-                <ArrowUpRight className="h-4 w-4" />
-              </button>
-            </div>
-
-            <button
-            onClick={() => window.open(`https://wa.me/${whatsappNumber}`, '_blank')}
-            className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-4 text-left shadow-sm transition-colors hover:border-emerald-300 hover:bg-emerald-50/60"
-          >
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
-                  Tanya Sekolah
-                </p>
-                <p className="mt-1 text-sm font-semibold text-slate-900">
-                  Hubungi panitia jika butuh info lanjutan
-                </p>
-              </div>
-              <MessageSquare className="h-5 w-5 text-emerald-600" />
-            </button>
           </aside>
         </div>
-      </section>
+      </div>
     </article>
   );
 };

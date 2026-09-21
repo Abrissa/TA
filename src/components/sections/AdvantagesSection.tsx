@@ -14,7 +14,7 @@ export const AdvantagesSection: React.FC<AdvantagesSectionProps> = ({ setActiveT
       id: 'adv-1',
       title: 'Prestasi Gemilang',
       description:
-        'Raih prestasi akademik dan non-akademik tingkat kabupaten, provinsi, hingga nasional bersama bimbingan intensif siswa berprestasi MI AL-AHMAD.',
+        'Terbukti juara di ajang internasional (301 medali IKSC 2025), juara LKBB se-Pulau Jawa, serta prestasi kejuaraan renang pelajar.',
       icon: <Trophy className="w-6 h-6" />,
       actionText: 'Lihat Prestasi',
       onClick: () => setActiveTab('prestasi'),
@@ -69,7 +69,7 @@ export const AdvantagesSection: React.FC<AdvantagesSectionProps> = ({ setActiveT
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Section Header */}
         <ScrollFadeUp direction="up" delay={0.1} className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-xs font-bold uppercase tracking-wider shadow-xs">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-sm font-bold uppercase tracking-wider shadow-xs">
             ✨ Keunggulan Madrasah
           </span>
 
@@ -78,7 +78,7 @@ export const AdvantagesSection: React.FC<AdvantagesSectionProps> = ({ setActiveT
             <span className="text-emerald-700">Terbaik</span>.
           </h2>
 
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-body">
+          <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-body">
             Membentuk generasi pembelajar yang berakhlakul karimah, unggul dalam sains dan Al-Qur'an,
             serta siap menghadapi tantangan masa depan.
           </p>
@@ -115,16 +115,16 @@ export const AdvantagesSection: React.FC<AdvantagesSectionProps> = ({ setActiveT
 
                   {/* Card Content */}
                   <div className="pt-3 text-center space-y-2.5">
-                    <h3 className="font-extrabold text-slate-900 text-lg font-heading group-hover:text-emerald-700 transition-colors">
+                    <h3 className="font-extrabold text-slate-900 text-xl font-heading group-hover:text-emerald-700 transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-body">
+                    <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-body">
                       {item.description}
                     </p>
                   </div>
 
                   {/* Action Link Footer */}
-                  <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-700 group-hover:text-emerald-700 transition-colors">
+                  <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-sm font-bold text-slate-700 group-hover:text-emerald-700 transition-colors">
                     <span>{item.actionText}</span>
                     <div className="w-6 h-6 rounded-full bg-slate-50 group-hover:bg-emerald-50 text-slate-400 group-hover:text-emerald-700 flex items-center justify-center transition-colors">
                       <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />

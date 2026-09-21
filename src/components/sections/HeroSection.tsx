@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { PageTab } from '../../types';
 import { SCHOOL_INFO } from '../../data/mockData';
+import { AnimatedCounter } from '../ui/AnimatedCounter';
 
 interface HeroSectionProps {
   setActiveTab: (tab: PageTab) => void;
@@ -131,18 +132,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 className="pt-4 border-t border-white/25 flex items-center justify-center lg:justify-start gap-8 sm:gap-12 text-white"
               >
                 <div>
-                  <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading">{SCHOOL_INFO.stats.students}+</p>
-                  <p className="text-xs sm:text-sm lg:text-base text-emerald-100 font-medium">Siswa Aktif</p>
+                  <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
+                    <AnimatedCounter end={SCHOOL_INFO.stats.students} suffix="+" duration={1800} delay={400} />
+                  </p>
+                  <p className="text-sm sm:text-base text-emerald-100 font-semibold">Siswa Aktif</p>
                 </div>
                 <div className="w-px h-10 bg-white/30" />
                 <div>
-                  <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading">1000+</p>
-                  <p className="text-xs sm:text-sm lg:text-base text-emerald-100 font-medium">Alumni</p>
+                  <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
+                    <AnimatedCounter end={1000} suffix="+" duration={2000} delay={400} />
+                  </p>
+                  <p className="text-sm sm:text-base text-emerald-100 font-semibold">Alumni</p>
                 </div>
                 <div className="w-px h-10 bg-white/30" />
                 <div>
-                  <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading">500+</p>
-                  <p className="text-xs sm:text-sm lg:text-base text-emerald-100 font-medium">Prestasi</p>
+                  <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
+                    <AnimatedCounter end={500} suffix="+" duration={1800} delay={400} />
+                  </p>
+                  <p className="text-sm sm:text-base text-emerald-100 font-semibold">Prestasi</p>
                 </div>
               </motion.div>
             </div>

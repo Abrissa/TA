@@ -100,119 +100,177 @@ export const FACILITIES_DATA: Facility[] = [
 
 export const ACHIEVEMENTS_DATA: Achievement[] = [
   {
-    id: 'a1',
-    title: 'Juara 1 Olimpiade Matematika Sains',
-    category: 'Provinsi',
-    date: '14 Mei 2024',
-    description: 'Siswa perwakilan MI AL-AHMAD berhasil meraih medali emas pada ajang bergengsi tahunan tingkat provinsi.',
-    winner: 'Ahmad Fauzi (Kelas 5A)',
-    imageUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800&auto=format&fit=crop',
+    id: 'ach-iksc-2025',
+    title: 'International Kangaroo Science Contest (IKSC) ke-18',
+    category: 'Internasional',
+    date: 'Tahun 2025',
+    year: '2025',
+    rank: '301 Medali (9 Emas, 74 Perak, 218 Perunggu)',
+    event: 'International Kangaroo Science Contest (IKSC) 18th 2025',
+    winner: 'Siswa - Siswi MI AL-AHMAD',
+    winnerRole: 'Delegasi Sains Internasional',
+    description:
+      'Selamat atas prestasi gemilang yang diraih oleh siswa-siswi MI AL-AHMAD dalam ajang kompetisi sains bertaraf internasional IKSC 18th 2025 dengan memborong total 301 medali: 9 Gold, 74 Silver, dan 218 Bronze. #JAWARA Jaya Istimewa Berkah!',
+    imageUrl: '/assets/prestasi-iksc-2025.jpg',
+    highlight: '#JAWARA (Jaya Istimewa Berkah)',
+    medals: {
+      gold: 9,
+      silver: 74,
+      bronze: 218,
+      total: 301,
+    },
+    details: [
+      '9 Medali Emas (Gold)',
+      '74 Medali Perak (Silver)',
+      '218 Medali Perunggu (Bronze)',
+      'Madrasah Maju, Bermutu, Mendunia',
+    ],
   },
   {
-    id: 'a2',
-    title: 'Terbaik 1 MHQ Tahfidz Juz 30',
-    category: 'Kabupaten',
-    date: '28 April 2024',
-    description: 'Dedikasi dalam menghafal Al-Qur\'an membuahkan hasil gemilang pada Musabaqah Hifdzil Qur\'an.',
-    winner: 'Siti Aminah (Kelas 4C)',
-    imageUrl: 'https://images.unsplash.com/photo-1584697964358-3e14ca57658b?q=80&w=800&auto=format&fit=crop',
+    id: 'ach-paskibra-sancaka-2025',
+    title: 'LKBB SANCAKA S3 2025 Tingkat SD/MI Se-Pulau Jawa',
+    category: 'Se-Pulau Jawa',
+    date: 'Tahun 2025',
+    year: '2025',
+    rank: 'Juara 2 Utama & Borong 6 Kategori Prestasi',
+    event: 'LKBB SANCAKA S3 2025 Tingkat SD/MI Se-Pulau Jawa',
+    winner: 'Tim Paskibra MI AL AHMAD (KOPASMILAD)',
+    winnerRole: 'Regu Paskibra Tingkat SD/MI',
+    description:
+      'Selamat & Sukses atas torehan gemilang Tim Paskibra MI AL AHMAD (KOPASMILAD) di ajang LKBB SANCAKA S3 2025 Tingkat SD/MI Se-Pulau Jawa dengan memborong 6 piala kejuaraan bergengsi.',
+    imageUrl: '/assets/prestasi-paskibra-kopasmilad.jpg',
+    highlight: 'Tingkat SD/MI Se-Pulau Jawa',
+    details: [
+      'Juara 2 Utama + Medali 16',
+      'Best Kostum 2',
+      'Best Danton 1',
+      'Best PBB 2',
+      'Best Formasi 2',
+      'Best Parade Danton 3',
+    ],
   },
   {
-    id: 'a3',
-    title: 'Juara Umum Lomba Pramuka Terampil',
-    category: 'Juara Umum',
-    date: '12 Maret 2024',
-    description: 'Regu Elang dan Melati berhasil menyapu bersih berbagai kategori lomba ketangkasan kepramukaan.',
-    winner: 'Regu Inti Pramuka',
-    imageUrl: 'https://images.unsplash.com/photo-1526976668912-1a811878dd37?q=80&w=800&auto=format&fit=crop',
+    id: 'ach-azka-renang-2025',
+    title: 'Juara 3 Lomba Renang SD/MI Kecamatan Krian',
+    category: 'Kecamatan',
+    date: 'Tahun 2025',
+    year: '2025',
+    rank: 'Juara 3 Renang (Piala & Piagam)',
+    event: 'Lomba Renang Tingkat SD/MI Kecamatan Krian - Pekan Olahraga HUT RI ke-80',
+    winner: 'Azka Haidar Amirudin',
+    winnerRole: 'Siswa Berprestasi Cabang Akuatik/Renang',
+    description:
+      'Selamat dan sukses atas keberhasilan ananda Azka Haidar Amirudin meraih Juara 3 Lomba Renang Tingkat SD/MI Kecamatan Krian dalam rangka memperingati Pekan Olahraga HUT RI ke-80.',
+    imageUrl: '/assets/prestasi-azka-haidar.jpg',
+    highlight: 'Juara 3 Kecamatan (Piala & Piagam)',
+    details: [
+      'Juara 3 Lomba Renang SD/MI',
+      'Pekan Olahraga HUT RI ke-80',
+      'Tingkat Kecamatan Krian',
+    ],
   },
 ];
 
 export const HISTORICAL_MILESTONES = [
   {
-    year: '2023',
-    title: 'Penghargaan Sekolah Adiwiyata',
-    description: 'Diakui secara resmi sebagai sekolah berbasis lingkungan yang sehat dan asri oleh Dinas Lingkungan Hidup.',
+    year: '2025',
+    title: 'Prestasi Internasional & Se-Pulau Jawa',
+    description:
+      'Meraih 301 Medali di ajang International Kangaroo Science Contest (IKSC 2025) serta Juara 2 Utama dan 6 Kategori LKBB SANCAKA S3 Se-Pulau Jawa.',
   },
   {
-    year: '2022',
-    title: 'Juara 2 Lomba Inovasi Media Pembelajaran',
-    description: 'Guru MI AL-AHMAD menciptakan platform digital interaktif untuk pengenalan huruf hijaiyah.',
+    year: '2024',
+    title: 'Juara 1 KSM Matematika & Renang Pelajar',
+    description:
+      'Juara 1 Kompetisi Sains Madrasah (KSM) Tingkat Kabupaten melaju ke Tingkat Provinsi dan Juara 3 Lomba Renang HUT RI ke-80.',
+  },
+  {
+    year: '2023',
+    title: 'Penghargaan Sekolah Adiwiyata',
+    description:
+      'Diakui secara resmi sebagai sekolah berbasis lingkungan yang sehat, asri, dan berwawasan lingkungan hidup.',
   },
   {
     year: '2021',
     title: 'Predikat Akreditasi \'A\' (Unggul)',
-    description: 'Mempertahankan standar kualitas pendidikan tertinggi berdasarkan penilaian BAN-S/M.',
+    description:
+      'Mempertahankan standar mutu pendidikan dasar Islam tertinggi dengan akreditasi A oleh BAN-S/M.',
   },
 ];
 
 export const ARTICLES_DATA: Article[] = [
   {
-    id: 'art-feat',
-    title: 'Persiapan Menuju Olimpiade Sains Nasional Tingkat Kabupaten',
-    excerpt: 'Siswa-siswi terpilih MI AL-AHMAD mulai menjalani pelatihan intensif untuk menghadapi ajang OSN. Dukungan penuh diberikan oleh tim guru pembina.',
-    content: `Siswa-siswi terpilih MI AL-AHMAD mulai menjalani pelatihan intensif untuk menghadapi ajang Olimpiade Sains Nasional (OSN) tingkat kabupaten tahun 2024. Program persiapan ini dirancang terstruktur dengan mengedepankan pemahaman konsep mendalam serta penyelesaian soal-soal bernalar tinggi (HOTS).\n\nKepala Madrasah, Drs. H. Ahmad Fauzi, M.Pd, menyampaikan bahwa madrasah memberikan pendampingan khusus serta fasilitas penunjang laboratorium digital. Pembinaan dilaksanakan setiap hari sehabis jam kegiatan belajar mengajar dengan bimbingan langsung dari tim guru IPA dan Matematika.\n\n"Kami percaya bahwa potensi anak-anak akan terpancar maksimal saat dipadukan dengan latihan tekun dan doa yang khusyuk. Semoga perwakilan kita dapat memberikan persembahan terbaik," tutur beliau.`,
-    category: 'Edukasi',
-    date: '24 Mei 2024',
-    author: 'Admin Sekolah',
-    authorRole: 'Humas & Informasi',
-    imageUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1000&auto=format&fit=crop',
+    id: 'art-maulana-ksm-2024',
+    title: 'Maulana, Siswa MI dari Kabupaten Sidoarjo Tembus Kompetisi Sains Madrasah Tingkat Provinsi',
+    excerpt:
+      'Siswa kelas 5 MI Al-Ahmad Krian, Maulana Kenzie Adha Ariyanto berhasil meraih Juara 1 Kompetisi Sains Madrasah (KSM) bidang matematika tingkat Kabupaten Sidoarjo dan melaju ke tingkat provinsi.',
+    content: `Jakarta: Siswa kelas 5 Madrasah Ibtidaiyah (MI) Al-Ahmad Krian, Maulana Kenzie Adha Ariyanto berhasil meraih Juara 1 Kompetisi Sains Madrasah (KSM) bidang matematika tingkat Kabupaten Sidoarjo. Keberhasilan itu membuat Maulana dapat melanjutkan kompetisi ke tingkat provinsi.
+
+“Untuk persiapan ke tingkat provinsi harus terus belajar dan mengasah kemampuan dengan berlatih soal-soal,” kata Wakil Kepala Madrasah bidang Kurikulum, Aat Choiruddin, dikutip dari laman nu.or.id, Rabu, 10 Juli 2024.
+
+Wakil Sekretaris Pengurus Cabang Nahdlatul Ulama (PCNU) Sidoarjo itu menyampaikan pada ajang resmi Kemenag ini, MI Al-Ahmad Krian mengirimkan masing-masing satu siswa pada bidang matematika dan Ilmu Pengetahuan Alam (IPA) Terpadu, serta satu grup kategori beregu.
+
+"Mengikuti olimpiade terlebih resmi dari Kemenag sangat penting untuk meningkatkan kemampuan berpikir kritis dan problem solving serta memperoleh pengalaman mengikuti kompetisi sampai ke tingkat nasional,” ujar beliau.
+
+Aat mengatakan setiap siswa MI Al-Ahmad berpotensi mengikuti olimpiade. Syaratnya, memiliki minat dan bakat di bidang yang dilombakan, belajar dengan tekun dan sungguh-sungguh, serta bergabung dengan komunitas olimpiade.
+
+“Nah kebetulan di MI Al-Ahmad ada kelas program khusus olimpiade. Jika ingin berhasil di olimpiade juga harus sering-sering berlatih mengerjakan soal-soal,” ungkap dia.
+
+Ia menjelaskan MI Al-Ahmad merupakan salah satu sekolah paling representatif di wilayah Sidoarjo Barat. Tidak hanya dari Krian, siswanya banyak dari kecamatan sekitar, seperti Balongbendo, Wonoayu, Prambon, bahkan Legundi Gresik.
+
+Salah satu alasan orang tua menyekolahkan anaknya di MI Al-Ahmad karena memiliki program dan fasilitas lengkap. Selain itu, memiliki berbagai prestasi dengan layanan pendidikan istimewa, kelas khusus tahfiz, dan olimpiade.
+
+“Peminat kelas-kelas tersebut dua kali lipat, sehingga harus dilakukan seleksi dan kurikulumnya juga didesain khusus agar hasilnya sesuai target yang diharapkan,” ungkap Aat.`,
+    category: 'Prestasi',
+    date: '10 Juli 2024',
+    author: 'Renatha Swasty',
+    authorRole: 'Jurnalis Medcom.id / Liputan Khusus',
+    sourceName: 'Medcom.id & nu.or.id',
+    sourceUrl: 'https://www.medcom.id/pendidikan/news-pendidikan/4KZ92W6k-maulana-siswa-mi-dari-kabupaten-sidoarjo-tembus-kompetisi-sains-madrasah-tingkat-provinsi',
+    imageUrl: '/assets/berita-maulana-ksm.jpg',
+    readTime: '3 menit baca',
+    tags: ['KSM Sidoarjo', 'Olimpiade Matematika', 'Prestasi Santri', 'Kemenag', 'Provinsi Jatim'],
     isFeatured: true,
   },
   {
-    id: 'art-1',
-    title: 'Kemah Ukhuwah: Membangun Kemandirian Siswa Sejak Dini',
-    excerpt: 'Kegiatan tahunan pramuka yang bertujuan melatih mental, kedisiplinan, dan rasa persaudaraan antar sesama siswa.',
-    content: 'Kegiatan Kemah Ukhuwah tahun ini berlangsung dengan penuh semangat dan keceriaan di kawasan perkemahan hijau. Siswa diajarkan keterampilan manajerial mandiri, mendirikan tenda, memasak bersama, serta malam keakraban api unggun.',
-    category: 'Kegiatan',
-    date: '18 Mei 2024',
-    author: 'Admin',
-    authorRole: 'Tim Kesiswaan',
-    imageUrl: 'https://images.unsplash.com/photo-1526976668912-1a811878dd37?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'art-2',
-    title: 'Juara 1 Olimpiade Matematika Tingkat Kabupaten',
-    excerpt: 'Kebanggaan bagi sekolah, ananda Zikri berhasil meraih medali emas dalam kompetisi bergengsi tingkat daerah.',
-    content: 'Prestasi membanggakan kembali diukir oleh ananda Zikri siswa kelas 5 MI AL-AHMAD yang berhasil menyabet predikat Juara 1 dalam Olimpiade Matematika SD/MI tingkat Kabupaten.',
+    id: 'art-iksc-2025',
+    title: 'Prestasi Mendunia: Siswa MI AL-AHMAD Borong 301 Medali di Ajang Internasional IKSC 2025',
+    excerpt:
+      'Delegasi sains MI AL-AHMAD membuktikan kualitas pendidikan global dengan memborong total 301 medali (9 Emas, 74 Perak, dan 218 Perunggu) pada International Kangaroo Science Contest ke-18.',
+    content: `Krian: Prestasi membanggakan di panggung internasional kembali diukir oleh santri-santri MI AL-AHMAD Krian. Dalam ajang bergengsi International Kangaroo Science Contest (IKSC) ke-18 tahun 2025, delegasi madrasah sukses memborong total 301 medali kejuaraan yang terdiri dari 9 Medali Emas (Gold), 74 Medali Perak (Silver), dan 218 Medali Perunggu (Bronze).
+
+Kompetisi sains bertaraf internasional ini diikuti oleh ribuan peserta unggulan dari berbagai penjuru dunia. Keberhasilan delegasi MI AL-AHMAD membuktikan bahwa penguatan kurikulum sains terpadu yang dipadukan dengan pembinaan kelas olimpiade intensif mampu bersaing di panggung dunia.
+
+Kepala Madrasah menyampaikan rasa syukur dan apresiasi mendalam atas kerja keras para siswa, guru pembina, dan dukungan penuh orang tua wali santri. Capaian ini sejalan dengan visi madrasah untuk mencetak generasi Qur'ani yang berakhlak mulia sekaligus unggul dalam sains dan teknologi berstandar global.
+
+"Dengan semangat #JAWARA (Jaya Istimewa Berkah), MI AL-AHMAD berkomitmen terus mendampingi putra-putri bangsa untuk mewujudkan potensi terbaik mereka hingga ke tingkat dunia," tutur beliau.`,
     category: 'Prestasi',
-    date: '12 Mei 2024',
-    author: 'Guru',
-    authorRole: 'Pembina OSN',
-    imageUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800&auto=format&fit=crop',
+    date: 'Tahun 2025',
+    author: 'Tim Humas Madrasah',
+    authorRole: 'Humas & Informasi Publik',
+    imageUrl: '/assets/prestasi-iksc-2025.jpg',
+    readTime: '3 menit baca',
+    tags: ['IKSC 2025', 'Sains Internasional', '301 Medali', '#JAWARA'],
   },
   {
-    id: 'art-3',
-    title: 'Tips Mendampingi Anak Belajar Al-Qur\'an di Rumah',
-    excerpt: 'Panduan praktis bagi orang tua untuk menciptakan suasana belajar yang menyenangkan bagi anak dalam menghafal Al-Qur\'an.',
-    content: 'Proses murajaah dan tahfidz Al-Qur\'an tidak hanya terbatas di ruang kelas madrasah, tetapi memerlukan peran aktif orang tua di rumah melalui rutinitas ba\'da Maghrib.',
-    category: 'Informasi',
-    date: '05 Mei 2024',
-    author: 'Kesiswaan',
-    authorRole: 'Koordinator Tahfidz',
-    imageUrl: 'https://images.unsplash.com/photo-1584697964358-3e14ca57658b?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'art-4',
-    title: 'Eksperimen Seru di Laboratorium IPA Terpadu',
-    excerpt: 'Belajar sains menjadi lebih menyenangkan dengan praktik langsung di lab IPA modern MI AL-AHMAD.',
-    content: 'Siswa kelas 4 dan 5 antusias mengikuti sesi praktikum sains mengenai sifat-sifat wujud benda dan eksperimen reaksi asam-basa menggunakan media pembelajaran interaktif.',
-    category: 'Kegiatan',
-    date: '02 Mei 2024',
-    author: 'Guru IPA',
-    authorRole: 'Pengelola Lab',
-    imageUrl: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'art-5',
-    title: 'Tim Futsal Sekolah Menembus Final Liga Pelajar',
-    excerpt: 'Setelah melalui babak kualifikasi yang sengit, tim kebanggaan kita akhirnya mengamankan tiket final.',
-    content: 'Semangat pantang menyerah ditunjukkan oleh tim futsal MI AL-AHMAD yang berhasil menundukkan tim unggulan pada semifinal Liga Pelajar Sidoarjo.',
+    id: 'art-paskibra-sancaka-2025',
+    title: 'KOPASMILAD MI AL-AHMAD Sabet Juara 2 Utama & Borong 6 Gelar LKBB SANCAKA S3 Se-Pulau Jawa',
+    excerpt:
+      'Regu Paskibra KOPASMILAD tampil memukau di ajang LKBB SANCAKA S3 2025 tingkat SD/MI se-Pulau Jawa dengan memboyong Juara 2 Utama, Best Danton, Best Kostum, Best PBB, dan Best Formasi.',
+    content: `Krian: Penampilan memukau dan formasi baris-berbaris yang presisi berhasil mengantarkan Tim Paskibra MI AL-AHMAD (KOPASMILAD) meraih prestasi gemilang pada ajang LKBB SANCAKA S3 2025 tingkat SD/MI Se-Pulau Jawa.
+
+Dalam perlombaan yang diikuti oleh regu-regu terbaik dari berbagai provinsi di Pulau Jawa ini, KOPASMILAD berhasil memborong enam piala dan penghargaan bergengsi, yaitu Juara 2 Utama + 16 Medali, Best Kostum 2, Best Danton 1, Best PBB 2, Best Formasi 2, serta Best Parade Danton 3.
+
+Kekompakan gerakan, ketegasan instruksi komandan peleton, serta kostum elegan bernuansa merah putih kebanggaan madrasah memukau para juri dan penonton yang memadati arena lomba.
+
+Pembina ekstrakurikuler Paskibra mengungkapkan bahwa disiplin tinggi, latihan teratur, dan penanaman nilai-nilai kepemimpinan sejak dini menjadi kunci sukses tim dalam menorehkan prestasi gemilang ini.`,
     category: 'Prestasi',
-    date: '28 April 2024',
-    author: 'Pelatih Olahraga',
-    authorRole: 'Guru PJOK',
-    imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800&auto=format&fit=crop',
+    date: 'Tahun 2025',
+    author: 'Kesiswaan & Ekstrakurikuler',
+    authorRole: 'Pelatih KOPASMILAD',
+    imageUrl: '/assets/prestasi-paskibra-kopasmilad.jpg',
+    readTime: '2 menit baca',
+    tags: ['Paskibra', 'LKBB Sancaka', 'Se-Pulau Jawa', 'KOPASMILAD'],
   },
 ];
 

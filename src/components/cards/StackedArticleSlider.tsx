@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronRight, Eye, ArrowUpRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Article } from '../../types';
@@ -15,6 +15,7 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
   const visibleArticles = articles.slice(0, 3);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAdvancing, setIsAdvancing] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleNext = () => {
     if (isAdvancing || visibleArticles.length < 2) return;
@@ -26,6 +27,17 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
     }, 520);
   };
 
+  // Auto-play timer: slides automatically every 4.5 seconds and pauses on hover
+  useEffect(() => {
+    if (isHovered || visibleArticles.length < 2) return;
+
+    const timer = setInterval(() => {
+      handleNext();
+    }, 4500);
+
+    return () => clearInterval(timer);
+  }, [isHovered, visibleArticles.length, isAdvancing]);
+
   const currentArticle = visibleArticles[activeIndex] || visibleArticles[0];
   const nextArticle = visibleArticles[(activeIndex + 1) % visibleArticles.length] || currentArticle;
   const thirdArticle = visibleArticles[(activeIndex + 2) % visibleArticles.length] || nextArticle;
@@ -34,24 +46,24 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
     <div className="p-5 space-y-4">
       <div className="relative rounded-2xl overflow-hidden h-44 bg-slate-100">
         <img src={article.imageUrl} alt="" className="w-full h-full object-cover" />
-        <span className="absolute top-3 right-3 bg-emerald-950/90 text-white text-[10px] font-bold uppercase px-3 py-1 rounded-full shadow-md tracking-wider">
+        <span className="absolute top-3 right-3 bg-emerald-950/90 text-white text-xs font-bold uppercase px-3 py-1 rounded-full shadow-md tracking-wider">
           Kabar terbaru
         </span>
       </div>
-      <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+      <div className="flex items-center justify-between text-sm text-slate-500 font-medium">
         <span className="flex items-center gap-1">
           <Eye className="w-3.5 h-3.5 text-slate-400" />
           205 Dibaca
         </span>
         <span>{article.date}</span>
       </div>
-      <h4 className="text-base font-extrabold font-heading text-slate-900 line-clamp-2 leading-snug">
+      <h4 className="text-lg font-extrabold font-heading text-slate-900 line-clamp-2 leading-snug">
         {article.title}
       </h4>
-      <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed font-body">
+      <p className="text-sm sm:text-[15px] text-slate-600 line-clamp-2 leading-relaxed font-body">
         {article.excerpt}
       </p>
-      <div className="pt-1 text-xs font-bold text-slate-900 flex items-center gap-1.5">
+      <div className="pt-1 text-sm font-bold text-slate-900 flex items-center gap-1.5">
         <span>Baca artikel</span>
         <ArrowUpRight className="w-4 h-4 text-emerald-600" />
       </div>
@@ -59,7 +71,11 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
   );
 
   return (
-    <div className="space-y-4">
+    <div
+      className="space-y-4"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="relative max-w-sm mx-auto lg:max-w-none">
         {/* The next article is intentionally visible, so the interaction reads as a real stack. */}
         <motion.div
@@ -132,13 +148,13 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
               alt={currentArticle.title}
               className="w-full h-full object-cover"
             />
-            <span className="absolute top-3 right-3 bg-emerald-950/90 text-white text-[10px] font-bold uppercase px-3 py-1 rounded-full shadow-md tracking-wider">
+            <span className="absolute top-3 right-3 bg-emerald-950/90 text-white text-xs font-bold uppercase px-3 py-1 rounded-full shadow-md tracking-wider">
               Kabar terbaru
             </span>
           </div>
 
           {/* Article Meta Info */}
-          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+          <div className="flex items-center justify-between text-sm text-slate-500 font-medium">
             <span className="flex items-center gap-1">
               <Eye className="w-3.5 h-3.5 text-slate-400" />
               205 Dibaca
@@ -149,13 +165,13 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
           {/* Article Title */}
           <h4
             onClick={() => onSelectArticle(currentArticle)}
-            className="text-base font-extrabold font-heading text-slate-900 line-clamp-2 leading-snug cursor-pointer hover:text-emerald-600 transition-colors"
+            className="text-lg font-extrabold font-heading text-slate-900 line-clamp-2 leading-snug cursor-pointer hover:text-emerald-600 transition-colors"
           >
             {currentArticle.title}
           </h4>
 
           {/* Article Excerpt */}
-          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed font-body">
+          <p className="text-sm sm:text-[15px] text-slate-600 line-clamp-2 leading-relaxed font-body">
             {currentArticle.excerpt}
           </p>
 
@@ -163,7 +179,7 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
           <div className="pt-1 flex items-center justify-between">
             <button
               onClick={() => onSelectArticle(currentArticle)}
-              className="text-xs font-bold text-slate-900 hover:text-emerald-600 flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="text-sm font-bold text-slate-900 hover:text-emerald-600 flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <span>Baca artikel</span>
               <ArrowUpRight className="w-4 h-4 text-emerald-600" />

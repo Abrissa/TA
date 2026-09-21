@@ -32,7 +32,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
   };
 
   return (
-    <footer className="bg-white border-t border-slate-200 text-slate-600 text-xs font-body pt-12 pb-8">
+    <footer className="bg-white border-t border-slate-200 text-slate-600 text-sm font-body pt-12 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 items-start">
           
@@ -46,17 +46,17 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
                 className="w-14 h-14 object-contain"
               />
               <div>
-                <span className="block font-bold text-lg text-slate-900 font-heading leading-tight">
+                <span className="block font-bold text-xl text-slate-900 font-heading leading-tight">
                   MI AL-AHMAD
                 </span>
-                <span className="block text-[11px] text-emerald-600 font-bold uppercase tracking-wider">
+                <span className="block text-xs text-emerald-600 font-bold uppercase tracking-wider mt-0.5">
                   Sidoarjo - Jawa Timur
                 </span>
               </div>
             </div>
 
             {/* Slogan */}
-            <p className="text-slate-600 text-xs leading-relaxed max-w-sm">
+            <p className="text-slate-600 text-sm leading-relaxed max-w-sm">
               Bersama MI AL-AHMAD, Berkarakter, Peduli & Berprestasi di Era Teknologi & Qur'ani.
             </p>
 
@@ -126,7 +126,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
             </div>
 
             {/* Copyright */}
-            <p className="text-[11px] text-slate-500 pt-2 font-medium">
+            <p className="text-xs sm:text-sm text-slate-500 pt-2 font-medium">
               Copyright © 2026 All right reserved | MI AL-AHMAD Sidoarjo
             </p>
           </div>
@@ -135,8 +135,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
           <div className="lg:col-span-3 space-y-6">
             {/* Menu Utama */}
             <div className="space-y-2.5">
-              <h4 className="font-bold text-slate-900 text-sm font-heading">Menu Utama</h4>
-              <ul className="space-y-1.5 text-slate-600">
+              <h4 className="font-bold text-slate-900 text-base font-heading">Menu Utama</h4>
+              <ul className="space-y-2 text-slate-600 text-sm">
                 <li>
                   <button
                     onClick={() => handleNavClick('beranda')}
@@ -182,8 +182,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
 
             {/* Tentang Kami */}
             <div className="space-y-2.5">
-              <h4 className="font-bold text-slate-900 text-sm font-heading">Tentang Kami</h4>
-              <ul className="space-y-1.5 text-slate-600">
+              <h4 className="font-bold text-slate-900 text-base font-heading">Tentang Kami</h4>
+              <ul className="space-y-2 text-slate-600 text-sm">
                 <li>
                   <button
                     onClick={() => handleNavClick('visi-misi')}
@@ -224,8 +224,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
           <div className="lg:col-span-3 space-y-6">
             {/* Kategori Berita */}
             <div className="space-y-2.5">
-              <h4 className="font-bold text-slate-900 text-sm font-heading">Kategori Berita</h4>
-              <ul className="space-y-1.5 text-slate-600">
+              <h4 className="font-bold text-slate-900 text-base font-heading">Kategori Berita</h4>
+              <ul className="space-y-2 text-slate-600 text-sm">
                 <li>
                   <button
                     onClick={() => handleNavClick('prestasi')}
@@ -271,8 +271,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
 
             {/* Informasi */}
             <div className="space-y-2.5">
-              <h4 className="font-bold text-slate-900 text-sm font-heading">Informasi</h4>
-              <ul className="space-y-1.5 text-slate-600">
+              <h4 className="font-bold text-slate-900 text-base font-heading">Informasi</h4>
+              <ul className="space-y-2 text-slate-600 text-sm">
                 <li>
                   <button
                     onClick={() => handleNavClick('visi-misi')}
@@ -311,7 +311,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
 
           {/* COL 4: Lokasi Sekolah (Google Maps Card - 2 cols) */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-bold text-slate-900 text-sm font-heading">Lokasi Sekolah</h4>
+            <h4 className="font-bold text-slate-900 text-base font-heading">Lokasi Sekolah</h4>
             <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md group bg-slate-100">
               
               {/* Maps Card Image Preview */}
@@ -328,7 +328,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
                   <div className="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg animate-bounce">
                     <MapPin className="w-5 h-5" />
                   </div>
-                  <span className="bg-slate-900/90 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-md whitespace-nowrap mt-1">
+                  <span className="bg-slate-900/90 text-white text-xs font-bold px-2 py-0.5 rounded shadow-md whitespace-nowrap mt-1">
                     MI AL-AHMAD
                   </span>
                 </div>
@@ -336,7 +336,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
                 {/* Buka di Maps Button Badge */}
                 <button
                   onClick={handleOpenGoogleMaps}
-                  className="absolute top-2 left-2 bg-white/95 hover:bg-white text-slate-900 font-bold text-[10px] px-2.5 py-1 rounded-lg shadow-sm border border-slate-200 flex items-center gap-1 transition-all cursor-pointer"
+                  className="absolute top-2 left-2 bg-white/95 hover:bg-white text-slate-900 font-bold text-xs px-2.5 py-1 rounded-lg shadow-sm border border-slate-200 flex items-center gap-1 transition-all cursor-pointer"
                 >
                   <span>Buka di Maps</span>
                   <ExternalLink className="w-3 h-3 text-emerald-600" />
@@ -344,8 +344,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
               </div>
 
               <div className="p-3 bg-white border-t border-slate-100 text-center">
-                <p className="text-[11px] font-bold text-slate-800">BPPPM NU AL-AHMAD KRIAN</p>
-                <p className="text-[10px] text-slate-500 truncate">Jl. Raya Pendidikan, Sidoarjo</p>
+                <p className="text-xs font-bold text-slate-800">BPPPM NU AL-AHMAD KRIAN</p>
+                <p className="text-xs text-slate-500 truncate">Jl. Raya Pendidikan, Sidoarjo</p>
               </div>
             </div>
           </div>

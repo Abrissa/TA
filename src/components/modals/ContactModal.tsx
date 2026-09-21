@@ -29,27 +29,27 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
           >
             <X className="w-5 h-5" />
           </button>
-          <span className="inline-block px-2.5 py-0.5 rounded-full bg-white/15 text-emerald-100 border border-white/20 text-[11px] font-semibold uppercase tracking-wider mb-2">
+          <span className="inline-block px-3 py-1 rounded-full bg-white/15 text-emerald-100 border border-white/20 text-xs font-semibold uppercase tracking-wider mb-2">
             Informasi & Layanan Pendaftaran PPDB
           </span>
-          <h2 className="text-2xl font-bold font-heading text-white">
+          <h2 className="text-2xl sm:text-3xl font-bold font-heading text-white">
             Kontak Resmi MI AL-AHMAD
           </h2>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="p-6 sm:p-7 space-y-6">
           {/* Quick WhatsApp Action Card */}
-          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center justify-between gap-4">
-            <div className="space-y-0.5">
-              <p className="font-bold text-[#059669] uppercase tracking-wider text-xs">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 sm:p-5 flex items-center justify-between gap-4">
+            <div className="space-y-1">
+              <p className="font-bold text-[#059669] uppercase tracking-wider text-sm">
                 Layanan Cepat WhatsApp
               </p>
-              <p className="text-slate-700 text-xs">Respons cepat panitia PPDB & Informasi</p>
+              <p className="text-slate-700 text-sm">Respons cepat panitia PPDB & Informasi</p>
             </div>
             <button
               onClick={handleWhatsAppClick}
-              className="px-4 py-2 bg-[#059669] hover:bg-[#047857] text-white font-bold rounded-lg text-xs transition-colors shrink-0 flex items-center gap-1.5 shadow-xs cursor-pointer"
+              className="px-4 py-2.5 bg-[#059669] hover:bg-[#047857] text-white font-bold rounded-xl text-sm transition-colors shrink-0 flex items-center gap-2 shadow-xs cursor-pointer"
             >
               <MessageSquare className="w-4 h-4 text-amber-300" />
               Chat Panitia
@@ -57,44 +57,44 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
           </div>
 
           {/* Contact Details List */}
-          <div className="space-y-3">
-            <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-[#059669] flex items-center justify-center shrink-0">
-                <MapPin className="w-4 h-4" />
+          <div className="space-y-3.5">
+            <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <div className="w-9 h-9 rounded-lg bg-emerald-100 text-[#059669] flex items-center justify-center shrink-0">
+                <MapPin className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900">Alamat Lengkap Madrasah</p>
-                <p className="text-xs text-slate-600 leading-relaxed">{SCHOOL_INFO.address}</p>
+                <p className="text-sm font-bold text-slate-900">Alamat Lengkap Madrasah</p>
+                <p className="text-sm text-slate-600 leading-relaxed">{SCHOOL_INFO.address}</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-[#059669] flex items-center justify-center shrink-0">
-                <Phone className="w-4 h-4" />
+            <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <div className="w-9 h-9 rounded-lg bg-emerald-100 text-[#059669] flex items-center justify-center shrink-0">
+                <Phone className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900">Telepon Layanan Informasi</p>
-                <p className="text-xs text-slate-600">{SCHOOL_INFO.phone}</p>
+                <p className="text-sm font-bold text-slate-900">Telepon Layanan Informasi</p>
+                <p className="text-sm text-slate-600">{SCHOOL_INFO.phone}</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-[#059669] flex items-center justify-center shrink-0">
-                <Mail className="w-4 h-4" />
+            <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <div className="w-9 h-9 rounded-lg bg-emerald-100 text-[#059669] flex items-center justify-center shrink-0">
+                <Mail className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900">Email Resmi Sekolah</p>
-                <p className="text-xs text-slate-600">{SCHOOL_INFO.email}</p>
+                <p className="text-sm font-bold text-slate-900">Email Resmi Sekolah</p>
+                <p className="text-sm text-slate-600">{SCHOOL_INFO.email}</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-[#059669] flex items-center justify-center shrink-0">
-                <Clock className="w-4 h-4" />
+            <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <div className="w-9 h-9 rounded-lg bg-emerald-100 text-[#059669] flex items-center justify-center shrink-0">
+                <Clock className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900">Jam Operasional Layanan Tata Usaha</p>
-                <p className="text-xs text-slate-600">Senin - Sabtu: 07.00 - 14.00 WIB</p>
+                <p className="text-sm font-bold text-slate-900">Jam Operasional Layanan Tata Usaha</p>
+                <p className="text-sm text-slate-600">Senin - Sabtu: 07.00 - 14.00 WIB</p>
               </div>
             </div>
           </div>
@@ -103,7 +103,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
           <div className="pt-2">
             <button
               onClick={onClose}
-              className="w-full py-2.5 rounded-lg border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors cursor-pointer"
+              className="w-full py-3 rounded-xl border border-slate-200 text-slate-700 text-sm font-bold hover:bg-slate-50 transition-colors cursor-pointer"
             >
               Tutup
             </button>
