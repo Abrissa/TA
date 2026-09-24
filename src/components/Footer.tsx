@@ -35,7 +35,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
     <footer className="bg-white border-t border-slate-200 text-slate-600 text-sm font-body pt-12 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* COL 1: Identity, Contact, Socials, Copyright (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
             {/* Logo */}
@@ -127,7 +127,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
 
             {/* Copyright */}
             <p className="text-xs sm:text-sm text-slate-500 pt-2 font-medium">
-              Copyright © 2026 All right reserved | MI AL-AHMAD Sidoarjo
+              Copyright © 2026 All right reserved | MI AL-AHMAD Sidoarjo <br /> Supported by RPL SMK Krian 1 Sidoarjo
             </p>
           </div>
 
@@ -313,7 +313,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact }) =
           <div className="lg:col-span-2 space-y-3">
             <h4 className="font-bold text-slate-900 text-base font-heading">Lokasi Sekolah</h4>
             <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md group bg-slate-100">
-              
+
               {/* Maps Card Image Preview */}
               <div className="relative h-44 w-full">
                 <img
