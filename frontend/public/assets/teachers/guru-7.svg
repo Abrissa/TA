@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0369A1" />
+      <stop offset="100%" stop-color="#0EA5E9" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.45" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="400" height="400" rx="32" fill="url(#bgGrad)" />
+
+  <!-- Subtle Islamic Geometric Accent in Background -->
+  <g stroke="#FFFFFF" stroke-opacity="0.1" stroke-width="2" fill="none">
+    <circle cx="200" cy="200" r="140" />
+    <circle cx="200" cy="200" r="170" stroke-dasharray="6,6" />
+    <polygon points="200,50 306,124 332,250 250,332 124,306 68,200 124,94 250,68" />
+    <polygon points="200,350 94,276 68,150 150,68 276,94 332,200 276,306 150,332" />
+  </g>
+
+  <!-- Character Illustration Body / Shoulders -->
+  <g filter="url(#shadow)">
+    <!-- Shoulders & Outfit -->
+    <path d="M100,340 C100,270 140,240 200,240 C260,240 300,270 300,340 C300,380 280,400 200,400 C120,400 100,380 100,340 Z" fill="#FFFFFF" />
+    <!-- Collar / Tie / Scarf Accent -->
+    <path d="M170,240 L200,285 L230,240 Z" fill="#0369A1" opacity="0.85" />
+    <!-- Headwear & Face -->
+    
+      <!-- Hair -->
+      <path d="M158,105 C155,80 175,70 200,70 C225,70 245,80 242,105 C235,90 220,85 200,85 C180,85 165,90 158,105 Z" fill="#1E293B" />
+      <!-- Face -->
+      <path d="M162,105 C162,95 175,90 200,90 C225,90 238,95 238,105 C238,145 225,168 200,168 C175,168 162,145 162,105 Z" fill="#FCE5D8" />
+    
+    <!-- Gentle Smile & Eyes -->
+    <circle cx="188" cy="125" r="3" fill="#334155" />
+    <circle cx="212" cy="125" r="3" fill="#334155" />
+    <path d="M192,142 Q200,148 208,142" stroke="#334155" stroke-width="2.5" stroke-linecap="round" fill="none" />
+  </g>
+
+  <!-- Bottom Name Badge Tag -->
+  <rect x="30" y="325" width="340" height="55" rx="16" fill="#0F172A" fill-opacity="0.8" />
+  <text x="200" y="348" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#F8FAFC">Yusuf Mahendra, S.Pd</text>
+  <text x="200" y="367" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#34D399">Guru PJOK &amp; Olahraga</text>
+
+  <!-- Initials Badge Top Right -->
+  <g transform="translate(325, 35)">
+    <circle cx="20" cy="20" r="22" fill="#FFFFFF" fill-opacity="0.2" stroke="#FFFFFF" stroke-width="2" />
+    <text x="20" y="26" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="900" fill="#FFFFFF">YM</text>
+  </g>
+</svg>
