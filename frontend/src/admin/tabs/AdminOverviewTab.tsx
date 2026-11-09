@@ -83,7 +83,7 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
       sublabel: 'Tercatat dalam rekam jejak',
       badgeColor: 'purple',
       icon: Trophy,
-      actionTab: 'page-control',
+      actionTab: 'achievements',
     },
   ];
 

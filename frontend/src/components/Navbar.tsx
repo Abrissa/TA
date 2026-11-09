@@ -15,7 +15,8 @@ import {
   Phone,
   Clock,
   Award,
-  FileText
+  FileText,
+  GraduationCap
 } from 'lucide-react';
 
 import { resolveImageUrl } from '../services/api';
@@ -51,10 +52,17 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mobileProfileOpen, setMobileProfileOpen] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const [alumniDropdownOpen, setAlumniDropdownOpen] = useState(false);
+  const [mobileAlumniOpen, setMobileAlumniOpen] = useState(true);
+  const alumniDropdownRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setProfileDropdownOpen(false);
+      }
+      if (alumniDropdownRef.current && !alumniDropdownRef.current.contains(event.target as Node)) {
+        setAlumniDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -65,10 +73,12 @@ export const Navbar: React.FC<NavbarProps> = ({
     setActiveTab(tab);
     setMobileMenuOpen(false);
     setProfileDropdownOpen(false);
+    setAlumniDropdownOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const isProfileActive = ['visi-misi', 'guru', 'alumni', 'profil'].includes(activeTab);
+  const isProfileActive = ['visi-misi', 'guru', 'profil'].includes(activeTab);
+  const isAlumniActive = ['alumni', 'form-alumni'].includes(activeTab);
 
   const profileSubItems: { id: PageTab; label: string; desc: string; icon: React.ReactNode }[] = [
     {
@@ -83,10 +93,19 @@ export const Navbar: React.FC<NavbarProps> = ({
       desc: 'Profil Pendidik Profesional & Staf Pengajar',
       icon: <Users className="w-4 h-4 text-[#059669]" />
     },
+  ];
+
+  const alumniSubItems: { id: PageTab; label: string; desc: string; icon: React.ReactNode }[] = [
     {
       id: 'alumni',
       label: 'Jejak Alumni',
       desc: 'Profil Lulusan & Testimonial Alumni',
+      icon: <GraduationCap className="w-4 h-4 text-[#059669]" />
+    },
+    {
+      id: 'form-alumni',
+      label: 'Form Pendataan Alumni',
+      desc: 'Formulir Penelusuran & Update Data Alumni',
       icon: <UserCheck className="w-4 h-4 text-[#059669]" />
     },
   ];
@@ -249,17 +268,60 @@ export const Navbar: React.FC<NavbarProps> = ({
               Berita & Artikel
             </button>
 
-            {/* Form Alumni */}
-            <button
-              onClick={() => handleNavClick('form-alumni')}
-              className={`px-3 py-2 text-[15px] font-semibold transition-colors cursor-pointer ${
-                activeTab === 'form-alumni'
-                  ? 'text-emerald-700 font-bold'
-                  : 'text-slate-600 hover:text-emerald-600'
-              }`}
+            {/* Alumni (Dropdown Menu) */}
+            <div
+              className="relative"
+              ref={alumniDropdownRef}
+              onMouseEnter={() => setAlumniDropdownOpen(true)}
+              onMouseLeave={() => setAlumniDropdownOpen(false)}
             >
-              Form Alumni
-            </button>
+              <button
+                onClick={() => setAlumniDropdownOpen(!alumniDropdownOpen)}
+                className={`px-3 py-2 text-[15px] font-semibold transition-colors flex items-center gap-1 cursor-pointer ${
+                  isAlumniActive
+                    ? 'text-emerald-700 font-bold'
+                    : 'text-slate-600 hover:text-emerald-600'
+                }`}
+                aria-expanded={alumniDropdownOpen}
+                aria-haspopup="true"
+              >
+                <span>Alumni</span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${alumniDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Alumni Dropdown Menu Overlay */}
+              {alumniDropdownOpen && (
+                <div className="absolute top-full left-0 w-64 pt-2 z-50">
+                  <div className="bg-white rounded-xl shadow-xl border border-slate-200 p-2 space-y-0.5">
+                    <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-500 border-b border-slate-100">
+                      Jejak & Pendataan Alumni
+                    </div>
+                    {alumniSubItems.map((subItem) => {
+                      const isSubActive = activeTab === subItem.id;
+                      return (
+                        <button
+                          key={subItem.id}
+                          onClick={() => handleNavClick(subItem.id)}
+                          className={`w-full text-left px-3 py-2.5 rounded-lg transition-colors cursor-pointer ${
+                            isSubActive
+                              ? 'bg-slate-50 text-emerald-700 font-bold'
+                              : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-600'
+                          }`}
+                        >
+                          <div className="text-sm font-bold flex items-center justify-between">
+                            <span>{subItem.label}</span>
+                            {isSubActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>}
+                          </div>
+                          <div className="text-xs text-slate-500 font-normal leading-tight mt-0.5">
+                            {subItem.desc}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
 
           </nav>
 
@@ -369,14 +431,37 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>Berita & Artikel</span>
             </button>
 
-            <button
-              onClick={() => handleNavClick('form-alumni')}
-              className={`w-full text-left px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-3 cursor-pointer ${activeTab === 'form-alumni' ? 'bg-gradient-to-r from-[#059669] to-[#047857] text-white' : 'text-slate-700 hover:bg-slate-50'
-                }`}
-            >
-              <UserCheck className="w-4 h-4" />
-              <span>Form Alumni</span>
-            </button>
+            {/* Mobile Alumni Group */}
+            <div className="bg-slate-50 rounded-xl p-2 border border-slate-200 space-y-1">
+              <button
+                onClick={() => setMobileAlumniOpen(!mobileAlumniOpen)}
+                className="w-full text-left px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-[#059669] flex items-center justify-between cursor-pointer"
+              >
+                <span>ALUMNI</span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${mobileAlumniOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {mobileAlumniOpen && (
+                <div className="space-y-1 pl-1">
+                  {alumniSubItems.map((subItem) => (
+                    <button
+                      key={subItem.id}
+                      onClick={() => handleNavClick(subItem.id)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm font-semibold flex items-center justify-between transition-colors cursor-pointer ${activeTab === subItem.id
+                          ? 'bg-gradient-to-r from-[#059669] to-[#047857] text-white'
+                          : 'text-slate-700 hover:bg-white'
+                        }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        {subItem.icon}
+                        <span>{subItem.label}</span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 opacity-50" />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">

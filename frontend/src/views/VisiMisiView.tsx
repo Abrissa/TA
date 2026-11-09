@@ -23,7 +23,7 @@ interface VisiMisiViewProps {
 export const VisiMisiView: React.FC<VisiMisiViewProps> = ({ onOpenContact, setActiveTab, settings }) => {
   const schoolName = settings?.school_name || 'MI AL-AHMAD';
   const visionText = settings?.vision_text || "Terwujudnya Generasi Qur'ani yang Unggul dalam Prestasi, Berakhlakul Karimah, dan Memiliki Kecerdasan Sains serta Teknologi.";
-  const visionImage = resolveImageUrl(settings?.vision_image_url) || '/assets/gedung-mi-al-ahmad.jpg';
+  const visionImage = resolveImageUrl(settings?.vision_image_url) || '/assets/plang-mi-al-ahmad.jpg';
 
   const missions = [
     {
@@ -80,6 +80,8 @@ export const VisiMisiView: React.FC<VisiMisiViewProps> = ({ onOpenContact, setAc
         ]}
         title="Visi, Misi & Landasan Pendidikan"
         subtitle="Membangun pendidikan dasar Islam berkarakter, berorientasi Al-Qur'an, serta unggul dalam penguasaan sains dan teknologi."
+        backgroundImageUrl="/assets/plang-mi-al-ahmad.jpg"
+        imagePosition="object-[center_60%]"
       />
 
       {/* Main Content Container */}
@@ -141,11 +143,11 @@ export const VisiMisiView: React.FC<VisiMisiViewProps> = ({ onOpenContact, setAc
           <div className="lg:col-span-6">
             <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
               <img
-                src={visionImage || '/assets/gedung-mi-al-ahmad.jpg'}
-                alt={`Kegiatan Belajar Siswa ${schoolName}`}
+                src={visionImage || '/assets/plang-mi-al-ahmad.jpg'}
+                alt={`Papan Nama Resmi ${schoolName} Gedung Abu Yazid`}
                 className="w-full h-[380px] object-cover rounded-xl"
                 onError={(e) => {
-                  e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                  e.currentTarget.src = '/assets/plang-mi-al-ahmad.jpg';
                 }}
               />
             </div>

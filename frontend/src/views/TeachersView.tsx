@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Teacher, PageTab } from '../types';
 import { api, resolveImageUrl } from '../services/api';
+import { TEACHERS_DATA } from '../data/mockData';
 import { 
   GraduationCap,
   Users,
@@ -16,20 +17,22 @@ interface TeachersViewProps {
 }
 
 export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setActiveTab }) => {
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [teachers, setTeachers] = useState<Teacher[]>(TEACHERS_DATA);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     api.getTeachers()
-      .then((data) => setTeachers(data))
-      .catch(() => setTeachers([]))
+      .then((data) => {
+        if (data && data.length > 0) setTeachers(data);
+      })
+      .catch(() => {})
       .finally(() => setIsLoading(false));
   }, []);
 
   return (
     <div className="space-y-12 pb-16 bg-slate-50/50 min-h-screen">
       
-      {/* HEADER BANNER WITH SILHOUETTE */}
+      {/* HEADER BANNER WITH SILHOUETTE & TEACHERS PHOTO */}
       <PageHeroBanner
         breadcrumbs={[
           { label: 'Beranda', onClick: () => setActiveTab('beranda') },
@@ -44,6 +47,8 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
           </>
         }
         subtitle="Tenaga pendidik profesional berijazah sarjana & magister yang siap mendidik murid dengan keikhlasan, ilmu, dan kearifan akhlak Qur'ani."
+        backgroundImageUrl="/assets/dewan-guru-mi-al-ahmad.jpg"
+        imagePosition="object-[center_62%]"
       />
 
       {/* STATS BAR */}

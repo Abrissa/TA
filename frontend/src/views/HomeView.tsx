@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { PageTab, Article, Achievement } from '../types';
+import { PageTab, Article, Achievement, AlumniProfile } from '../types';
 import { api } from '../services/api';
+import { mockAdminStore } from '../services/mockAdminData';
 import {
   FACILITIES_DATA,
   ARTICLES_DATA,
@@ -15,6 +16,9 @@ import {
   Trophy,
   ChevronRight,
   Sparkles,
+  GraduationCap,
+  UserCheck,
+  Briefcase,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -30,6 +34,7 @@ interface HomeViewProps {
   onOpenContact: () => void;
   onOpenPPDB?: () => void;
   onSelectArticle: (art: Article) => void;
+  settings?: Record<string, string>;
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({
@@ -37,23 +42,55 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onOpenContact,
   onOpenPPDB,
   onSelectArticle,
+  settings: propSettings,
 }) => {
-  const [settings, setSettings] = useState<Record<string, string>>({
-    section_hero_visible: 'true',
-    section_advantages_visible: 'true',
-    section_principal_visible: 'true',
-    section_achievements_visible: 'true',
-    section_articles_visible: 'true',
-    section_facilities_visible: 'true',
-    section_marquee_visible: 'true',
-    announcement_banner_active: 'true',
-    announcement_banner_text: '',
+  const [settings, setSettings] = useState<Record<string, string>>(() => {
+    return {
+      ...mockAdminStore.getSettings(),
+      ...(propSettings || {}),
+    };
   });
 
-  const [articles, setArticles] = useState<Article[]>(ARTICLES_DATA);
-  const [achievements, setAchievements] = useState<Achievement[]>(ACHIEVEMENTS_DATA);
+  const [articles, setArticles] = useState<Article[]>(() => {
+    return mockAdminStore.getArticles();
+  });
+  const [achievements, setAchievements] = useState<Achievement[]>(() => {
+    return mockAdminStore.getAchievements();
+  });
+  const [alumniList, setAlumniList] = useState<AlumniProfile[]>([]);
 
   useEffect(() => {
+    if (propSettings && Object.keys(propSettings).length > 0) {
+      setSettings((prev) => ({ ...prev, ...propSettings }));
+    }
+  }, [propSettings]);
+
+  useEffect(() => {
+    const handleSettingsChanged = (e?: any) => {
+      if (e?.detail && typeof e.detail === 'object') {
+        setSettings((prev) => ({ ...prev, ...e.detail }));
+      } else {
+        setSettings(mockAdminStore.getSettings());
+      }
+    };
+    const handleArticlesChanged = () => {
+      setArticles(mockAdminStore.getArticles());
+    };
+    const handleAchievementsChanged = () => {
+      setAchievements(mockAdminStore.getAchievements());
+    };
+    const handleAlumniChanged = () => {
+      api.getAlumni().then((data) => {
+        if (data && data.length > 0) setAlumniList(data);
+      }).catch(() => {});
+    };
+
+    window.addEventListener('mi_settings_changed', handleSettingsChanged);
+    window.addEventListener('mi_articles_changed', handleArticlesChanged);
+    window.addEventListener('mi_achievements_changed', handleAchievementsChanged);
+    window.addEventListener('mi_alumni_changed', handleAlumniChanged);
+    window.addEventListener('storage', handleSettingsChanged);
+
     api.getSettings().then((res) => {
       if (res) setSettings((prev) => ({ ...prev, ...res }));
     }).catch(() => {});
@@ -65,6 +102,18 @@ export const HomeView: React.FC<HomeViewProps> = ({
     api.getAchievements().then((res) => {
       if (res && res.length > 0) setAchievements(res);
     }).catch(() => {});
+
+    api.getAlumni().then((res) => {
+      if (res && res.length > 0) setAlumniList(res);
+    }).catch(() => {});
+
+    return () => {
+      window.removeEventListener('mi_settings_changed', handleSettingsChanged);
+      window.removeEventListener('mi_articles_changed', handleArticlesChanged);
+      window.removeEventListener('mi_achievements_changed', handleAchievementsChanged);
+      window.removeEventListener('mi_alumni_changed', handleAlumniChanged);
+      window.removeEventListener('storage', handleSettingsChanged);
+    };
   }, []);
 
   const facilityIcons: Record<string, React.ReactNode> = {
@@ -343,6 +392,130 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </StaggerItem>
             ))}
           </StaggerContainer>
+        </section>
+      )}
+
+      {/* Kisah & Jejak Alumni */}
+      {alumniList.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 space-y-8">
+          <ScrollFadeUp
+            direction="up"
+            delay={0.1}
+            className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-4"
+          >
+            <div>
+              <span className="inline-flex items-center gap-1.5 text-sm font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200 shadow-xs">
+                <GraduationCap className="w-4 h-4 text-emerald-600" />
+                #LULUSAN • Rekam Jejak Alumni
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-slate-900 mt-2">
+                Inspirasi & Kisah Alumni
+              </h2>
+              <p className="text-base sm:text-lg text-slate-600 mt-1">
+                Kiprah santri dan lulusan MI AL-AHMAD yang berkontribusi bagi masyarakat dan bangsa
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  setActiveTab('alumni');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="text-sm sm:text-base font-bold text-white bg-emerald-700 hover:bg-emerald-800 px-5 py-2.5 rounded-xl flex items-center gap-2 cursor-pointer transition-all shadow-xs shrink-0 self-start sm:self-auto"
+              >
+                <span>Lihat Semua Alumni</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </ScrollFadeUp>
+
+          <StaggerContainer
+            staggerDelay={0.1}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
+            {alumniList.slice(0, 3).map((alm) => (
+              <StaggerItem key={alm.id}>
+                <motion.div
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                  onClick={() => {
+                    setActiveTab('alumni');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="h-full bg-white rounded-2xl border border-slate-200 p-6 shadow-xs hover:shadow-lg hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3.5">
+                      {alm.imageUrl ? (
+                        <img
+                          src={alm.imageUrl}
+                          alt={alm.name}
+                          className="w-14 h-14 rounded-full object-cover border-2 border-emerald-100 shadow-xs shrink-0"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            const parent = e.currentTarget.parentElement;
+                            if (parent && !parent.querySelector('.alumni-avatar-fallback')) {
+                              const div = document.createElement('div');
+                              div.className = 'alumni-avatar-fallback w-14 h-14 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg shrink-0';
+                              div.textContent = alm.name ? alm.name.charAt(0) : 'A';
+                              parent.prepend(div);
+                            }
+                          }}
+                        />
+                      ) : (
+                        <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg shrink-0">
+                          {alm.name ? alm.name.charAt(0) : 'A'}
+                        </div>
+                      )}
+                      <div>
+                        <h3 className="font-extrabold text-slate-900 text-base group-hover:text-emerald-700 transition-colors">
+                          {alm.name}
+                        </h3>
+                        <p className="text-xs font-semibold text-emerald-700">
+                          Lulusan {alm.graduationYear}
+                        </p>
+                        <p className="text-xs text-slate-500 font-medium mt-0.5 line-clamp-1">
+                          {alm.profession || alm.currentRole}
+                        </p>
+                      </div>
+                    </div>
+
+                    {alm.quote && (
+                      <p className="text-sm text-slate-600 italic bg-slate-50/80 p-3.5 rounded-xl border border-slate-100 leading-relaxed">
+                        "{alm.quote}"
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-100 mt-4 flex items-center justify-between text-xs font-bold text-emerald-700 group-hover:translate-x-1 transition-transform">
+                    <span>Lihat Profil Lengkap</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </div>
+                </motion.div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+
+          {/* CTA Form Alumni Banner */}
+          <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 rounded-2xl p-6 sm:p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md">
+            <div className="space-y-1.5 text-center sm:text-left">
+              <h3 className="text-lg sm:text-xl font-bold font-heading">
+                Apakah Anda Alumni MI AL-AHMAD?
+              </h3>
+              <p className="text-sm text-emerald-100 max-w-xl">
+                Jalin silaturahmi kembali bersama almamater tercinta. Bagikan jejak profesi dan inspirasi Anda untuk adik-adik santri.
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                setActiveTab('form-alumni');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm transition-all shadow-md shrink-0 flex items-center gap-2 cursor-pointer"
+            >
+              <UserCheck className="w-4 h-4 text-slate-950" />
+              <span>Isi Pendataan Alumni</span>
+            </button>
+          </div>
         </section>
       )}
     </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PageTab, Article } from './types';
 import { MainLayout } from './components/layouts/MainLayout';
 import { api, AdminUser } from './services/api';
+import { mockAdminStore } from './services/mockAdminData';
 
 import { HomeView } from './views/HomeView';
 import { ArticleDetailView } from './views/ArticleDetailView';
@@ -46,15 +47,33 @@ export default function App() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   const [isAdminRoute, setIsAdminRoute] = useState<boolean>(checkIsAdmin);
-  const [settings, setSettings] = useState<Record<string, string>>({});
+  const [settings, setSettings] = useState<Record<string, string>>(() => {
+    return mockAdminStore.getSettings();
+  });
   const [currentUser, setCurrentUser] = useState<AdminUser | null>(() => {
     return api.getStoredUser();
   });
 
   useEffect(() => {
+    const handleSettingsChanged = (e?: any) => {
+      if (e?.detail && typeof e.detail === 'object') {
+        setSettings((prev) => ({ ...prev, ...e.detail }));
+      } else {
+        setSettings(mockAdminStore.getSettings());
+      }
+    };
+
+    window.addEventListener('mi_settings_changed', handleSettingsChanged);
+    window.addEventListener('storage', handleSettingsChanged);
+
     api.getSettings().then((res) => {
-      if (res) setSettings(res);
+      if (res) setSettings((prev) => ({ ...prev, ...res }));
     }).catch(() => {});
+
+    return () => {
+      window.removeEventListener('mi_settings_changed', handleSettingsChanged);
+      window.removeEventListener('storage', handleSettingsChanged);
+    };
   }, [isAdminRoute]);
 
   useEffect(() => {
@@ -84,27 +103,30 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const schoolTitle = settings.school_name || 'MI AL-AHMAD';
+    const schoolTag = settings.school_tagline || "Membentuk Generasi Qur'ani & Berprestasi";
+
     if (isAdminRoute) {
-      document.title = 'Dashboard Admin | MI AL-AHMAD Krian Sidoarjo';
+      document.title = `Dashboard Admin | ${schoolTitle} Krian Sidoarjo`;
       return;
     }
 
     const titles: Record<PageTab, string> = {
-      beranda: "MI AL-AHMAD | Membentuk Generasi Qur'ani & Berprestasi",
-      profil: "Profil Sekolah | MI AL-AHMAD",
-      'visi-misi': "Visi, Misi & Landasan | MI AL-AHMAD",
-      guru: "Dewan Guru & Staf | MI AL-AHMAD",
-      prestasi: "Prestasi Siswa | MI AL-AHMAD",
-      artikel: "Berita & Pengumuman | MI AL-AHMAD",
-      alumni: "Jejak Alumni | MI AL-AHMAD",
-      'form-alumni': "Pendataan Alumni | MI AL-AHMAD",
-      ppdb: "Penerimaan Peserta Didik Baru (PPDB) | MI AL-AHMAD",
+      beranda: `${schoolTitle} | ${schoolTag}`,
+      profil: `Profil Sekolah | ${schoolTitle}`,
+      'visi-misi': `Visi, Misi & Landasan | ${schoolTitle}`,
+      guru: `Dewan Guru & Staf | ${schoolTitle}`,
+      prestasi: `Prestasi Siswa | ${schoolTitle}`,
+      artikel: `Berita & Pengumuman | ${schoolTitle}`,
+      alumni: `Jejak Alumni | ${schoolTitle}`,
+      'form-alumni': `Pendataan Alumni | ${schoolTitle}`,
+      ppdb: `Penerimaan Peserta Didik Baru (PPDB) | ${schoolTitle}`,
     };
     document.title =
       selectedArticle && activeTab === 'artikel'
-        ? `${selectedArticle.title} | MI AL-AHMAD`
-        : titles[activeTab] || 'MI AL-AHMAD';
-  }, [activeTab, selectedArticle, isAdminRoute]);
+        ? `${selectedArticle.title} | ${schoolTitle}`
+        : titles[activeTab] || schoolTitle;
+  }, [activeTab, selectedArticle, isAdminRoute, settings]);
 
   useEffect(() => {
     if (activeTab !== 'artikel' && selectedArticle) {
@@ -171,6 +193,7 @@ export default function App() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           onSelectArticle={handleSelectArticle}
+          settings={settings}
         />
       )}
 
@@ -197,6 +220,7 @@ export default function App() {
         <AchievementView
           onOpenContact={() => setIsContactOpen(true)}
           setActiveTab={setActiveTab}
+          settings={settings}
         />
       )}
 
@@ -204,6 +228,7 @@ export default function App() {
         <NewsView
           onSelectArticle={handleSelectArticle}
           setActiveTab={setActiveTab}
+          settings={settings}
         />
       )}
 

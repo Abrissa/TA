@@ -109,9 +109,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] xl:text-[54px] font-extrabold text-white leading-[1.14] font-heading tracking-tight"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] xl:text-[54px] font-extrabold text-white leading-[1.14] font-heading tracking-tight whitespace-pre-line"
               >
-                {settings?.hero_headline ? (
+                {settings?.hero_headline &&
+                settings.hero_headline.trim() &&
+                settings.hero_headline.trim() !== 'Berkarakter, Peduli & Berprestasi di Era Teknologi' ? (
                   settings.hero_headline
                 ) : (
                   <>

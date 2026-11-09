@@ -181,7 +181,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenPPDB }) => {
                 </button>
               </div>
             </div>
-          </div>
 
           {/* STATS BAR */}
           <section className="bg-slate-50 border-y border-slate-200/80 py-10">

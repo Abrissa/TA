@@ -14,7 +14,8 @@ import {
   FileCheck,
   Calendar,
   MapPin,
-  Phone
+  Phone,
+  Trash2
 } from 'lucide-react';
 
 export const AdminPpdbTab: React.FC = () => {
@@ -79,6 +80,23 @@ export const AdminPpdbTab: React.FC = () => {
     }
   };
 
+  const handleDelete = async (rec: PpdbRecord) => {
+    if (!window.confirm(`Yakin ingin menghapus data pendaftaran calon santri "${rec.child_full_name}" (${rec.registration_number})? Tindakan ini tidak dapat dibatalkan.`)) {
+      return;
+    }
+    try {
+      await api.deletePpdbRecord(rec.id);
+      if (selectedRecord?.id === rec.id) {
+        setSelectedRecord(null);
+      }
+      setUpdateFeedback(`Data pendaftaran "${rec.child_full_name}" berhasil dihapus.`);
+      setTimeout(() => setUpdateFeedback(null), 3500);
+      loadPpdb();
+    } catch (err: any) {
+      alert(err.message || 'Gagal menghapus data pendaftar PPDB.');
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -94,10 +112,17 @@ export const AdminPpdbTab: React.FC = () => {
         </div>
       </div>
 
+      {updateFeedback && !selectedRecord && (
+        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center gap-2 animate-fadeIn">
+          <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+          <span>{updateFeedback}</span>
+        </div>
+      )}
+
       {/* Status Badges Filter Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         {[
-          { key: 'all', label: 'Semua', count: statusCounts['total'] ?? 0, color: 'slate' },
+          { key: 'all', label: 'Semua', count: statusCounts['total'] ?? statusCounts['all'] ?? 0, color: 'slate' },
           { key: 'menunggu_verifikasi', label: 'Menunggu', count: statusCounts['menunggu_verifikasi'] ?? 0, color: 'amber' },
           { key: 'terverifikasi', label: 'Terverifikasi', count: statusCounts['terverifikasi'] ?? 0, color: 'blue' },
           { key: 'diterima', label: 'Diterima', count: statusCounts['diterima'] ?? 0, color: 'emerald' },
@@ -211,6 +236,15 @@ export const AdminPpdbTab: React.FC = () => {
                         >
                           <MessageCircle className="w-4 h-4" />
                         </a>
+
+                        {/* Tombol Hapus */}
+                        <button
+                          onClick={() => handleDelete(rec)}
+                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                          title="Hapus Data Pendaftaran"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -291,23 +325,34 @@ export const AdminPpdbTab: React.FC = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+              <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-100">
                 <button
                   type="button"
-                  onClick={() => setSelectedRecord(null)}
-                  className="px-4 py-2 text-sm text-slate-600 hover:text-slate-900 cursor-pointer"
+                  onClick={() => handleDelete(selectedRecord)}
+                  className="px-3.5 py-2 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
-                  Tutup
+                  <Trash2 className="w-4 h-4" />
+                  <span>Hapus Pendaftar</span>
                 </button>
-                <button
-                  type="button"
-                  onClick={handleUpdateStatus}
-                  disabled={isUpdating}
-                  className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-semibold text-sm rounded-xl transition-all shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50"
-                >
-                  {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileCheck className="w-4 h-4" />}
-                  <span>Simpan Perubahan Status</span>
-                </button>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedRecord(null)}
+                    className="px-4 py-2 text-sm text-slate-600 hover:text-slate-900 cursor-pointer"
+                  >
+                    Tutup
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleUpdateStatus}
+                    disabled={isUpdating}
+                    className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-semibold text-sm rounded-xl transition-all shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileCheck className="w-4 h-4" />}
+                    <span>Simpan Perubahan Status</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

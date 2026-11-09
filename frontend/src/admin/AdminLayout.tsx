@@ -3,6 +3,7 @@ import { AdminUser, api } from '../services/api';
 import { AdminOverviewTab } from './tabs/AdminOverviewTab';
 import { AdminPageControlTab } from './tabs/AdminPageControlTab';
 import { AdminArticlesTab } from './tabs/AdminArticlesTab';
+import { AdminAchievementsTab } from './tabs/AdminAchievementsTab';
 import { AdminPpdbTab } from './tabs/AdminPpdbTab';
 import { AdminAlumniTab } from './tabs/AdminAlumniTab';
 import { AdminMasterDataTab } from './tabs/AdminMasterDataTab';
@@ -10,6 +11,7 @@ import {
   LayoutDashboard, 
   Sliders, 
   FileText, 
+  Trophy,
   Users, 
   GraduationCap, 
   Database, 
@@ -38,6 +40,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   const menuItems = [
     { id: 'overview', label: 'Ringkasan Dashboard', icon: LayoutDashboard },
     { id: 'page-control', label: 'Konten Website & CMS', icon: Sliders },
+    { id: 'achievements', label: 'Prestasi Santri & Kejuaraan', icon: Trophy },
     { id: 'articles', label: 'Berita & Pengumuman', icon: FileText },
     { id: 'ppdb', label: 'Pendaftar PPDB (Santri Baru)', icon: Users },
     { id: 'alumni', label: 'Form & Direktori Alumni', icon: GraduationCap },
@@ -187,6 +190,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
           {activeTab === 'overview' && <AdminOverviewTab onNavigateTab={setActiveTab} />}
           {activeTab === 'page-control' && <AdminPageControlTab />}
+          {activeTab === 'achievements' && <AdminAchievementsTab />}
           {activeTab === 'articles' && <AdminArticlesTab />}
           {activeTab === 'ppdb' && <AdminPpdbTab />}
           {activeTab === 'alumni' && <AdminAlumniTab />}

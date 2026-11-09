@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PageTab, AlumniProfile } from '../types';
 import { api } from '../services/api';
+import { ALUMNI_DATA } from '../data/mockData';
 import { Users, UserCheck, Quote, Loader2, Briefcase, GraduationCap } from 'lucide-react';
 import { PageHeroBanner } from '../components/ui/PageHeroBanner';
 
@@ -9,13 +10,15 @@ interface AlumniViewProps {
 }
 
 export const AlumniView: React.FC<AlumniViewProps> = ({ setActiveTab }) => {
-  const [profiles, setProfiles] = useState<AlumniProfile[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [profiles, setProfiles] = useState<AlumniProfile[]>(ALUMNI_DATA);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     api.getAlumni()
-      .then((data) => setProfiles(data))
-      .catch(() => setProfiles([]))
+      .then((data) => {
+        if (data && data.length > 0) setProfiles(data);
+      })
+      .catch(() => {})
       .finally(() => setIsLoading(false));
   }, []);
 

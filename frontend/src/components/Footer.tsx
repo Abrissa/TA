@@ -31,10 +31,38 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
   const phone = settings?.school_phone || '(031) 8971234';
   const email = settings?.school_email || 'info@mialahmad.sch.id';
   const mapsUrl = settings?.maps_embed_url || 'https://maps.google.com/?q=MI+AL-AHMAD+Krian+Sidoarjo';
-  const socialIg = settings?.social_instagram || 'https://instagram.com';
-  const socialFb = settings?.social_facebook || 'https://facebook.com';
-  const socialYt = settings?.social_youtube || 'https://youtube.com';
-  const socialTt = settings?.social_tiktok || 'https://tiktok.com';
+  const isGeneric = (url?: string) => {
+    if (!url) return true;
+    const clean = url.trim().replace(/\/$/, '');
+    return (
+      clean === '' ||
+      clean === 'https://instagram.com' ||
+      clean === 'https://www.instagram.com' ||
+      clean === 'https://facebook.com' ||
+      clean === 'https://www.facebook.com' ||
+      clean === 'https://youtube.com' ||
+      clean === 'https://www.youtube.com' ||
+      clean === 'https://tiktok.com' ||
+      clean === 'https://www.tiktok.com'
+    );
+  };
+
+  const socialIg = !isGeneric(settings?.social_instagram) 
+    ? settings!.social_instagram 
+    : 'https://www.instagram.com/mialahmadkrian';
+
+  const socialFb = !isGeneric(settings?.social_facebook) 
+    ? settings!.social_facebook 
+    : 'https://www.facebook.com/mialahmadkrian';
+
+  const socialYt = !isGeneric(settings?.social_youtube) && settings?.social_youtube !== 'https://www.youtube.com/@mialahmadkrian' && settings?.social_youtube !== 'https://youtube.com/@mialahmadkrian'
+    ? settings!.social_youtube 
+    : 'https://www.youtube.com/@mial-ahmadkrianofficial3604';
+
+  const socialTt = !isGeneric(settings?.social_tiktok) 
+    ? settings!.social_tiktok 
+    : 'https://www.tiktok.com/@mialahmadkrian';
+
   const copyright = settings?.footer_copyright || 'Copyright © 2026 All right reserved | MI AL-AHMAD Sidoarjo';
 
   const handleNavClick = (tab: PageTab) => {
@@ -80,28 +108,46 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
 
             {/* Contact Info */}
             <div className="space-y-2 text-slate-700 font-medium">
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <button
+                type="button"
+                onClick={handleOpenGoogleMaps}
+                className="flex items-start gap-2.5 text-left hover:text-emerald-700 transition-colors cursor-pointer group"
+                title="Buka Lokasi MI AL-AHMAD di Google Maps"
+              >
+                <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
                 <span className="leading-tight">{address}</span>
+              </button>
+              <div>
+                <a
+                  href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
+                  className="inline-flex items-center gap-2.5 hover:text-emerald-700 transition-colors group"
+                  title="Hubungi Telepon MI AL-AHMAD"
+                >
+                  <Phone className="w-4 h-4 text-emerald-600 shrink-0 group-hover:scale-110 transition-transform" />
+                  <span>{phone}</span>
+                </a>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>{phone}</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>{email}</span>
+              <div>
+                <a
+                  href={`mailto:${email}`}
+                  className="inline-flex items-center gap-2.5 hover:text-emerald-700 transition-colors group"
+                  title="Kirim Email ke MI AL-AHMAD"
+                >
+                  <Mail className="w-4 h-4 text-emerald-600 shrink-0 group-hover:scale-110 transition-transform" />
+                  <span>{email}</span>
+                </a>
               </div>
             </div>
 
-            {/* Social Icons */}
+            {/* Social Icons Connected to MI AL-AHMAD Krian */}
             <div className="flex items-center gap-3 pt-1">
               <a
                 href="https://mialahmad.sch.id"
                 target="_blank"
                 rel="noreferrer"
                 className="w-8 h-8 rounded-full bg-slate-100 text-emerald-700 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors shadow-xs"
-                title="Website Resmi"
+                title="Website Resmi MI AL-AHMAD Krian (mialahmad.sch.id)"
+                aria-label="Website Resmi MI AL-AHMAD Krian"
               >
                 <Globe className="w-4 h-4" />
               </a>
@@ -110,7 +156,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
                 target="_blank"
                 rel="noreferrer"
                 className="w-8 h-8 rounded-full bg-slate-100 text-emerald-700 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors shadow-xs"
-                title="Instagram"
+                title="Instagram Resmi MI AL-AHMAD Krian (@mialahmadkrian)"
+                aria-label="Instagram Resmi MI AL-AHMAD Krian"
               >
                 <Instagram className="w-4 h-4" />
               </a>
@@ -119,7 +166,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
                 target="_blank"
                 rel="noreferrer"
                 className="w-8 h-8 rounded-full bg-slate-100 text-emerald-700 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors shadow-xs"
-                title="TikTok"
+                title="TikTok Resmi MI AL-AHMAD Krian (@mialahmadkrian)"
+                aria-label="TikTok Resmi MI AL-AHMAD Krian"
               >
                 <Share2 className="w-4 h-4" />
               </a>
@@ -128,7 +176,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
                 target="_blank"
                 rel="noreferrer"
                 className="w-8 h-8 rounded-full bg-slate-100 text-emerald-700 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors shadow-xs"
-                title="Facebook"
+                title="Facebook Resmi MI AL-AHMAD Krian (@mialahmadkrian)"
+                aria-label="Facebook Resmi MI AL-AHMAD Krian"
               >
                 <Facebook className="w-4 h-4" />
               </a>
@@ -137,7 +186,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
                 target="_blank"
                 rel="noreferrer"
                 className="w-8 h-8 rounded-full bg-slate-100 text-emerald-700 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors shadow-xs"
-                title="YouTube"
+                title="YouTube Resmi MI AL-AHMAD Krian (@mial-ahmadkrianofficial3604)"
+                aria-label="YouTube Resmi MI AL-AHMAD Krian"
               >
                 <Youtube className="w-4 h-4" />
               </a>
@@ -185,6 +235,14 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
                 </li>
                 <li>
                   <button
+                    onClick={() => handleNavClick('alumni')}
+                    className="hover:text-emerald-600 transition-colors cursor-pointer"
+                  >
+                    Jejak Alumni
+                  </button>
+                </li>
+                <li>
+                  <button
                     onClick={onOpenContact}
                     className="hover:text-emerald-600 transition-colors cursor-pointer"
                   >
@@ -228,6 +286,14 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
                     className="hover:text-emerald-600 font-semibold text-emerald-700 transition-colors cursor-pointer"
                   >
                     Pendaftaran PPDB Baru
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handleNavClick('form-alumni')}
+                    className="hover:text-emerald-600 transition-colors cursor-pointer"
+                  >
+                    Form Pendataan Alumni
                   </button>
                 </li>
                 <li>

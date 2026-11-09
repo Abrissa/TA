@@ -28,13 +28,12 @@ export const AdminAlumniTab: React.FC = () => {
   const loadData = async () => {
     try {
       setIsLoading(true);
-      if (activeSubTab === 'submissions') {
-        const res = await api.getAdminAlumniSubmissions();
-        setSubmissions(res);
-      } else {
-        const res = await api.getAlumni();
-        setProfiles(res);
-      }
+      const [subsRes, profRes] = await Promise.all([
+        api.getAdminAlumniSubmissions().catch(() => []),
+        api.getAlumni().catch(() => []),
+      ]);
+      setSubmissions(subsRes);
+      setProfiles(profRes);
     } catch (err) {
       console.error('Failed to load alumni data:', err);
     } finally {

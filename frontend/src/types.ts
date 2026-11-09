@@ -17,7 +17,7 @@ export interface Facility {
 }
 
 export interface Achievement {
-  id: string;
+  id: string | number;
   title: string;
   category: 'Provinsi' | 'Kabupaten' | 'Nasional' | 'Juara Umum' | 'Internasional' | 'Kecamatan' | 'Regional' | 'Se-Pulau Jawa' | string;
   date: string;
@@ -36,15 +36,18 @@ export interface Achievement {
     total?: number;
   };
   highlight?: string;
+  isHighlighted?: boolean;
 }
 
 export interface Article {
-  id: string;
+  id: string | number;
   title: string;
+  slug?: string;
   excerpt: string;
   content: string;
   category: 'Kegiatan' | 'Prestasi' | 'Informasi' | 'Edukasi';
-  date: string;
+  date?: string;
+  publishedAt?: string;
   author: string;
   authorRole: string;
   imageUrl: string;
@@ -57,11 +60,12 @@ export interface Article {
 }
 
 export interface AlumniProfile {
-  id: string;
+  id: string | number;
   name: string;
   graduationYear: string;
   title: string;
   currentRole: string;
+  profession?: string;
   bio: string;
   quote?: string;
   imageUrl: string;
@@ -81,9 +85,12 @@ export interface AlumniFormData {
   fullName: string;
   graduationYear: string;
   jobRole: string;
+  currentRole?: string;
   photoUrl: string;
   socialMedia: string;
   message: string;
+  phone?: string;
+  email?: string;
 }
 
 export interface PPDBFormData {

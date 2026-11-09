@@ -11,6 +11,10 @@ interface PageHeroBannerProps {
   subtitle?: string;
   breadcrumbs: BreadcrumbItem[];
   children?: React.ReactNode;
+  backgroundImageUrl?: string;
+  backgroundBlur?: boolean;
+  backgroundWhiteTint?: boolean;
+  imagePosition?: string;
 }
 
 const IslamicSilhouette: React.FC = () => (
@@ -80,23 +84,43 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
   subtitle,
   breadcrumbs,
   children,
+  backgroundImageUrl,
+  backgroundBlur = false,
+  backgroundWhiteTint = false,
+  imagePosition,
 }) => {
   return (
-    <section className="relative bg-gradient-to-r from-[#065F46] via-[#047857] to-[#064E3B] text-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-b-4 border-amber-400 overflow-hidden">
-      {/* Background Architectural Silhouette of Gedung MI AL-AHMAD */}
+    <section className="relative bg-slate-950 text-white py-14 sm:py-20 px-4 sm:px-6 lg:px-8 border-b-4 border-amber-400 overflow-hidden">
+      {/* Background Architectural Silhouette or Custom Photo */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
         <img
-          src="/assets/gedung-mi-al-ahmad.jpg"
+          src={backgroundImageUrl || "/assets/gedung-mi-al-ahmad.jpg"}
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover object-center filter grayscale contrast-150 brightness-90 opacity-20 mix-blend-luminosity scale-105"
+          className={`w-full h-full object-cover transition-all duration-700 ${
+            backgroundImageUrl
+              ? `${imagePosition || "object-[center_50%]"} opacity-90 brightness-95 contrast-105`
+              : "object-center filter grayscale contrast-150 brightness-90 opacity-20 mix-blend-luminosity scale-105"
+          }`}
         />
-        {/* Soft vignette and emerald depth overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#065F46]/90 via-[#047857]/80 to-[#064E3B]/90" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.2),transparent_70%)]" />
+        {/* Soft vignette and readability depth overlays */}
+        {backgroundImageUrl ? (
+          <>
+            {/* Dark gradient on the left for text readability, clear on right to show teachers */}
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/50 to-black/20" />
+            {/* Subtle white/light ambient glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.18),transparent_65%)]" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-slate-950/30" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-r from-[#065F46]/90 via-[#047857]/80 to-[#064E3B]/90" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.2),transparent_70%)]" />
+          </>
+        )}
       </div>
 
-      <IslamicSilhouette />
+      {!backgroundImageUrl && <IslamicSilhouette />}
       <div className="relative z-10 max-w-7xl mx-auto space-y-4 text-left">
         <nav aria-label="Breadcrumb" className="pb-1">
           <ol className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-black/20 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-medium text-emerald-100">

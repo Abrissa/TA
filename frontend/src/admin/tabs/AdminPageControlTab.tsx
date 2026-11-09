@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api, resolveImageUrl } from '../../services/api';
+import { DEFAULT_CMS_SETTINGS, mockAdminStore } from '../../services/mockAdminData';
 import { 
   Sliders, 
   CheckCircle2, 
@@ -34,58 +35,12 @@ type CmsSection =
   | 'footer' 
   | 'visibility';
 
-const DEFAULT_CMS_SETTINGS: Record<string, string> = {
-  school_logo_url: '/assets/logo-mi-al-ahmad.png',
-  school_name: 'MI AL-AHMAD',
-  school_tagline: 'Madrasah Ibtidaiyah Sidoarjo',
-  school_accreditation: 'A (Unggul)',
-  school_npsn: '111235150000',
-  school_nsm: '111235150000',
-  office_hours: 'Senin - Sabtu: 07.00 - 14.00 WIB',
-  hero_subtitle: 'Selamat Datang di MI AL-AHMAD',
-  hero_headline: 'Berkarakter, Peduli & Berprestasi di Era Teknologi',
-  hero_cta_text: 'Jelajahi',
-  hero_image_url: '/assets/gedung-mi-al-ahmad.jpg',
-  hero_students_image_url: '/assets/hero-students.png',
-  hero_stat_students: '850',
-  hero_stat_alumni: '1000',
-  hero_stat_achievements: '500',
-  principal_name: 'Drs. H. Ahmad Fauzi, M.Pd',
-  principal_role: 'Kepala Madrasah MI AL-AHMAD',
-  principal_image_url: '/assets/principal.png',
-  principal_greeting: "Yuk, jelajahi serunya dunia sekolah di MI AL-AHMAD Sidoarjo! 🎓 ✨ Temukan informasi tentang program keunggulan Tahfidz, fasilitas modern, kegiatan siswa, dan prestasi terbaru.",
-  vision_text: "Terwujudnya Generasi Qur'ani yang Unggul dalam Prestasi, Berakhlakul Karimah, dan Memiliki Kecerdasan Sains serta Teknologi.",
-  vision_image_url: '/assets/gedung-mi-al-ahmad.jpg',
-  mission_1_title: "Integrasi Kurikulum Merdeka & Al-Qur'an",
-  mission_1_desc: "Menyelenggarakan pembelajaran akademik terpadu yang didukung program Tahfidz Al-Qur'an dan bimbingan membaca Al-Qur'an metode Tartil.",
-  mission_2_title: "Pembiasaan Akhlak & Karakter Islami",
-  mission_2_desc: "Membiasakan salat Dhuha, Dzuhur berjamaah, kultum santri, serta penanaman adab kesopanan sehari-hari.",
-  mission_3_title: "Pengembangan Minat & Teknologi",
-  mission_3_desc: "Fasilitas laboratorium komputer, sains interaktif, serta ekstrakurikuler kepramukaan dan seni budaya Islami.",
-  ppdb_academic_year: '2026/2027',
-  ppdb_wave: 'Gelombang 1',
-  ppdb_dates: '01 Nov 2025 - 30 Mar 2026',
-  ppdb_quota: '120 Siswa',
-  ppdb_contact_person: '0812-3456-7890 (Ust. Ridwan)',
-  ppdb_intro_text: "Mari bergabung bersama keluarga besar madrasah berprestasi dengan kurikulum integrasi Kemenag, pembinaan tahfidz Al-Qur'an terpadu, dan pembinaan sains berstandar internasional.",
-  announcement_banner_text: '',
-  school_phone: '(031) 8971234',
-  school_whatsapp: '6281234567890',
-  school_email: 'info@mialahmad.sch.id',
-  school_address: 'Jl. Setiabudi No. 12, Krian, Sidoarjo, Jawa Timur',
-  maps_embed_url: 'https://maps.google.com/?q=MI+AL-AHMAD+Krian+Sidoarjo',
-  social_instagram: 'https://instagram.com',
-  social_facebook: 'https://facebook.com',
-  social_youtube: 'https://youtube.com',
-  social_tiktok: 'https://tiktok.com',
-  footer_description: "Bersama MI AL-AHMAD, Berkarakter, Peduli & Berprestasi di Era Teknologi & Qur'ani.",
-  footer_copyright: 'Copyright © 2026 All right reserved | MI AL-AHMAD Sidoarjo',
-};
-
 export const AdminPageControlTab: React.FC = () => {
   const [activeSubTab, setActiveSubTab] = useState<CmsSection>('branding');
-  const [settings, setSettings] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [settings, setSettings] = useState<Record<string, string>>(() => {
+    return mockAdminStore.getSettings();
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -100,7 +55,7 @@ export const AdminPageControlTab: React.FC = () => {
     try {
       setIsLoading(true);
       const res = await api.getSettings();
-      const initial: Record<string, string> = { ...DEFAULT_CMS_SETTINGS };
+      const initial: Record<string, string> = { ...mockAdminStore.getSettings() };
       if (res) {
         Object.entries(res).forEach(([k, v]) => {
           if (v !== undefined && v !== null) {
