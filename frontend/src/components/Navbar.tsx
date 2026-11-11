@@ -45,6 +45,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   const npsn = settings?.school_npsn || SCHOOL_INFO.npsn;
   const nsm = settings?.school_nsm || SCHOOL_INFO.nsm;
   const officeHours = settings?.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB';
+  const isSchoolOpen = settings?.school_is_open !== 'false';
+  const schoolStatusNote = settings?.school_status_note || '';
   const phone = settings?.school_phone || SCHOOL_INFO.phone;
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -127,12 +129,31 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>NSM: <strong>{nsm}</strong></span>
           </div>
 
-          {/* Right: Operational Hours & Quick Contact */}
-          <div className="flex items-center gap-6 text-emerald-100">
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-emerald-300" />
-              {officeHours}
-            </span>
+          {/* Right: Operational Hours, School Status & Quick Contact */}
+          <div className="flex items-center gap-5 text-emerald-100">
+            {/* Status Sekolah Buka/Tutup Indicator */}
+            <div className="flex items-center gap-2">
+              <span
+                className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold shadow-xs transition-colors ${
+                  isSchoolOpen
+                    ? 'bg-emerald-950/70 text-emerald-200 border border-emerald-400/40'
+                    : 'bg-rose-950/80 text-rose-200 border border-rose-400/50'
+                }`}
+                title={isSchoolOpen ? 'Madrasah sedang beroperasi / buka' : 'Madrasah sedang tutup / libur'}
+              >
+                <span className={`w-2 h-2 rounded-full ${isSchoolOpen ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`}></span>
+                <span>{isSchoolOpen ? 'BUKA' : 'TUTUP'}</span>
+              </span>
+
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-emerald-300" />
+                <span>{officeHours}</span>
+                {schoolStatusNote && (
+                  <span className="text-[11px] text-emerald-200/90 font-normal">({schoolStatusNote})</span>
+                )}
+              </span>
+            </div>
+
             <button
               onClick={onOpenContact}
               className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
@@ -363,12 +384,28 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-3 shadow-md">
-          <div className="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200 text-sm text-[#059669] flex items-center justify-between">
+          <div className="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200 text-sm flex items-center justify-between">
             <div>
-              <p className="font-bold">NPSN: {npsn} | NSM: {nsm}</p>
+              <p className="font-bold text-[#059669]">NPSN: {npsn} | NSM: {nsm}</p>
               <p className="text-xs text-slate-600">Akreditasi {accreditation}</p>
+              <p className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
+                <Clock className="w-3 h-3 text-emerald-600" />
+                {officeHours}
+              </p>
             </div>
-            <span className="px-2.5 py-1 rounded bg-emerald-200 text-[#059669] font-bold text-xs">TERDAFTAR</span>
+            <div className="text-right flex flex-col items-end gap-1">
+              <span className={`px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-xs ${
+                isSchoolOpen
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-rose-600 text-white'
+              }`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${isSchoolOpen ? 'bg-emerald-200 animate-pulse' : 'bg-rose-200'}`}></span>
+                {isSchoolOpen ? 'BUKA' : 'TUTUP'}
+              </span>
+              {schoolStatusNote && (
+                <span className="text-[10px] text-slate-500 max-w-[120px] truncate">{schoolStatusNote}</span>
+              )}
+            </div>
           </div>
 
           <div className="space-y-1">

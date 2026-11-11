@@ -11,6 +11,7 @@ import {
   ExternalLink,
   Share2,
   Lock,
+  Clock,
 } from 'lucide-react';
 
 import { resolveImageUrl } from '../services/api';
@@ -30,6 +31,8 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
   const address = settings?.school_address || 'Jl. Setiabudi No. 12, Krian, Sidoarjo, Jawa Timur';
   const phone = settings?.school_phone || '(031) 8971234';
   const email = settings?.school_email || 'info@mialahmad.sch.id';
+  const officeHours = settings?.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB';
+  const isSchoolOpen = settings?.school_is_open !== 'false';
   const mapsUrl = settings?.maps_embed_url || 'https://maps.google.com/?q=MI+AL-AHMAD+Krian+Sidoarjo';
   const isGeneric = (url?: string) => {
     if (!url) return true;
@@ -136,6 +139,18 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
                   <Mail className="w-4 h-4 text-emerald-600 shrink-0 group-hover:scale-110 transition-transform" />
                   <span>{email}</span>
                 </a>
+              </div>
+              <div className="flex items-center gap-2 pt-1 text-xs">
+                <Clock className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span className="text-slate-600">{officeHours}</span>
+                <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                  isSchoolOpen
+                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                    : 'bg-rose-50 text-rose-700 border border-rose-200'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${isSchoolOpen ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></span>
+                  {isSchoolOpen ? 'Buka' : 'Tutup'}
+                </span>
               </div>
             </div>
 

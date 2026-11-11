@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AdminUser, api } from '../services/api';
+import { mockAdminStore } from '../services/mockAdminData';
 import { AdminOverviewTab } from './tabs/AdminOverviewTab';
 import { AdminPageControlTab } from './tabs/AdminPageControlTab';
 import { AdminArticlesTab } from './tabs/AdminArticlesTab';
@@ -36,6 +37,43 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [isSidebarOpenMobile, setIsSidebarOpenMobile] = useState<boolean>(false);
+  const [settings, setSettings] = useState<Record<string, string>>(() => mockAdminStore.getSettings());
+  const [isTogglingSchool, setIsTogglingSchool] = useState(false);
+
+  useEffect(() => {
+    const handleSettingsChanged = (e?: any) => {
+      if (e?.detail && typeof e.detail === 'object') {
+        setSettings(prev => ({ ...prev, ...e.detail }));
+      } else {
+        setSettings(mockAdminStore.getSettings());
+      }
+    };
+    window.addEventListener('mi_settings_changed', handleSettingsChanged);
+    window.addEventListener('storage', handleSettingsChanged);
+    api.getSettings().then(res => {
+      if (res) setSettings(prev => ({ ...prev, ...res }));
+    }).catch(() => {});
+
+    return () => {
+      window.removeEventListener('mi_settings_changed', handleSettingsChanged);
+      window.removeEventListener('storage', handleSettingsChanged);
+    };
+  }, []);
+
+  const isSchoolOpen = settings.school_is_open !== 'false';
+
+  const handleToggleSchoolStatus = async () => {
+    const nextVal = isSchoolOpen ? 'false' : 'true';
+    setIsTogglingSchool(true);
+    try {
+      await api.updateAdminSettings([{ key: 'school_is_open', value: nextVal }]);
+      setSettings(prev => ({ ...prev, school_is_open: nextVal }));
+    } catch (err: any) {
+      alert(err.message || 'Gagal mengubah status operasional sekolah.');
+    } finally {
+      setIsTogglingSchool(false);
+    }
+  };
 
   const menuItems = [
     { id: 'overview', label: 'Ringkasan Dashboard', icon: LayoutDashboard },
@@ -175,7 +213,34 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Quick School Open/Closed Switch */}
+            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200/90 px-3 py-1.5 rounded-xl shadow-2xs">
+              <span className="text-xs font-semibold text-slate-600 hidden md:inline">Sekolah:</span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={isSchoolOpen}
+                onClick={handleToggleSchoolStatus}
+                disabled={isTogglingSchool}
+                className={`relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none disabled:opacity-50 ${
+                  isSchoolOpen ? 'bg-emerald-600' : 'bg-rose-600'
+                }`}
+                title={isSchoolOpen ? 'Status BUKA: Klik untuk mematikan / tutup sekolah' : 'Status TUTUP: Klik untuk mengaktifkan / buka sekolah'}
+              >
+                <span
+                  className={`pointer-events-none inline-flex items-center justify-center h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out text-[9px] font-black ${
+                    isSchoolOpen ? 'translate-x-6 text-emerald-700' : 'translate-x-0 text-rose-700'
+                  }`}
+                >
+                  {isSchoolOpen ? 'ON' : 'OFF'}
+                </span>
+              </button>
+              <span className={`text-xs font-extrabold ${isSchoolOpen ? 'text-emerald-700' : 'text-rose-700'}`}>
+                {isSchoolOpen ? 'BUKA' : 'TUTUP'}
+              </span>
+            </div>
+
             <button
               onClick={onBackToPublicSite}
               className="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"

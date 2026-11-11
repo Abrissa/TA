@@ -17,6 +17,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, set
   const email = settings?.school_email || SCHOOL_INFO.email;
   const address = settings?.school_address || SCHOOL_INFO.address;
   const hours = settings?.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB';
+  const isSchoolOpen = settings?.school_is_open !== 'false';
+  const schoolStatusNote = settings?.school_status_note || '';
 
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent(
@@ -100,9 +102,20 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, set
               <div className="w-9 h-9 rounded-lg bg-emerald-100 text-[#059669] flex items-center justify-center shrink-0">
                 <Clock className="w-5 h-5" />
               </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900">Jam Operasional Layanan Tata Usaha</p>
+              <div className="flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-bold text-slate-900">Jam Operasional Tata Usaha</p>
+                  <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold flex items-center gap-1.5 ${
+                    isSchoolOpen ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300'
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${isSchoolOpen ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></span>
+                    {isSchoolOpen ? 'Sedang Buka' : 'Sedang Tutup'}
+                  </span>
+                </div>
                 <p className="text-sm text-slate-600">{hours}</p>
+                {schoolStatusNote && (
+                  <p className="text-xs text-slate-500 mt-1 italic">"{schoolStatusNote}"</p>
+                )}
               </div>
             </div>
           </div>

@@ -386,6 +386,60 @@ export const AdminPageControlTab: React.FC = () => {
                   className="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
                 />
               </div>
+
+              {/* Status Buka / Tutup Sekolah Toggle */}
+              <div className="sm:col-span-2 pt-2 border-t border-slate-100">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-slate-900">Status Operasional Madrasah</span>
+                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                        settings['school_is_open'] !== 'false'
+                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                          : 'bg-rose-100 text-rose-800 border border-rose-300'
+                      }`}>
+                        {settings['school_is_open'] !== 'false' ? 'BUKA (ON)' : 'TUTUP (OFF)'}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Menampilkan penanda Buka atau Tutup secara live di bar atas website publik.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={settings['school_is_open'] !== 'false'}
+                    onClick={() => handleToggle('school_is_open')}
+                    className={`relative inline-flex h-8 w-16 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                      settings['school_is_open'] !== 'false' ? 'bg-emerald-600' : 'bg-slate-300'
+                    }`}
+                  >
+                    <span
+                      className={`pointer-events-none inline-flex items-center justify-center h-7 w-7 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out text-[10px] font-bold ${
+                        settings['school_is_open'] !== 'false' ? 'translate-x-8 text-emerald-700' : 'translate-x-0 text-slate-400'
+                      }`}
+                    >
+                      {settings['school_is_open'] !== 'false' ? 'ON' : 'OFF'}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Catatan Keterangan Status (Opsional)
+                </label>
+                <input
+                  type="text"
+                  value={settings['school_status_note'] ?? ''}
+                  onChange={(e) => handleTextChange('school_status_note', e.target.value)}
+                  placeholder="Contoh: Libur Hari Raya / KBM Aktif"
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+                <p className="text-[11px] text-slate-400 mt-1">
+                  Catatan ini akan tampil di samping badge status buka/tutup di baris atas website.
+                </p>
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api, AdminStats, PpdbRecord, AlumniSubmissionRecord } from '../../services/api';
+import { mockAdminStore } from '../../services/mockAdminData';
 import { 
   Users, 
   FileText, 
@@ -10,7 +11,9 @@ import {
   ArrowUpRight, 
   Loader2,
   Calendar,
-  AlertCircle
+  AlertCircle,
+  Power,
+  Building
 } from 'lucide-react';
 
 interface AdminOverviewTabProps {
@@ -22,10 +25,51 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
   const [recentPpdb, setRecentPpdb] = useState<PpdbRecord[]>([]);
   const [recentAlumni, setRecentAlumni] = useState<AlumniSubmissionRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [settings, setSettings] = useState<Record<string, string>>(() => mockAdminStore.getSettings());
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [statusFeedback, setStatusFeedback] = useState<string | null>(null);
 
   useEffect(() => {
     loadData();
+
+    const handleSettingsChanged = (e?: any) => {
+      if (e?.detail && typeof e.detail === 'object') {
+        setSettings(prev => ({ ...prev, ...e.detail }));
+      } else {
+        setSettings(mockAdminStore.getSettings());
+      }
+    };
+    window.addEventListener('mi_settings_changed', handleSettingsChanged);
+    window.addEventListener('storage', handleSettingsChanged);
+    api.getSettings().then(res => {
+      if (res) setSettings(prev => ({ ...prev, ...res }));
+    }).catch(() => {});
+
+    return () => {
+      window.removeEventListener('mi_settings_changed', handleSettingsChanged);
+      window.removeEventListener('storage', handleSettingsChanged);
+    };
   }, []);
+
+  const handleToggleSchoolStatus = async () => {
+    const isCurrentlyOpen = settings.school_is_open !== 'false';
+    const nextVal = isCurrentlyOpen ? 'false' : 'true';
+    setIsUpdatingStatus(true);
+    setStatusFeedback(null);
+
+    try {
+      await api.updateAdminSettings([
+        { key: 'school_is_open', value: nextVal }
+      ]);
+      setSettings(prev => ({ ...prev, school_is_open: nextVal }));
+      setStatusFeedback(`Status berhasil diubah: Madrasah sekarang ${nextVal === 'true' ? 'BUKA (ON)' : 'TUTUP / LIBUR (OFF)'}.`);
+      setTimeout(() => setStatusFeedback(null), 3500);
+    } catch (err: any) {
+      alert(err.message || 'Gagal memperbarui status madrasah.');
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
 
   const loadData = async () => {
     try {
@@ -87,6 +131,8 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
     },
   ];
 
+  const isSchoolOpen = settings.school_is_open !== 'false';
+
   return (
     <div className="space-y-8">
       {/* Top Banner Notice */}
@@ -104,6 +150,91 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
           >
             Kendali Tampilan Web →
           </button>
+        </div>
+      </div>
+
+      {/* Status Buka / Tutup Sekolah (Switch On/Off) Control Card */}
+      <div className={`rounded-2xl p-6 border transition-all shadow-xs ${
+        isSchoolOpen 
+          ? 'bg-gradient-to-r from-emerald-50 via-white to-emerald-50/40 border-emerald-200' 
+          : 'bg-gradient-to-r from-rose-50 via-white to-rose-50/40 border-rose-200'
+      }`}>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-1.5 flex-1">
+            <div className="flex items-center gap-2.5">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                <Building className="w-4 h-4 text-slate-400" />
+                Status Operasional Madrasah
+              </span>
+              <span
+                className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-extrabold shadow-2xs ${
+                  isSchoolOpen
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-rose-600 text-white'
+                }`}
+              >
+                <span className={`w-2 h-2 rounded-full ${isSchoolOpen ? 'bg-emerald-200 animate-pulse' : 'bg-rose-200'}`}></span>
+                <span>{isSchoolOpen ? 'SEKOLAH BUKA' : 'SEKOLAH TUTUP / LIBUR'}</span>
+              </span>
+            </div>
+
+            <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+              {isSchoolOpen
+                ? 'Layanan Tatap Muka & KBM Sedang Berjalan (BUKA)'
+                : 'Layanan Tatap Muka Madrasah Sedang Tutup / Libur (TUTUP)'}
+            </h3>
+
+            <p className="text-xs sm:text-sm text-slate-600 flex flex-wrap items-center gap-x-4 gap-y-1">
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Jam Layanan Kantor: <strong>{settings.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB'}</strong></span>
+              </span>
+              {settings.school_status_note && (
+                <span className="text-slate-600 bg-white/80 border border-slate-200 px-2.5 py-0.5 rounded-lg text-xs font-medium">
+                  Keterangan: {settings.school_status_note}
+                </span>
+              )}
+            </p>
+
+            {statusFeedback && (
+              <p className="text-xs font-bold text-emerald-700 flex items-center gap-1.5 pt-1 animate-fadeIn">
+                <CheckCircle className="w-4 h-4 text-emerald-600" />
+                <span>{statusFeedback}</span>
+              </p>
+            )}
+          </div>
+
+          {/* Big ON / OFF Switch */}
+          <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs shrink-0 self-start md:self-auto">
+            <div className="text-right">
+              <div className="text-xs font-extrabold text-slate-900">
+                {isSchoolOpen ? 'Saklar BUKA (ON)' : 'Saklar TUTUP (OFF)'}
+              </div>
+              <div className="text-[11px] text-slate-400">
+                Klik untuk geser status
+              </div>
+            </div>
+
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isSchoolOpen}
+              onClick={handleToggleSchoolStatus}
+              disabled={isUpdatingStatus}
+              className={`relative inline-flex h-9 w-18 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none disabled:opacity-50 ${
+                isSchoolOpen ? 'bg-emerald-600' : 'bg-slate-300'
+              }`}
+              title={isSchoolOpen ? 'Klik untuk mengubah status menjadi TUTUP' : 'Klik untuk mengubah status menjadi BUKA'}
+            >
+              <span
+                className={`pointer-events-none inline-flex items-center justify-center h-8 w-8 transform rounded-full bg-white shadow-md ring-0 transition duration-300 ease-in-out text-[11px] font-black ${
+                  isSchoolOpen ? 'translate-x-9 text-emerald-700' : 'translate-x-0 text-slate-500'
+                }`}
+              >
+                {isSchoolOpen ? 'ON' : 'OFF'}
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 

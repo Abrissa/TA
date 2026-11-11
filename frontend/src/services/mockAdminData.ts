@@ -209,6 +209,8 @@ export const DEFAULT_CMS_SETTINGS: Record<string, string> = {
   school_npsn: '111235150000',
   school_nsm: '111235150000',
   office_hours: 'Senin - Sabtu: 07.00 - 14.00 WIB',
+  school_is_open: 'true',
+  school_status_note: '',
   hero_subtitle: 'Selamat Datang di MI AL-AHMAD',
   hero_headline: 'Berkarakter, Peduli & Berprestasi di Era Teknologi',
   hero_cta_text: 'Jelajahi',
