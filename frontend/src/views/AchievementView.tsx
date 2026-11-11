@@ -21,6 +21,7 @@ import {
   Search,
   Home,
   Loader2,
+  User,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PageHeroBanner } from '../components/ui/PageHeroBanner';
@@ -45,8 +46,7 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [activeModalItem, setActiveModalItem] = useState<Achievement | null>(null);
   const [spotlightIndex, setSpotlightIndex] = useState<number>(0);
-  const [stackIndex, setStackIndex] = useState<number>(0);
-  const stackTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [isSpotlightHovered, setIsSpotlightHovered] = useState<boolean>(false);
   const achievementsGridRef = useRef<HTMLDivElement>(null);
 
   // Reset tab/halaman ke pertama saat kategori atau pencarian berubah
@@ -78,27 +78,6 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
     };
   }, []);
 
-  // Auto-play spotlight
-  useEffect(() => {
-    if (activeModalItem || achievements.length === 0) return;
-    const timer = setInterval(() => {
-      setSpotlightIndex((prev) => (prev + 1) % achievements.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [activeModalItem, achievements.length]);
-
-  // Auto-play stacked carousel — defined after filteredAchievements, see below
-
-  const handleNextSpotlight = () => {
-    setSpotlightIndex((prev) => (prev + 1) % achievements.length);
-  };
-
-  const handlePrevSpotlight = () => {
-    setSpotlightIndex((prev) => (prev - 1 + achievements.length) % achievements.length);
-  };
-
-  const activeSpotlight = achievements[spotlightIndex];
-
   // Close modal on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -116,6 +95,30 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
       count: achievements.filter((a) => a.category === cat).length,
     })),
   ].filter((cat) => cat.count > 0);
+
+  const activeCategoryAchievements =
+    selectedCategory === 'Semua'
+      ? achievements
+      : achievements.filter((a) => a.category === selectedCategory);
+  const spotlightList = activeCategoryAchievements.length > 0 ? activeCategoryAchievements : achievements;
+  const currentSpotlight = spotlightList.length > 0 ? (spotlightList[spotlightIndex % spotlightList.length] || spotlightList[0]) : null;
+
+  const handleNextSpotlight = () => {
+    setSpotlightIndex((prev) => (prev + 1) % spotlightList.length);
+  };
+
+  const handlePrevSpotlight = () => {
+    setSpotlightIndex((prev) => (prev - 1 + spotlightList.length) % spotlightList.length);
+  };
+
+  // Auto-play spotlight timer: slides automatically every 4.5 seconds and pauses on hover or when modal is open
+  useEffect(() => {
+    if (isSpotlightHovered || activeModalItem || spotlightList.length <= 1) return;
+    const timer = setInterval(() => {
+      setSpotlightIndex((prev) => (prev + 1) % spotlightList.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [isSpotlightHovered, activeModalItem, spotlightList.length]);
 
   const filteredAchievements = achievements.filter((ach) => {
     const matchesCategory = selectedCategory === 'Semua' || ach.category === selectedCategory;
@@ -141,15 +144,6 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
-
-  // ▸ Auto-play spotlight stacked card carousel
-  useEffect(() => {
-    if (achievements.length <= 1) return;
-    stackTimerRef.current = setInterval(() => {
-      setSpotlightIndex((prev) => (prev + 1) % achievements.length);
-    }, 3800);
-    return () => { if (stackTimerRef.current) clearInterval(stackTimerRef.current); };
-  }, [achievements.length]);
 
   const getCategoryBadgeStyle = (category: string) => {
     switch (category) {
@@ -197,179 +191,172 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
           <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 text-slate-500 text-sm">
             Belum ada data prestasi yang dipublikasikan.
           </div>
-        ) : (
-          <div 
-            className="bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-900 rounded-3xl p-6 sm:p-8 lg:p-10 text-white border border-emerald-500/40 shadow-2xl overflow-hidden relative"
-            onMouseEnter={() => { if (stackTimerRef.current) clearInterval(stackTimerRef.current); }}
-            onMouseLeave={() => {
-              if (achievements.length > 1) {
-                stackTimerRef.current = setInterval(() => {
-                  setSpotlightIndex((prev) => (prev + 1) % achievements.length);
-                }, 3800);
-              }
-            }}
+        ) : !searchQuery && currentSpotlight ? (
+          <div
+            onMouseEnter={() => setIsSpotlightHovered(true)}
+            onMouseLeave={() => setIsSpotlightHovered(false)}
+            className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-white border border-emerald-500/40 shadow-xl overflow-hidden relative group"
           >
-            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl pointer-events-none" />
 
             {/* Slider Controls Bar */}
-            <div className="flex items-center justify-between gap-3 pb-5 mb-6 border-b border-white/10 relative z-10">
+            <div className="flex items-center justify-between gap-3 pb-4 mb-4 border-b border-white/10 relative z-10">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-800/80 text-emerald-200 text-xs sm:text-sm font-bold border border-emerald-600/50 shadow-xs">
-                  <Sparkles className="w-4 h-4 text-amber-300" />
-                  Sorotan Prestasi Utama
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-400 text-slate-950 text-xs sm:text-sm font-black uppercase tracking-wider shadow-sm">
+                  <Sparkles className="w-4 h-4 text-slate-950" />
+                  Prestasi Pilihan
+                </span>
+                <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-semibold">
+                  Bergeser Otomatis
                 </span>
               </div>
 
               {/* Prev / Next Buttons & Counter */}
               <div className="flex items-center gap-2">
-                <span className="text-sm font-mono font-bold text-amber-300 mr-2">
-                  {String(spotlightIndex + 1).padStart(2, '0')} / {String(achievements.length).padStart(2, '0')}
+                <span className="text-xs sm:text-sm font-mono font-bold text-amber-300 mr-1">
+                  {String((spotlightIndex % spotlightList.length) + 1).padStart(2, '0')} / {String(spotlightList.length).padStart(2, '0')}
                 </span>
                 <button
                   onClick={handlePrevSpotlight}
                   aria-label="Prestasi Sebelumnya"
-                  className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/15"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/15"
                   title="Sebelumnya"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
                 <button
                   onClick={handleNextSpotlight}
-                  aria-label="Prestasi Berikutnya"
-                  className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/15"
+                  aria-label="Prestasi Selanjutnya"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/15"
                   title="Berikutnya"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </div>
             </div>
 
-            {/* HORIZONTAL STACKED CARDS DECK (GAMBAR 4 REFERENCE - PURE WHITE CARDS) */}
-            <div className="relative min-h-[510px] sm:min-h-[530px] flex items-center justify-center py-4 z-10 overflow-hidden">
-              <div className="relative w-full max-w-4xl h-[480px] sm:h-[500px] flex items-center justify-center">
-                {achievements.map((ach, idx) => {
-                  const total = achievements.length;
-                  let diff = (idx - spotlightIndex + total) % total;
-                  if (diff > total / 2) diff -= total;
-
-                  const isCenter = diff === 0;
-                  const isLeft = diff === -1 || (total === 2 && diff === 1);
-                  const isRight = diff === 1;
-
-                  let transformStyle = '';
-                  let zIndex = 10;
-                  let opacity = 0;
-                  let pointerEvents = 'none';
-
-                  if (isCenter) {
-                    transformStyle = 'translateX(0) scale(1) rotate(0deg)';
-                    zIndex = 30;
-                    opacity = 1;
-                    pointerEvents = 'auto';
-                  } else if (isLeft) {
-                    transformStyle = 'translateX(-36%) sm:translateX(-45%) scale(0.88) rotate(-2deg)';
-                    zIndex = 20;
-                    opacity = 0.75;
-                    pointerEvents = 'auto';
-                  } else if (isRight) {
-                    transformStyle = 'translateX(36%) sm:translateX(45%) scale(0.88) rotate(2deg)';
-                    zIndex = 20;
-                    opacity = 0.75;
-                    pointerEvents = 'auto';
-                  } else {
-                    transformStyle = `translateX(${diff > 0 ? '70%' : '-70%'}) scale(0.7)`;
-                    zIndex = 10;
-                    opacity = 0;
-                  }
-
-                  return (
-                    <div
-                      key={ach.id}
-                      onClick={() => {
-                        if (isCenter) {
-                          setActiveModalItem(ach);
-                        } else {
-                          setSpotlightIndex(idx);
-                        }
+            {/* Animated Slide Content */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSpotlight.id}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-10"
+              >
+                {/* Photo Thumbnail */}
+                <div className="lg:col-span-5 flex justify-center">
+                  <div
+                    onClick={() => setActiveModalItem(currentSpotlight)}
+                    className="relative cursor-pointer rounded-2xl overflow-hidden shadow-2xl border-2 border-amber-400/60 w-full aspect-[4/3] bg-slate-950/60"
+                  >
+                    <img
+                      src={currentSpotlight.imageUrl || '/assets/prestasi-iksc-2025.jpg'}
+                      alt={currentSpotlight.title}
+                      className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      onError={(e) => {
+                        e.currentTarget.src = '/assets/prestasi-iksc-2025.jpg';
                       }}
-                      className="absolute top-0 w-[290px] sm:w-[360px] lg:w-[400px] bg-white text-slate-900 rounded-3xl p-5 sm:p-6 shadow-2xl border border-slate-200/90 flex flex-col justify-between cursor-pointer transition-all duration-500 ease-out select-none"
-                      style={{
-                        transform: transformStyle,
-                        zIndex,
-                        opacity,
-                        pointerEvents: pointerEvents as any,
-                        filter: isCenter ? 'drop-shadow(0 20px 30px rgba(0,0,0,0.35))' : 'drop-shadow(0 10px 20px rgba(0,0,0,0.18))',
-                      }}
-                    >
-                      {/* Top Poster Preview Box */}
-                      <div className="relative rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 h-56 sm:h-64 flex items-center justify-center p-2 group">
-                        <img
-                          src={ach.imageUrl || '/assets/prestasi-iksc-2025.jpg'}
-                          alt={ach.title}
-                          className="w-full h-full object-contain drop-shadow-sm transition-transform duration-500 group-hover:scale-105"
-                          onError={(e) => {
-                            e.currentTarget.src = '/assets/prestasi-iksc-2025.jpg';
-                          }}
-                        />
-                        <span className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-xs ${getCategoryBadgeStyle(ach.category)}`}>
-                          Tingkat {ach.category}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                      <span className="px-3 py-1 rounded-md bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">
+                        {currentSpotlight.category ? `Tingkat ${currentSpotlight.category}` : 'Prestasi'}
+                      </span>
+                      {currentSpotlight.rank && (
+                        <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1">
+                          <Trophy className="w-3.5 h-3.5 text-amber-300" />
+                          {currentSpotlight.rank}
                         </span>
-                        <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-xs text-white text-xs font-bold">
-                          {ach.year || '2025'}
-                        </span>
-                      </div>
-
-                      {/* Content Details */}
-                      <div className="pt-4 space-y-2 text-left">
-                        <h3 className="font-black font-heading text-slate-900 text-base sm:text-lg line-clamp-2 leading-tight">
-                          {ach.title}
-                        </h3>
-                        <p className="text-xs sm:text-sm font-bold text-emerald-700 line-clamp-1">
-                          {ach.winnerRole ? `${ach.winnerRole} • ` : ''}{ach.winner}
-                        </p>
-                        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                          {ach.description}
-                        </p>
-                      </div>
-
-                      {/* Bottom Button */}
-                      <div className="pt-3 border-t border-slate-100 mt-2">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveModalItem(ach);
-                          }}
-                          className="w-full py-2.5 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer"
-                        >
-                          <Eye className="w-4 h-4" />
-                          <span>Lihat Poster Lengkap</span>
-                        </button>
-                      </div>
+                      )}
                     </div>
-                  );
-                })}
-              </div>
-            </div>
+                  </div>
+                </div>
 
-            {/* Slide Indicator Dots */}
-            <div className="flex items-center justify-center gap-2 pt-4 relative z-10">
-              {achievements.map((ach, idx) => (
+                {/* Text Info */}
+                <div className="lg:col-span-7 space-y-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-3.5 py-1.5 rounded-full bg-emerald-800/80 text-emerald-200 text-sm font-semibold border border-emerald-600/50 flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4 text-amber-300" />
+                      {currentSpotlight.year ? `Tahun ${currentSpotlight.year}` : (currentSpotlight.date || 'Tahun 2025')}
+                    </span>
+                    {currentSpotlight.event && (
+                      <span className="px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-sm font-medium">
+                        {currentSpotlight.event}
+                      </span>
+                    )}
+                  </div>
+
+                  <div>
+                    <h2
+                      onClick={() => setActiveModalItem(currentSpotlight)}
+                      className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading text-white leading-tight hover:text-amber-300 transition-colors cursor-pointer"
+                    >
+                      {currentSpotlight.title}
+                    </h2>
+                    {(currentSpotlight.winner || currentSpotlight.winnerRole) && (
+                      <p className="text-amber-300 font-bold text-sm sm:text-base mt-1.5 flex items-center gap-2">
+                        <User className="w-4 h-4 text-amber-400" />
+                        {currentSpotlight.winnerRole ? `${currentSpotlight.winnerRole} • ` : 'Peraih Prestasi: '}
+                        {currentSpotlight.winner}
+                      </p>
+                    )}
+                  </div>
+
+                  <p className="text-slate-200 text-base sm:text-lg leading-relaxed line-clamp-3">
+                    {currentSpotlight.description}
+                  </p>
+
+                  {/* Details / Tags */}
+                  {((currentSpotlight.details && currentSpotlight.details.length > 0) || currentSpotlight.highlight) && (
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {currentSpotlight.highlight && (
+                        <span className="px-3 py-1 rounded-md bg-amber-400/20 text-amber-300 text-xs font-semibold border border-amber-400/30">
+                          {currentSpotlight.highlight}
+                        </span>
+                      )}
+                      {currentSpotlight.details?.slice(0, 4).map((detail, dIdx) => (
+                        <span
+                          key={dIdx}
+                          className="px-3 py-1 rounded-md bg-white/10 text-slate-200 text-xs font-medium border border-white/10"
+                        >
+                          #{detail.replace(/^#/, '')}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="pt-2 flex flex-wrap items-center gap-3">
+                    <button
+                      onClick={() => setActiveModalItem(currentSpotlight)}
+                      className="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-sm sm:text-base flex items-center gap-2 transition-all shadow-md cursor-pointer"
+                    >
+                      <span>Lihat Detail Prestasi</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Dots Indicator */}
+            <div className="flex items-center justify-center gap-2 pt-4 mt-3 border-t border-white/10 relative z-10">
+              {spotlightList.map((_, idx) => (
                 <button
-                  key={ach.id}
+                  key={idx}
                   onClick={() => setSpotlightIndex(idx)}
-                  aria-label={`Slide ${idx + 1}: ${ach.title}`}
-                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                    spotlightIndex === idx
-                      ? 'w-8 bg-amber-400 shadow-md shadow-amber-400/40'
-                      : 'w-2.5 bg-white/30 hover:bg-white/60'
+                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                    (spotlightIndex % spotlightList.length) === idx
+                      ? 'w-7 bg-amber-400'
+                      : 'w-2 bg-white/30 hover:bg-white/50'
                   }`}
-                  title={ach.title}
+                  aria-label={`Go to slide ${idx + 1}`}
                 />
               ))}
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* Filter & Search Controls */}
         <div ref={achievementsGridRef} className="space-y-4 pt-4">
@@ -424,7 +411,7 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
             {categories.map((cat) => (
               <button
                 key={cat.label}
-                onClick={() => { setSelectedCategory(cat.label); setStackIndex(0); }}
+                onClick={() => { setSelectedCategory(cat.label); setSpotlightIndex(0); }}
                 className={`px-4 py-2 rounded-xl text-sm sm:text-base font-bold transition-all cursor-pointer flex items-center gap-2 ${selectedCategory === cat.label
                     ? 'bg-emerald-700 text-white shadow-md shadow-emerald-700/20 scale-105'
                     : 'bg-white text-slate-700 border border-slate-200 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-300'
