@@ -70,18 +70,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           {/* 2-Column Grid Layout: Foto & Teks Terpisah Rapi */}
           <div className="relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 items-end min-h-[360px] sm:min-h-[400px] lg:min-h-[430px]">
-            {/* Kolom Kiri (5 Kolom): Foto Siswa Diperbesar Signifikan dengan Efek Pop-out Megah */}
+            {/* Kolom Kiri (5 Kolom): Foto Siswa Proporsional & Pas */}
             <div className="lg:col-span-5 relative flex justify-center lg:justify-start items-end order-2 lg:order-1 h-full pl-4 sm:pl-8 lg:pl-10 overflow-visible">
               <motion.div
                 initial={{ opacity: 0, scale: 0.94, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full max-w-[460px] sm:max-w-[520px] lg:max-w-[600px] xl:max-w-[640px] flex items-end justify-center lg:justify-start overflow-visible scale-[1.05] sm:scale-[1.1] lg:scale-[1.16] xl:scale-[1.2] origin-bottom lg:-mb-1"
+                className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[400px] flex items-end justify-center lg:justify-start overflow-visible origin-bottom"
               >
                 <img
                   src={studentsImage}
                   alt="Siswa Berprestasi MI AL-AHMAD"
-                  className="w-full max-h-[420px] sm:max-h-[520px] lg:max-h-[620px] xl:max-h-[680px] object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.5)] -mb-0 lg:-mt-32 xl:-mt-36"
+                  className="w-auto h-auto max-h-[320px] sm:max-h-[380px] lg:max-h-[450px] xl:max-h-[470px] object-contain object-bottom drop-shadow-[0_20px_25px_rgba(0,0,0,0.35)] -mb-0 lg:-mt-6 xl:-mt-8"
                   onError={(e) => {
                     e.currentTarget.src = '/assets/hero-students.png';
                   }}
