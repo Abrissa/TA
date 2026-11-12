@@ -934,6 +934,39 @@ export const api = {
     }
   },
 
+  async createAcademicYear(data: { name: string; code?: string; start_date?: string; end_date?: string; is_active?: boolean }): Promise<MasterAcademicYear> {
+    try {
+      const res = await fetch(`${BASE_URL}/api/admin/master-data/academic-years`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data),
+      });
+      const json = await handleResponse<{ success: boolean; data: MasterAcademicYear }>(res);
+      return json.data;
+    } catch (err: any) {
+      if (isNetworkError(err)) {
+        return mockAdminStore.createAcademicYear(data);
+      }
+      throw err;
+    }
+  },
+
+  async deleteAcademicYear(id: number): Promise<void> {
+    try {
+      const res = await fetch(`${BASE_URL}/api/admin/master-data/academic-years/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
+      await handleResponse(res);
+    } catch (err: any) {
+      if (isNetworkError(err)) {
+        mockAdminStore.deleteAcademicYear(id);
+        return;
+      }
+      throw err;
+    }
+  },
+
   async updatePpdbPath(id: number, data: Partial<MasterPpdbPath>): Promise<void> {
     try {
       const res = await fetch(`${BASE_URL}/api/admin/master-data/ppdb-paths/${id}`, {

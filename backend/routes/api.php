@@ -103,6 +103,8 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
 
     // Master Database Management
     Route::get('/master-data', [AdminMasterDataController::class, 'index']);
+    Route::post('/master-data/academic-years', [AdminMasterDataController::class, 'storeAcademicYear']);
+    Route::delete('/master-data/academic-years/{id}', [AdminMasterDataController::class, 'destroyAcademicYear']);
     Route::post('/master-data/categories', [AdminMasterDataController::class, 'storeCategory']);
     Route::put('/master-data/ppdb-paths/{id}', [AdminMasterDataController::class, 'updatePpdbPath']);
     Route::post('/master-data/academic-years/{id}/set-active', [AdminMasterDataController::class, 'setActiveAcademicYear']);

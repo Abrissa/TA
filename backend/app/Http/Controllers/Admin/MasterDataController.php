@@ -81,4 +81,45 @@ class MasterDataController extends Controller
             'data' => $year,
         ]);
     }
+
+    public function storeAcademicYear(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'code' => 'required|string|max:50|unique:master_academic_years,code',
+            'is_active' => 'nullable|boolean',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+        ]);
+
+        if (!empty($validated['is_active'])) {
+            MasterAcademicYear::query()->update(['is_active' => false]);
+        }
+
+        $year = MasterAcademicYear::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tahun ajaran baru berhasil ditambahkan.',
+            'data' => $year,
+        ], 201);
+    }
+
+    public function destroyAcademicYear(int $id): JsonResponse
+    {
+        $year = MasterAcademicYear::findOrFail($id);
+        if ($year->is_active) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tahun ajaran yang sedang aktif tidak dapat dihapus.',
+            ], 422);
+        }
+
+        $year->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tahun ajaran berhasil dihapus.',
+        ]);
+    }
 }

@@ -1,4 +1,4 @@
-import { AdminStats, AdminUser, AlumniSubmissionRecord, MasterDataResponse, MasterPpdbPath, PpdbRecord, SchoolProfileData } from './api';
+import { AdminStats, AdminUser, AlumniSubmissionRecord, MasterAcademicYear, MasterDataResponse, MasterPpdbPath, PpdbRecord, SchoolProfileData } from './api';
 import { Article, Achievement } from '../types';
 import { ARTICLES_DATA, ACHIEVEMENTS_DATA, TEACHERS_DATA, SCHOOL_INFO } from '../data/mockData';
 
@@ -635,6 +635,39 @@ export const mockAdminStore = {
       ...y,
       is_active: y.id === id,
     }));
+    writeStorage('mi_mock_master_data', data);
+  },
+
+  createAcademicYear(payload: { name: string; code?: string; start_date?: string; end_date?: string; is_active?: boolean }): MasterAcademicYear {
+    const data = this.getMasterData();
+    const nextId = (data.academic_years.reduce((max, y) => Math.max(max, y.id), 0) || 0) + 1;
+    let code = payload.code?.trim();
+    if (!code) {
+      const match = payload.name.match(/(\d{4})\s*[\/\-]\s*(\d{4})/);
+      code = match ? `${match[1]}-${match[2]}` : `AY-${nextId}`;
+    }
+
+    if (payload.is_active) {
+      data.academic_years = data.academic_years.map((y) => ({ ...y, is_active: false }));
+    }
+
+    const newYear: MasterAcademicYear = {
+      id: nextId,
+      name: payload.name.trim(),
+      code,
+      start_date: payload.start_date || undefined,
+      end_date: payload.end_date || undefined,
+      is_active: !!payload.is_active,
+    };
+
+    data.academic_years.push(newYear);
+    writeStorage('mi_mock_master_data', data);
+    return newYear;
+  },
+
+  deleteAcademicYear(id: number): void {
+    const data = this.getMasterData();
+    data.academic_years = data.academic_years.filter((y) => y.id !== id);
     writeStorage('mi_mock_master_data', data);
   },
 
