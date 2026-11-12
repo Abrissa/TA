@@ -13,7 +13,10 @@ import {
   Calendar,
   AlertCircle,
   Power,
-  Building
+  Building,
+  Edit2,
+  Check,
+  X
 } from 'lucide-react';
 
 interface AdminOverviewTabProps {
@@ -28,6 +31,11 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
   const [settings, setSettings] = useState<Record<string, string>>(() => mockAdminStore.getSettings());
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [statusFeedback, setStatusFeedback] = useState<string | null>(null);
+
+  // Quick edit hari & jam operasional kantor
+  const [isEditingHours, setIsEditingHours] = useState(false);
+  const [tempHours, setTempHours] = useState('');
+  const [isSavingHours, setIsSavingHours] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -68,6 +76,24 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
       alert(err.message || 'Gagal memperbarui status madrasah.');
     } finally {
       setIsUpdatingStatus(false);
+    }
+  };
+
+  const handleSaveHours = async () => {
+    if (!tempHours.trim()) return;
+    setIsSavingHours(true);
+    try {
+      await api.updateAdminSettings([
+        { key: 'office_hours', value: tempHours.trim() }
+      ]);
+      setSettings(prev => ({ ...prev, office_hours: tempHours.trim() }));
+      setIsEditingHours(false);
+      setStatusFeedback(`Jam layanan kantor berhasil diperbarui menjadi: "${tempHours.trim()}".`);
+      setTimeout(() => setStatusFeedback(null), 3500);
+    } catch (err: any) {
+      alert(err.message || 'Gagal menyimpan jam layanan kantor.');
+    } finally {
+      setIsSavingHours(false);
     }
   };
 
@@ -184,17 +210,114 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
                 : 'Layanan Tatap Muka Madrasah Sedang Tutup / Libur (TUTUP)'}
             </h3>
 
-            <p className="text-xs sm:text-sm text-slate-600 flex flex-wrap items-center gap-x-4 gap-y-1">
-              <span className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Jam Layanan Kantor: <strong>{settings.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB'}</strong></span>
-              </span>
-              {settings.school_status_note && (
-                <span className="text-slate-600 bg-white/80 border border-slate-200 px-2.5 py-0.5 rounded-lg text-xs font-medium">
-                  Keterangan: {settings.school_status_note}
+            {!isEditingHours ? (
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <span className="flex items-center gap-1.5 text-xs sm:text-sm text-slate-700 bg-white/90 border border-slate-200/90 px-3 py-1.5 rounded-xl shadow-2xs">
+                  <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>
+                    Jam Layanan Kantor: <strong className="text-slate-900">{settings.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB'}</strong>
+                  </span>
                 </span>
-              )}
-            </p>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTempHours(settings.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB');
+                    setIsEditingHours(true);
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-100/80 hover:bg-emerald-100 rounded-xl transition-colors cursor-pointer border border-emerald-300/70 shadow-2xs"
+                  title="Ubah hari dan jam layanan kantor"
+                >
+                  <Edit2 className="w-3.5 h-3.5" />
+                  <span>Ubah Hari & Jam</span>
+                </button>
+
+                {settings.school_status_note && (
+                  <span className="text-slate-600 bg-white/80 border border-slate-200 px-2.5 py-1 rounded-xl text-xs font-medium">
+                    Keterangan: {settings.school_status_note}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div className="pt-2 p-3.5 bg-white/95 rounded-xl border border-emerald-300 shadow-sm space-y-2.5 max-w-xl">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-emerald-600" />
+                    Atur Hari & Jam Layanan Operasional Kantor:
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingHours(false)}
+                    className="text-slate-400 hover:text-slate-600 text-xs font-semibold cursor-pointer"
+                  >
+                    Batal
+                  </button>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                  <input
+                    type="text"
+                    value={tempHours}
+                    onChange={(e) => setTempHours(e.target.value)}
+                    placeholder="Contoh: Senin - Sabtu: 07.00 - 14.00 WIB"
+                    className="flex-1 px-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-medium text-slate-900"
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSaveHours();
+                      if (e.key === 'Escape') setIsEditingHours(false);
+                    }}
+                  />
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleSaveHours}
+                      disabled={isSavingHours}
+                      className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer disabled:opacity-50"
+                    >
+                      {isSavingHours ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Check className="w-3.5 h-3.5" />
+                      )}
+                      <span>Simpan</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingHours(false)}
+                      className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                    >
+                      Batal
+                    </button>
+                  </div>
+                </div>
+
+                {/* Preset Options */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-[11px] text-slate-500">
+                  <span className="font-semibold text-slate-600">Pilihan Cepat:</span>
+                  <button
+                    type="button"
+                    onClick={() => setTempHours('Senin - Sabtu: 07.00 - 14.00 WIB')}
+                    className="px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 transition-colors border border-slate-200 cursor-pointer"
+                  >
+                    Senin - Sabtu (07.00 - 14.00)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTempHours('Senin - Jumat: 07.00 - 15.00 WIB')}
+                    className="px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 transition-colors border border-slate-200 cursor-pointer"
+                  >
+                    Senin - Jumat (07.00 - 15.00)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTempHours('Senin - Kamis: 07.00 - 13.30 WIB, Jumat: 07.00 - 11.00 WIB')}
+                    className="px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 transition-colors border border-slate-200 cursor-pointer"
+                  >
+                    Hari Kerja & Jumat Pendek
+                  </button>
+                </div>
+              </div>
+            )}
 
             {statusFeedback && (
               <p className="text-xs font-bold text-emerald-700 flex items-center gap-1.5 pt-1 animate-fadeIn">
