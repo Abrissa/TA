@@ -90,7 +90,7 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
   imagePosition,
 }) => {
   return (
-    <section className="relative bg-slate-950 text-white py-14 sm:py-20 px-4 sm:px-6 lg:px-8 border-b-4 border-amber-400 overflow-hidden">
+    <section className="relative bg-slate-950 text-white py-10 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 border-b-4 border-amber-400 overflow-hidden">
       {/* Background Architectural Silhouette or Custom Photo */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
         <img
@@ -121,9 +121,9 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
       </div>
 
       {!backgroundImageUrl && <IslamicSilhouette />}
-      <div className="relative z-10 max-w-7xl mx-auto space-y-4 text-left">
+      <div className="relative z-10 max-w-7xl mx-auto space-y-3.5 sm:space-y-4 text-left">
         <nav aria-label="Breadcrumb" className="pb-1">
-          <ol className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-black/20 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-medium text-emerald-100">
+          <ol className="flex flex-wrap items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-lg bg-black/20 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-medium text-emerald-100">
             {breadcrumbs.map((crumb, idx) => (
               <React.Fragment key={idx}>
                 {idx > 0 && <ChevronRight className="w-3.5 h-3.5 text-white/50 shrink-0" />}
@@ -133,12 +133,12 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
                       onClick={crumb.onClick}
                       className="inline-flex items-center gap-1.5 hover:text-amber-300 transition-colors cursor-pointer text-emerald-100"
                     >
-                      {idx === 0 && <Home className="w-4 h-4 text-amber-300" />}
+                      {idx === 0 && <Home className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />}
                       <span>{crumb.label}</span>
                     </button>
                   ) : (
                     <span className="inline-flex items-center gap-1.5 text-amber-300 font-bold" aria-current="page">
-                      {idx === 0 && <Home className="w-4 h-4 text-amber-300" />}
+                      {idx === 0 && <Home className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />}
                       {crumb.label}
                     </span>
                   )}
@@ -148,12 +148,12 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
           </ol>
         </nav>
 
-        <h1 className="text-3xl sm:text-5xl font-extrabold font-heading text-white tracking-tight leading-tight max-w-4xl">
+        <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold font-heading text-white tracking-tight leading-tight max-w-4xl">
           {title}
         </h1>
 
         {subtitle && (
-          <p className="text-emerald-100 text-base sm:text-lg max-w-3xl leading-relaxed">
+          <p className="text-emerald-100 text-xs sm:text-base lg:text-lg max-w-3xl leading-relaxed">
             {subtitle}
           </p>
         )}

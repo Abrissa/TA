@@ -173,9 +173,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Brand Logo & Title */}
           <button
             onClick={() => handleNavClick('beranda')}
-            className="flex items-center gap-3.5 text-left group focus:outline-none cursor-pointer"
+            className="flex items-center gap-2.5 sm:gap-3.5 text-left group focus:outline-none cursor-pointer"
           >
-            <div className="w-12 h-14 sm:w-13 sm:h-[58px] shrink-0">
+            <div className="w-10 h-12 sm:w-13 sm:h-[58px] shrink-0">
               <img
                 alt={`Logo ${schoolName}`}
                 className="w-full h-full object-contain"
@@ -186,10 +186,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               />
             </div>
             <div>
-              <span className="block font-extrabold text-xl sm:text-2xl text-emerald-700 tracking-tight font-heading leading-none">
+              <span className="block font-extrabold text-lg sm:text-2xl text-emerald-700 tracking-tight font-heading leading-none">
                 {schoolName}
               </span>
-              <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1 font-body">
+              <span className="block text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider mt-0.5 sm:mt-1 font-body">
                 {schoolTagline}
               </span>
             </div>
@@ -367,8 +367,32 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu button & quick indicators */}
           <div className="md:hidden flex items-center gap-2">
+            <span
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold shadow-xs ${
+                isSchoolOpen
+                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-300'
+                  : 'bg-rose-50 text-rose-700 border border-rose-300'
+              }`}
+              title={isSchoolOpen ? 'Madrasah sedang Buka' : 'Madrasah sedang Tutup'}
+            >
+              <span className={`w-1.5 h-1.5 rounded-full ${isSchoolOpen ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+              <span>{isSchoolOpen ? 'BUKA' : 'TUTUP'}</span>
+            </span>
+
+            <button
+              onClick={() => handleNavClick('ppdb')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-xs transition-colors cursor-pointer ${
+                activeTab === 'ppdb'
+                  ? 'bg-amber-400 text-slate-950 font-extrabold'
+                  : 'bg-emerald-600 text-white hover:bg-emerald-700'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5 text-amber-300" />
+              <span>PPDB</span>
+            </button>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg text-slate-700 hover:bg-slate-100 cursor-pointer"

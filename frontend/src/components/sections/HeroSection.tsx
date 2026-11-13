@@ -36,7 +36,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const statAchievements = parseInt(settings?.hero_stat_achievements || '') || 500;
 
   return (
-    <section className="relative overflow-hidden pt-16 pb-28 sm:pt-20 sm:pb-36 lg:pt-24 lg:pb-48 min-h-[680px] lg:min-h-[780px] flex items-center">
+    <section className="relative overflow-hidden pt-8 pb-16 sm:pt-20 sm:pb-36 lg:pt-24 lg:pb-48 min-h-0 sm:min-h-[680px] lg:min-h-[780px] flex items-center">
       {/* Background: Gedung Sekolah MI AL-AHMAD */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img
@@ -59,29 +59,29 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="relative min-h-[360px] sm:min-h-[400px] lg:min-h-[430px] flex items-end overflow-visible"
+          className="relative min-h-[340px] sm:min-h-[400px] lg:min-h-[430px] flex items-end overflow-visible"
         >
           {/* Card Background: Kotak Lurus Elegan & Lebih Ringkas (Compact Sleek Card) */}
-          <div className="absolute inset-0 w-full h-full rounded-3xl lg:rounded-[40px] bg-gradient-to-r from-[#047857] via-[#059669] to-[#0284c7] border border-white/35 shadow-[0_28px_65px_rgba(4,120,87,0.46)] overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl lg:rounded-[40px] bg-gradient-to-r from-[#047857] via-[#059669] to-[#0284c7] border border-white/35 shadow-[0_20px_50px_rgba(4,120,87,0.38)] overflow-hidden pointer-events-none">
             {/* Subtle internal glow & top highlight */}
             <div className="pointer-events-none absolute -right-20 -bottom-20 w-96 h-96 rounded-full bg-emerald-400/25 blur-3xl" />
             <div className="pointer-events-none absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/20 to-transparent" />
           </div>
 
           {/* 2-Column Grid Layout: Foto & Teks Terpisah Rapi */}
-          <div className="relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 items-end min-h-[360px] sm:min-h-[400px] lg:min-h-[430px]">
+          <div className="relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 items-end min-h-[340px] sm:min-h-[400px] lg:min-h-[430px]">
             {/* Kolom Kiri (5 Kolom): Foto Siswa Setengah Paha Pas & Proporsional */}
-            <div className="lg:col-span-5 relative flex justify-center lg:justify-start items-end order-2 lg:order-1 h-full pl-4 sm:pl-8 lg:pl-10 overflow-visible">
+            <div className="lg:col-span-5 relative flex justify-center lg:justify-start items-end order-2 lg:order-1 h-full px-4 lg:pl-10 lg:pr-0 overflow-visible">
               <motion.div
                 initial={{ opacity: 0, scale: 0.94, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[420px] flex items-end justify-center lg:justify-start overflow-visible origin-bottom"
+                className="relative w-full max-w-[240px] sm:max-w-[340px] lg:max-w-[420px] flex items-end justify-center lg:justify-start overflow-visible origin-bottom pt-2 sm:pt-0"
               >
                 <img
                   src={studentsImage}
                   alt="Siswa Berprestasi MI AL-AHMAD"
-                  className="w-full h-auto max-h-[320px] sm:max-h-[370px] lg:max-h-[430px] xl:max-h-[450px] object-contain object-bottom drop-shadow-[0_20px_25px_rgba(0,0,0,0.35)] lg:-mt-4"
+                  className="w-full h-auto max-h-[250px] sm:max-h-[350px] lg:max-h-[430px] xl:max-h-[450px] object-contain object-bottom drop-shadow-[0_20px_25px_rgba(0,0,0,0.35)] lg:-mt-4"
                   onError={(e) => {
                     e.currentTarget.src = '/assets/hero-students.png';
                   }}
@@ -90,7 +90,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             {/* Kolom Kanan: Teks Judul, Tombol, dan Statistik */}
-            <div className="lg:col-span-7 order-1 lg:order-2 px-6 sm:px-10 lg:pr-16 lg:pl-6 py-8 sm:py-10 lg:py-10 text-center lg:text-left space-y-4 sm:space-y-5 lg:space-y-5">
+            <div className="lg:col-span-7 order-1 lg:order-2 px-4 sm:px-10 lg:pr-16 lg:pl-6 py-6 sm:py-10 lg:py-10 text-center lg:text-left space-y-3.5 sm:space-y-5 lg:space-y-5">
               {/* Subjudul Badge */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -98,7 +98,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="flex items-center justify-center lg:justify-start"
               >
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-900/40 border border-emerald-300/30 text-emerald-100 text-xs sm:text-sm lg:text-base font-semibold tracking-wide backdrop-blur-xs">
+                <span className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-emerald-900/40 border border-emerald-300/30 text-emerald-100 text-xs sm:text-sm lg:text-base font-semibold tracking-wide backdrop-blur-xs">
                   <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
                   {subtitle}
                 </span>
@@ -109,7 +109,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] xl:text-[54px] font-extrabold text-white leading-[1.14] font-heading tracking-tight whitespace-pre-line"
+                className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] xl:text-[54px] font-extrabold text-white leading-[1.18] sm:leading-[1.14] font-heading tracking-tight whitespace-pre-line"
               >
                 {settings?.hero_headline &&
                 settings.hero_headline.trim() &&
@@ -119,7 +119,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <>
                     Berkarakter, Peduli <br className="hidden sm:inline" />
                     &amp;{' '}
-                    <span className="font-serif-italic font-normal text-3xl sm:text-4xl md:text-5xl lg:text-[56px] xl:text-[64px] text-white underline decoration-emerald-300/40 underline-offset-8">
+                    <span className="font-serif-italic font-normal text-2xl sm:text-4xl md:text-5xl lg:text-[56px] xl:text-[64px] text-white underline decoration-emerald-300/40 underline-offset-4 sm:underline-offset-8">
                       Berprestasi
                     </span>{' '}
                     di Era Teknologi
@@ -132,11 +132,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex items-center justify-center lg:justify-start gap-4 pt-1"
+                className="flex items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-1"
               >
                 <button
                   onClick={handleExplore}
-                  className="bg-white text-slate-900 font-bold px-9 py-3.5 sm:py-4 rounded-full shadow-lg hover:shadow-2xl hover:bg-emerald-50 hover:scale-105 active:scale-95 transition-all duration-200 text-base sm:text-lg flex items-center justify-center cursor-pointer"
+                  className="bg-white text-slate-900 font-bold px-7 sm:px-9 py-3 sm:py-4 rounded-full shadow-lg hover:shadow-2xl hover:bg-emerald-50 hover:scale-105 active:scale-95 transition-all duration-200 text-sm sm:text-lg flex items-center justify-center cursor-pointer"
                 >
                   {ctaText}
                 </button>
@@ -144,9 +144,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   onClick={onOpenContact}
                   title="Hubungi Kami"
                   aria-label="Hubungi Kami"
-                  className="bg-white text-slate-900 w-14 h-14 rounded-full shadow-lg hover:shadow-2xl hover:bg-emerald-50 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
+                  className="bg-white text-slate-900 w-11 h-11 sm:w-14 sm:h-14 rounded-full shadow-lg hover:shadow-2xl hover:bg-emerald-50 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
                 >
-                  <ArrowUpRight className="w-6 h-6 stroke-[2.5]" />
+                  <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
                 </button>
               </motion.div>
 
@@ -155,27 +155,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="pt-4 border-t border-white/25 flex items-center justify-center lg:justify-start gap-8 sm:gap-12 text-white"
+                className="pt-3 sm:pt-4 border-t border-white/25 flex items-center justify-around sm:justify-center lg:justify-start gap-2 sm:gap-8 lg:gap-12 text-white"
               >
-                <div>
-                  <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
+                <div className="text-center sm:text-left">
+                  <p className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
                     <AnimatedCounter end={statStudents} suffix="+" duration={1800} delay={400} />
                   </p>
-                  <p className="text-sm sm:text-base text-emerald-100 font-semibold">Siswa Aktif</p>
+                  <p className="text-xs sm:text-base text-emerald-100 font-semibold">Siswa Aktif</p>
                 </div>
-                <div className="w-px h-10 bg-white/30" />
-                <div>
-                  <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
+                <div className="w-px h-8 sm:h-10 bg-white/30" />
+                <div className="text-center sm:text-left">
+                  <p className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
                     <AnimatedCounter end={statAlumni} suffix="+" duration={2000} delay={400} />
                   </p>
-                  <p className="text-sm sm:text-base text-emerald-100 font-semibold">Alumni</p>
+                  <p className="text-xs sm:text-base text-emerald-100 font-semibold">Alumni</p>
                 </div>
-                <div className="w-px h-10 bg-white/30" />
-                <div>
-                  <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
+                <div className="w-px h-8 sm:h-10 bg-white/30" />
+                <div className="text-center sm:text-left">
+                  <p className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
                     <AnimatedCounter end={statAchievements} suffix="+" duration={1800} delay={400} />
                   </p>
-                  <p className="text-sm sm:text-base text-emerald-100 font-semibold">Prestasi</p>
+                  <p className="text-xs sm:text-base text-emerald-100 font-semibold">Prestasi</p>
                 </div>
               </motion.div>
             </div>

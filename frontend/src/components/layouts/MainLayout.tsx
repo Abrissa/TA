@@ -29,7 +29,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-slate-900 font-body selection:bg-emerald-200 selection:text-emerald-950">
+    <div className="min-h-screen flex flex-col bg-white text-slate-900 font-body selection:bg-emerald-200 selection:text-emerald-950 overflow-x-hidden w-full">
       {/* Top Header Navigation Bar */}
       <Navbar
         activeTab={activeTab}
@@ -41,7 +41,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
       />
 
       {/* Main Content View */}
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 w-full overflow-x-hidden">{children}</main>
 
       {/* Footer */}
       <Footer

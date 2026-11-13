@@ -16,6 +16,17 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAdvancing, setIsAdvancing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    return typeof window !== 'undefined' ? window.innerWidth < 640 : false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleNext = () => {
     if (isAdvancing || visibleArticles.length < 2) return;
@@ -43,8 +54,8 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
   const thirdArticle = visibleArticles[(activeIndex + 2) % visibleArticles.length] || nextArticle;
 
   const renderStackCard = (article: Article) => (
-    <div className="p-5 space-y-4">
-      <div className="relative rounded-2xl overflow-hidden h-44 bg-slate-100">
+    <div className="p-4 sm:p-5 space-y-3 sm:space-y-4">
+      <div className="relative rounded-2xl overflow-hidden h-36 sm:h-44 bg-slate-100">
         <img 
           src={article.imageUrl || '/assets/berita-maulana-ksm.jpg'} 
           alt="" 
@@ -53,24 +64,24 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
             e.currentTarget.src = '/assets/berita-maulana-ksm.jpg';
           }}
         />
-        <span className="absolute top-3 right-3 bg-emerald-950/90 text-white text-xs font-bold uppercase px-3 py-1 rounded-full shadow-md tracking-wider">
+        <span className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 bg-emerald-950/90 text-white text-[11px] sm:text-xs font-bold uppercase px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-md tracking-wider">
           Kabar terbaru
         </span>
       </div>
-      <div className="flex items-center justify-between text-sm text-slate-500 font-medium">
+      <div className="flex items-center justify-between text-xs sm:text-sm text-slate-500 font-medium">
         <span className="flex items-center gap-1">
           <Eye className="w-3.5 h-3.5 text-slate-400" />
           205 Dibaca
         </span>
         <span>{article.date}</span>
       </div>
-      <h4 className="text-lg font-extrabold font-heading text-slate-900 line-clamp-2 leading-snug">
+      <h4 className="text-base sm:text-lg font-extrabold font-heading text-slate-900 line-clamp-2 leading-snug">
         {article.title}
       </h4>
-      <p className="text-sm sm:text-[15px] text-slate-600 line-clamp-2 leading-relaxed font-body">
+      <p className="text-xs sm:text-[15px] text-slate-600 line-clamp-2 leading-relaxed font-body">
         {article.excerpt}
       </p>
-      <div className="pt-1 text-sm font-bold text-slate-900 flex items-center gap-1.5">
+      <div className="pt-0.5 sm:pt-1 text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
         <span>Baca artikel</span>
         <ArrowUpRight className="w-4 h-4 text-emerald-600" />
       </div>
@@ -83,21 +94,21 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative max-w-sm mx-auto lg:max-w-none">
+      <div className="relative max-w-[340px] sm:max-w-sm mx-auto lg:max-w-none pr-2 sm:pr-0">
         {/* The next article is intentionally visible, so the interaction reads as a real stack. */}
         <motion.div
           key={`next-${nextArticle.id}`}
           initial={false}
           animate={{
-            y: 8,
-            x: 18,
+            y: isMobile ? 6 : 8,
+            x: isMobile ? 8 : 18,
             scale: 0.985,
-            rotate: 1.2,
+            rotate: isMobile ? 0.8 : 1.2,
             opacity: 1,
           }}
           transition={{ type: 'spring', stiffness: 260, damping: 28, mass: 0.8 }}
           style={{ zIndex: 2 }}
-          className="absolute top-0 right-0 left-0 min-h-[430px] overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-md pointer-events-none"
+          className="absolute top-0 right-0 left-0 min-h-[380px] sm:min-h-[430px] overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-md pointer-events-none"
           aria-hidden="true"
         >
           {renderStackCard(nextArticle)}
@@ -107,28 +118,22 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
           key={`third-${thirdArticle.id}`}
           initial={false}
           animate={{
-            y: 16,
-            x: 30,
+            y: isMobile ? 12 : 16,
+            x: isMobile ? 14 : 30,
             scale: 0.97,
-            rotate: 2,
+            rotate: isMobile ? 1.4 : 2,
             opacity: 1,
           }}
           transition={{ type: 'spring', stiffness: 260, damping: 28, mass: 0.8 }}
           style={{ zIndex: 1 }}
-          className="absolute top-0 right-0 left-0 min-h-[430px] overflow-hidden rounded-3xl border border-slate-200/70 bg-white shadow-sm pointer-events-none"
+          className="absolute top-0 right-0 left-0 min-h-[380px] sm:min-h-[430px] overflow-hidden rounded-3xl border border-slate-200/70 bg-white shadow-sm pointer-events-none"
           aria-hidden="true"
         >
           {renderStackCard(thirdArticle)}
         </motion.div>
 
-        {/* Background offset card 2 (bottom-most stack layer) */}
-        {/* <div className="absolute top-4 right-[-12px] left-[12px] h-full bg-white/60 rounded-3xl border border-slate-200/60 shadow-xs pointer-events-none z-[-1] transform rotate-2" /> */}
-
-        {/* Background offset card 1 (middle stack layer) */}
-        {/* <div className="absolute top-2 right-[-6px] left-[6px] h-full bg-white/85 rounded-3xl border border-slate-200/80 shadow-md pointer-events-none z-1" /> */}
-
         {/* Main Front Active Card */}
-        <div className="relative z-20 min-h-[430px] [perspective:1200px]">
+        <div className="relative z-20 min-h-[380px] sm:min-h-[430px] [perspective:1200px]">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={currentArticle.id}
@@ -146,10 +151,10 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
               ease: [0.22, 1, 0.36, 1],
             }}
             style={{ zIndex: 10, transformOrigin: 'center center' }}
-            className="relative bg-white rounded-3xl p-5 border border-slate-200/90 shadow-xl space-y-4"
+            className="relative bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-xl space-y-3 sm:space-y-4"
           >
           {/* Article Thumbnail Image */}
-          <div className="relative rounded-2xl overflow-hidden h-44 bg-slate-100">
+          <div className="relative rounded-2xl overflow-hidden h-36 sm:h-44 bg-slate-100">
             <img
               src={currentArticle.imageUrl || '/assets/berita-maulana-ksm.jpg'}
               alt={currentArticle.title}
@@ -158,13 +163,13 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
                 e.currentTarget.src = '/assets/berita-maulana-ksm.jpg';
               }}
             />
-            <span className="absolute top-3 right-3 bg-emerald-950/90 text-white text-xs font-bold uppercase px-3 py-1 rounded-full shadow-md tracking-wider">
+            <span className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 bg-emerald-950/90 text-white text-[11px] sm:text-xs font-bold uppercase px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-md tracking-wider">
               Kabar terbaru
             </span>
           </div>
 
           {/* Article Meta Info */}
-          <div className="flex items-center justify-between text-sm text-slate-500 font-medium">
+          <div className="flex items-center justify-between text-xs sm:text-sm text-slate-500 font-medium">
             <span className="flex items-center gap-1">
               <Eye className="w-3.5 h-3.5 text-slate-400" />
               205 Dibaca
@@ -175,21 +180,21 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
           {/* Article Title */}
           <h4
             onClick={() => onSelectArticle(currentArticle)}
-            className="text-lg font-extrabold font-heading text-slate-900 line-clamp-2 leading-snug cursor-pointer hover:text-emerald-600 transition-colors"
+            className="text-base sm:text-lg font-extrabold font-heading text-slate-900 line-clamp-2 leading-snug cursor-pointer hover:text-emerald-600 transition-colors"
           >
             {currentArticle.title}
           </h4>
 
           {/* Article Excerpt */}
-          <p className="text-sm sm:text-[15px] text-slate-600 line-clamp-2 leading-relaxed font-body">
+          <p className="text-xs sm:text-[15px] text-slate-600 line-clamp-2 leading-relaxed font-body">
             {currentArticle.excerpt}
           </p>
 
           {/* Read More Link */}
-          <div className="pt-1 flex items-center justify-between">
+          <div className="pt-0.5 sm:pt-1 flex items-center justify-between">
             <button
               onClick={() => onSelectArticle(currentArticle)}
-              className="text-sm font-bold text-slate-900 hover:text-emerald-600 flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="text-xs sm:text-sm font-bold text-slate-900 hover:text-emerald-600 flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <span>Baca artikel</span>
               <ArrowUpRight className="w-4 h-4 text-emerald-600" />

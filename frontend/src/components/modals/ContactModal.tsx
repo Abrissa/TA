@@ -50,19 +50,19 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, set
         {/* Content */}
         <div className="p-6 sm:p-7 space-y-6">
           {/* Quick WhatsApp Action Card */}
-          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 sm:p-5 flex items-center justify-between gap-4">
-            <div className="space-y-1">
-              <p className="font-bold text-[#059669] uppercase tracking-wider text-sm">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="space-y-1 text-center sm:text-left">
+              <p className="font-bold text-[#059669] uppercase tracking-wider text-xs sm:text-sm">
                 Layanan Cepat WhatsApp
               </p>
-              <p className="text-slate-700 text-sm">Respons cepat panitia PPDB & Informasi</p>
+              <p className="text-slate-700 text-xs sm:text-sm">Respons cepat panitia PPDB & Informasi</p>
             </div>
             <button
               onClick={handleWhatsAppClick}
-              className="px-4 py-2.5 bg-[#059669] hover:bg-[#047857] text-white font-bold rounded-xl text-sm transition-colors shrink-0 flex items-center gap-2 shadow-xs cursor-pointer"
+              className="w-full sm:w-auto justify-center px-4 py-2.5 bg-[#059669] hover:bg-[#047857] text-white font-bold rounded-xl text-sm transition-colors shrink-0 flex items-center gap-2 shadow-xs cursor-pointer"
             >
               <MessageSquare className="w-4 h-4 text-amber-300" />
-              Chat Panitia
+              <span>Chat Panitia</span>
             </button>
           </div>
 

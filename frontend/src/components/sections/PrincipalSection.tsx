@@ -30,7 +30,7 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
   return (
     <section
       id="sambutan-section"
-      className="relative overflow-hidden bg-gradient-to-b from-[#EEFBF4] via-emerald-50/90 to-emerald-100/70 pb-28 pt-16 lg:pb-36 lg:pt-20 border-t border-emerald-100/80 shadow-[0_-10px_30px_-5px_rgba(4,120,87,0.04)]"
+      className="relative overflow-hidden bg-gradient-to-b from-[#EEFBF4] via-emerald-50/90 to-emerald-100/70 pb-20 pt-12 sm:pb-28 sm:pt-16 lg:pb-36 lg:pt-20 border-t border-emerald-100/80 shadow-[0_-10px_30px_-5px_rgba(4,120,87,0.04)]"
     >
       {/* Ambient background glow accents */}
       <div className="pointer-events-none absolute left-[-80px] top-[10%] h-[300px] w-[300px] rounded-full bg-emerald-200/35 blur-3xl" />
@@ -43,14 +43,14 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
             direction="up"
             delay={0.1}
             duration={0.7}
-            className="space-y-5 text-center lg:col-span-4 lg:text-left"
+            className="space-y-4 sm:space-y-5 text-center lg:col-span-4 lg:text-left"
           >
             <div>
-              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white px-4 py-2 text-sm font-bold text-slate-800 shadow-xs">
-                <Award className="h-4 w-4 text-amber-500" />
+              <span className="mb-3 sm:mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-slate-800 shadow-xs">
+                <Award className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-500" />
                 <span>MI AL-AHMAD SIDOARJO</span>
               </span>
-              <h2 className="text-3xl font-black uppercase leading-tight tracking-tight text-slate-900 lg:text-4xl font-heading">
+              <h2 className="text-2xl sm:text-3xl font-black uppercase leading-tight tracking-tight text-slate-900 lg:text-4xl font-heading">
                 {settings?.principal_section_title || (
                   <>
                     MI AL-AHMAD <br className="hidden lg:block" />
@@ -60,14 +60,14 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
               </h2>
             </div>
 
-            <p className="text-sm leading-relaxed text-slate-700 sm:text-base whitespace-pre-line">
+            <p className="text-xs sm:text-base leading-relaxed text-slate-700 whitespace-pre-line">
               "{principalGreeting}"
             </p>
 
             <div className="flex justify-center pt-2 lg:justify-start">
               <button
                 onClick={() => setActiveTab('visi-misi')}
-                className="flex cursor-pointer items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 px-7 py-3.5 text-base font-bold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl"
+                className="flex cursor-pointer items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 px-6 sm:px-7 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl"
               >
                 <span>Baca Selengkapnya</span>
                 <ArrowUpRight className="h-4 w-4" />
@@ -80,7 +80,7 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
             direction="up"
             delay={0.25}
             duration={0.7}
-            className="relative my-6 flex justify-center lg:col-span-4 lg:my-0"
+            className="relative my-4 sm:my-6 flex justify-center lg:col-span-4 lg:my-0"
           >
             <div className="relative flex items-center justify-center">
               <motion.div
@@ -93,13 +93,13 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
-                className="pointer-events-none absolute h-[340px] w-[280px] rounded-[50%_50%_40%_60%/60%_40%_60%_40%] bg-gradient-to-br from-rose-200/60 via-pink-100/70 to-emerald-200/50 blur-xs sm:h-[380px] sm:w-[320px]"
+                className="pointer-events-none absolute h-[260px] w-[220px] sm:h-[380px] sm:w-[320px] rounded-[50%_50%_40%_60%/60%_40%_60%_40%] bg-gradient-to-br from-rose-200/60 via-pink-100/70 to-emerald-200/50 blur-xs"
               />
 
               <img
                 src={principalPhoto}
                 alt={principalName}
-                className="relative z-10 h-auto max-h-[420px] w-[280px] object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-[1.02] sm:w-[330px]"
+                className="relative z-10 h-auto max-h-[300px] sm:max-h-[420px] w-[220px] sm:w-[330px] object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-[1.02]"
                 onError={(e) => {
                   e.currentTarget.src = '/assets/principal.png';
                 }}

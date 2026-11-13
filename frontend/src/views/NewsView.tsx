@@ -157,15 +157,15 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
           <div
             onMouseEnter={() => setIsFeaturedHovered(true)}
             onMouseLeave={() => setIsFeaturedHovered(false)}
-            className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-white border border-emerald-500/40 shadow-xl overflow-hidden relative group"
+            className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 text-white border border-emerald-500/40 shadow-xl overflow-hidden relative group"
           >
             <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl pointer-events-none" />
 
             {/* Slider Controls Bar */}
-            <div className="flex items-center justify-between gap-3 pb-4 mb-4 border-b border-white/10 relative z-10">
+            <div className="flex items-center justify-between gap-3 pb-3 sm:pb-4 mb-3 sm:mb-4 border-b border-white/10 relative z-10">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-400 text-slate-950 text-xs sm:text-sm font-black uppercase tracking-wider shadow-sm">
-                  <Sparkles className="w-4 h-4 text-slate-950" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-amber-400 text-slate-950 text-xs sm:text-sm font-black uppercase tracking-wider shadow-sm">
+                  <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-950" />
                   Berita Pilihan
                 </span>
                 <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-semibold">
@@ -205,7 +205,7 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-10"
+                className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 lg:gap-8 items-center relative z-10"
               >
                 {/* Photo Thumbnail */}
                 <div className="lg:col-span-5 flex justify-center">
@@ -223,7 +223,7 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
-                      <span className="px-3 py-1 rounded-md bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">
+                      <span className="px-2.5 sm:px-3 py-1 rounded-md bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">
                         {currentFeatured.category}
                       </span>
                       {currentFeatured.readTime && (
@@ -237,14 +237,14 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
                 </div>
 
                 {/* Text Info */}
-                <div className="lg:col-span-7 space-y-4">
+                <div className="lg:col-span-7 space-y-3 sm:space-y-4">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-3.5 py-1.5 rounded-full bg-emerald-800/80 text-emerald-200 text-sm font-semibold border border-emerald-600/50 flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-amber-300" />
+                    <span className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-emerald-800/80 text-emerald-200 text-xs sm:text-sm font-semibold border border-emerald-600/50 flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
                       {currentFeatured.date}
                     </span>
                     {currentFeatured.sourceName && (
-                      <span className="px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-sm font-medium">
+                      <span className="px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs sm:text-sm font-medium">
                         Liputan {currentFeatured.sourceName}
                       </span>
                     )}
@@ -253,17 +253,17 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
                   <div>
                     <h2
                       onClick={() => onSelectArticle(currentFeatured)}
-                      className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading text-white leading-tight hover:text-amber-300 transition-colors cursor-pointer"
+                      className="text-xl sm:text-2xl lg:text-4xl font-black font-heading text-white leading-tight hover:text-amber-300 transition-colors cursor-pointer"
                     >
                       {currentFeatured.title}
                     </h2>
-                    <p className="text-amber-300 font-bold text-sm sm:text-base mt-1.5 flex items-center gap-2">
-                      <User className="w-4 h-4 text-amber-400" />
+                    <p className="text-amber-300 font-bold text-xs sm:text-base mt-1.5 flex items-center gap-2">
+                      <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
                       Oleh {currentFeatured.author} ({currentFeatured.authorRole})
                     </p>
                   </div>
 
-                  <p className="text-slate-200 text-base sm:text-lg leading-relaxed line-clamp-3">
+                  <p className="text-slate-200 text-sm sm:text-base lg:text-lg leading-relaxed line-clamp-3">
                     {currentFeatured.excerpt}
                   </p>
 

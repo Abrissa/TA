@@ -68,7 +68,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
               <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">Lulusan S1 / S2</p>
             </div>
 
-            <div className="space-y-1 border-l border-slate-100">
+            <div className="space-y-1 border-l-0 md:border-l border-slate-100">
               <p className="text-3xl sm:text-4xl font-extrabold text-[#059669] font-heading">15:1</p>
               <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">Rasio Guru:Siswa</p>
             </div>
