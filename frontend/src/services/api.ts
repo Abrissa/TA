@@ -1068,31 +1068,34 @@ export const api = {
         },
         body: formData,
       });
-      const json = await handleResponse<{ success: boolean; data: { path: string; url: string; filename: string } }>(res);
-      return json.data;
-    } catch (err: any) {
-      if (isNetworkError(err)) {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = () => {
-            const dataUrl = reader.result as string;
-            resolve({
-              path: dataUrl,
-              url: dataUrl,
-              filename: file.name,
-            });
-          };
-          reader.onerror = () => {
-            resolve({
-              path: '/assets/gedung-mi-al-ahmad.jpg',
-              url: '/assets/gedung-mi-al-ahmad.jpg',
-              filename: file.name,
-            });
-          };
-          reader.readAsDataURL(file);
-        });
+      if (res.ok) {
+        const json = await handleResponse<{ success: boolean; data: { path: string; url: string; filename: string } }>(res);
+        if (json?.data?.url) {
+          return json.data;
+        }
       }
-      throw err;
+      throw new Error(`Upload returned status ${res.status}`);
+    } catch (err: any) {
+      // Robust client fallback: convert to base64 Data URL so JPG, PNG, and WebP images persist smoothly
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUrl = reader.result as string;
+          resolve({
+            path: dataUrl,
+            url: dataUrl,
+            filename: file.name,
+          });
+        };
+        reader.onerror = () => {
+          resolve({
+            path: '/assets/teachers/guru-1.svg',
+            url: '/assets/teachers/guru-1.svg',
+            filename: file.name,
+          });
+        };
+        reader.readAsDataURL(file);
+      });
     }
   },
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { api, resolveImageUrl } from '../../services/api';
 import { Teacher } from '../../types';
 import {
@@ -18,7 +18,9 @@ import {
   BookOpen,
   Briefcase,
   Eye,
-  Check
+  Check,
+  Camera,
+  Link2,
 } from 'lucide-react';
 
 const PRESET_AVATARS = [
@@ -40,11 +42,16 @@ export const AdminTeachersTab: React.FC = () => {
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Partial<Teacher> | null>(null);
-  const [photoSourceType, setPhotoSourceType] = useState<'preset' | 'upload' | 'url'>('preset');
+  const [photoSourceType, setPhotoSourceType] = useState<'upload' | 'preset' | 'url'>('upload');
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Drag and Drop & Upload Details
+  const [isDragging, setIsDragging] = useState(false);
+  const [previewFileInfo, setPreviewFileInfo] = useState<{ name: string; size: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     loadTeachers();
@@ -69,13 +76,14 @@ export const AdminTeachersTab: React.FC = () => {
 
   const handleOpenCreate = () => {
     setUploadError(null);
-    setPhotoSourceType('preset');
+    setPhotoSourceType('upload');
+    setPreviewFileInfo(null);
     setEditingItem({
       name: '',
       degree: 'S.Pd.I',
       role: 'Wali Kelas & Guru Tematik',
       subjects: "Al-Qur'an Hadits, Fiqih, Tahfidz",
-      imageUrl: '/assets/teachers/guru-1.svg',
+      imageUrl: '',
       order: teachers.length + 1,
       isActive: true,
     });
@@ -84,8 +92,10 @@ export const AdminTeachersTab: React.FC = () => {
 
   const handleOpenEdit = (item: Teacher) => {
     setUploadError(null);
-    const isPreset = PRESET_AVATARS.includes(item.imageUrl);
-    setPhotoSourceType(isPreset ? 'preset' : item.imageUrl.startsWith('/storage') || item.imageUrl.startsWith('blob:') ? 'upload' : 'url');
+    setPreviewFileInfo(null);
+    const isPreset = PRESET_AVATARS.includes(item.imageUrl || '');
+    const isHttpUrl = item.imageUrl?.startsWith('http://') || item.imageUrl?.startsWith('https://');
+    setPhotoSourceType(isPreset ? 'preset' : isHttpUrl ? 'url' : 'upload');
     setEditingItem({
       ...item,
       isActive: item.isActive !== false,
@@ -105,29 +115,74 @@ export const AdminTeachersTab: React.FC = () => {
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const processImageFile = async (file: File) => {
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      setUploadError('Hanya file gambar (JPG, PNG, WebP) yang diizinkan.');
+    // Validate type (JPG, JPEG, PNG, WebP)
+    const validMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const isImageByExt = Boolean(file.name.match(/\.(jpe?g|png|webp)$/i));
+    if (!validMimes.includes(file.type) && !isImageByExt) {
+      setUploadError('Hanya file foto gambar (JPG, JPEG, PNG, WebP) yang diizinkan.');
       return;
     }
 
+    // Validate size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setUploadError('Ukuran gambar tidak boleh melebihi 5MB.');
+      setUploadError('Ukuran gambar maksimal 5 MB. Silakan pilih foto dengan resolusi yang lebih kecil.');
       return;
     }
 
     setUploadError(null);
     setIsUploading(true);
+
+    const sizeFormatted =
+      file.size >= 1024 * 1024
+        ? `${(file.size / (1024 * 1024)).toFixed(2)} MB`
+        : `${(file.size / 1024).toFixed(1)} KB`;
+
+    setPreviewFileInfo({
+      name: file.name,
+      size: sizeFormatted,
+    });
+
     try {
       const res = await api.uploadMedia(file, 'teachers');
-      setEditingItem((prev) => prev ? ({ ...prev, imageUrl: res.url }) : null);
+      setEditingItem((prev) => (prev ? { ...prev, imageUrl: res.url } : null));
+      setPhotoSourceType('upload');
     } catch (err: any) {
-      setUploadError(err.message || 'Gagal mengupload foto.');
+      setUploadError(err.message || 'Gagal memproses foto guru.');
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      processImageFile(file);
+    }
+    e.target.value = '';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      processImageFile(file);
     }
   };
 
@@ -145,10 +200,19 @@ export const AdminTeachersTab: React.FC = () => {
       return;
     }
 
+    // Default to preset avatar 1 if no image was provided
+    const finalImageUrl = editingItem.imageUrl?.trim() || '/assets/teachers/guru-1.svg';
+
     setIsSaving(true);
     try {
       const isEdit = !!editingItem.id && !editingItem.id.toString().startsWith('t-new-');
-      await api.saveTeacher(editingItem, isEdit ? editingItem.id : undefined);
+      await api.saveTeacher(
+        {
+          ...editingItem,
+          imageUrl: finalImageUrl,
+        },
+        isEdit ? editingItem.id : undefined
+      );
       setIsModalOpen(false);
       showToast(isEdit ? 'Data dewan guru berhasil diperbarui.' : 'Guru baru berhasil ditambahkan.');
       loadTeachers();
@@ -198,7 +262,7 @@ export const AdminTeachersTab: React.FC = () => {
             Dewan Guru & Tenaga Kependidikan
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Kelola profil pendidik, ustadz/ustadzah, mata pelajaran, dan urutan tampil pada portal madrasah.
+            Kelola profil pendidik, ustadz/ustadzah, mata pelajaran, foto asli (JPG/PNG), dan urutan tampil.
           </p>
         </div>
 
@@ -284,7 +348,9 @@ export const AdminTeachersTab: React.FC = () => {
           <Users className="w-12 h-12 text-slate-300 mx-auto" />
           <p className="text-slate-600 font-semibold text-sm">Tidak ada data dewan guru yang sesuai.</p>
           <p className="text-xs text-slate-400">
-            {search ? 'Coba ubah kata kunci pencarian Anda.' : 'Klik tombol "+ Tambah Guru Baru" untuk menambahkan profil pendidik.'}
+            {search
+              ? 'Coba ubah kata kunci pencarian Anda.'
+              : 'Klik tombol "+ Tambah Guru Baru" untuk menambahkan foto dan profil pendidik.'}
           </p>
           {!search && (
             <button
@@ -300,6 +366,9 @@ export const AdminTeachersTab: React.FC = () => {
           {filteredTeachers.map((t, idx) => {
             const fallbackAvatar = `/assets/teachers/guru-${(idx % 7) + 1}.svg`;
             const imageSrc = resolveImageUrl(t.imageUrl) || fallbackAvatar;
+            const isSvgAvatar =
+              typeof imageSrc === 'string' &&
+              (imageSrc.includes('.svg') || imageSrc.includes('/assets/teachers/guru-'));
 
             return (
               <div
@@ -312,12 +381,14 @@ export const AdminTeachersTab: React.FC = () => {
                     <img
                       src={imageSrc}
                       alt={t.name}
-                      className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                      className={`w-full h-full transition-transform duration-300 group-hover:scale-105 ${
+                        isSvgAvatar ? 'object-contain p-3' : 'object-cover'
+                      }`}
                       onError={(e) => {
                         e.currentTarget.src = fallbackAvatar;
                       }}
                     />
-                    <div className="absolute top-2.5 left-2.5">
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
                       <span
                         className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-xs ${
                           t.isActive !== false
@@ -325,9 +396,19 @@ export const AdminTeachersTab: React.FC = () => {
                             : 'bg-slate-700 text-slate-200'
                         }`}
                       >
-                        <span className={`w-1.5 h-1.5 rounded-full ${t.isActive !== false ? 'bg-emerald-200 animate-pulse' : 'bg-slate-400'}`} />
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            t.isActive !== false ? 'bg-emerald-200 animate-pulse' : 'bg-slate-400'
+                          }`}
+                        />
                         <span>{t.isActive !== false ? 'Aktif' : 'Draft'}</span>
                       </span>
+
+                      {!isSvgAvatar && (
+                        <span className="bg-emerald-950/70 backdrop-blur-xs text-emerald-200 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-xs">
+                          Foto Asli
+                        </span>
+                      )}
                     </div>
 
                     {t.order !== undefined && (
@@ -395,7 +476,7 @@ export const AdminTeachersTab: React.FC = () => {
       {/* Modal Dialog: Tambah / Edit Guru */}
       {isModalOpen && editingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-2xl w-full my-8 overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[90vh]">
+          <div className="bg-white rounded-3xl max-w-2xl w-full my-8 overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[92vh]">
             {/* Modal Header */}
             <div className="bg-gradient-to-r from-emerald-800 to-teal-800 p-6 text-white flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -404,10 +485,12 @@ export const AdminTeachersTab: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold font-heading">
-                    {editingItem.id && !editingItem.id.toString().startsWith('t-new-') ? 'Edit Data Dewan Guru' : 'Tambah Guru Baru'}
+                    {editingItem.id && !editingItem.id.toString().startsWith('t-new-')
+                      ? 'Edit Data Dewan Guru'
+                      : 'Tambah Guru Baru'}
                   </h3>
                   <p className="text-xs text-emerald-200">
-                    Isi informasi biodata pendidik dan peran pengajaran di madrasah
+                    Isi informasi biodata pendidik dan unggah foto profil (JPG/PNG)
                   </p>
                 </div>
               </div>
@@ -429,7 +512,273 @@ export const AdminTeachersTab: React.FC = () => {
                 </div>
               )}
 
-              {/* Nama & Gelar */}
+              {/* FOTO PROFIL GURU (JPG / PNG / WebP) */}
+              <div className="space-y-3 bg-slate-50/70 p-4 rounded-2xl border border-slate-200">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                      Foto Profil Guru <span className="text-emerald-700 font-semibold">(JPG / PNG / WebP)</span>
+                    </label>
+                    <p className="text-[11px] text-slate-500">
+                      Pilih foto resmi pendidik (format JPG, PNG, atau WebP)
+                    </p>
+                  </div>
+
+                  {/* Mode Selector Tabs */}
+                  <div className="inline-flex items-center gap-1 bg-white p-1 rounded-xl text-xs font-semibold border border-slate-200 shadow-2xs self-start sm:self-auto">
+                    <button
+                      type="button"
+                      onClick={() => setPhotoSourceType('upload')}
+                      className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                        photoSourceType === 'upload'
+                          ? 'bg-emerald-600 text-white shadow-xs font-bold'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>Upload Foto (JPG/PNG)</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPhotoSourceType('preset')}
+                      className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                        photoSourceType === 'preset'
+                          ? 'bg-emerald-600 text-white shadow-xs font-bold'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <Users className="w-3.5 h-3.5" />
+                      <span>Avatar Ilustrasi</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPhotoSourceType('url')}
+                      className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                        photoSourceType === 'url'
+                          ? 'bg-emerald-600 text-white shadow-xs font-bold'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <Link2 className="w-3.5 h-3.5" />
+                      <span>Link URL</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Hidden File Input */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/jpg,image/webp"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  id="teacher-photo-file-input"
+                />
+
+                {/* TAB 1: Upload File Foto (JPG / PNG / WebP) */}
+                {photoSourceType === 'upload' && (
+                  <div className="space-y-3">
+                    {editingItem.imageUrl &&
+                    !editingItem.imageUrl.includes('.svg') &&
+                    !PRESET_AVATARS.includes(editingItem.imageUrl) ? (
+                      /* Preview Box with Change/Remove Actions */
+                      <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4">
+                        <div className="relative w-28 h-36 shrink-0 rounded-xl overflow-hidden bg-white shadow-md border-2 border-emerald-500/40 group">
+                          <img
+                            src={resolveImageUrl(editingItem.imageUrl) || editingItem.imageUrl}
+                            alt="Foto Guru"
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <button
+                              type="button"
+                              onClick={() => fileInputRef.current?.click()}
+                              className="px-2 py-1 bg-white text-emerald-800 text-[11px] font-bold rounded-md shadow-xs cursor-pointer"
+                            >
+                              Ganti
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="flex-1 space-y-2 text-center sm:text-left min-w-0">
+                          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                              <span>Foto Guru Berhasil Dipilih</span>
+                            </span>
+                            <span className="text-[10px] font-mono font-bold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
+                              JPG / PNG / WebP
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-slate-700 font-medium truncate">
+                            {previewFileInfo?.name ||
+                              (editingItem.imageUrl.startsWith('data:')
+                                ? 'Foto Gambar Tersimpan (Data Base64)'
+                                : editingItem.imageUrl.split('/').pop())}
+                          </p>
+                          {previewFileInfo?.size && (
+                            <p className="text-[11px] text-slate-400">Ukuran file: {previewFileInfo.size}</p>
+                          )}
+
+                          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
+                            <button
+                              type="button"
+                              onClick={() => fileInputRef.current?.click()}
+                              disabled={isUploading}
+                              className="px-3.5 py-1.5 rounded-xl bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+                            >
+                              <Camera className="w-3.5 h-3.5" />
+                              <span>Ganti Foto (Upload Ulang)</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingItem({ ...editingItem, imageUrl: '' });
+                                setPreviewFileInfo(null);
+                              }}
+                              className="px-3.5 py-1.5 rounded-xl bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>Hapus Foto</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Drag & Drop Upload Zone */
+                      <div
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                        onClick={() => fileInputRef.current?.click()}
+                        className={`border-2 border-dashed rounded-2xl p-6 sm:p-7 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-2.5 bg-white ${
+                          isDragging
+                            ? 'border-emerald-500 bg-emerald-50/80 scale-[1.01] shadow-md ring-4 ring-emerald-200/50'
+                            : 'border-slate-300 hover:border-emerald-500 hover:bg-emerald-50/20'
+                        }`}
+                      >
+                        <div className="w-13 h-13 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shadow-2xs">
+                          {isUploading ? (
+                            <Loader2 className="w-6 h-6 animate-spin text-emerald-600" />
+                          ) : (
+                            <Camera className="w-6 h-6" />
+                          )}
+                        </div>
+
+                        <div className="space-y-1">
+                          <p className="text-xs sm:text-sm font-bold text-slate-800">
+                            {isUploading ? 'Sedang Memproses Foto...' : 'Klik untuk Pilih Foto Guru atau Seret File ke Sini'}
+                          </p>
+                          <p className="text-xs text-slate-500">
+                            Format didukung: <span className="font-bold text-emerald-700">JPG, JPEG, PNG, WebP</span> (Maksimal 5 MB)
+                          </p>
+                          <p className="text-[11px] text-slate-400">
+                            Disarankan foto potret/setengah badan dengan pencahayaan jelas
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-2 pt-1">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                            JPG
+                          </span>
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                            PNG
+                          </span>
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                            WEBP
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* TAB 2: Pilihan Avatar Ilustrasi */}
+                {photoSourceType === 'preset' && (
+                  <div className="space-y-2.5 bg-white p-4 rounded-2xl border border-slate-200">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-bold text-slate-700">Pilih salah satu karakter ilustrasi dewan guru:</p>
+                      <span className="text-[11px] text-slate-400">7 Pilihan Karakter</span>
+                    </div>
+                    <div className="grid grid-cols-4 sm:grid-cols-7 gap-2.5">
+                      {PRESET_AVATARS.map((path, idx) => {
+                        const isSelected = editingItem.imageUrl === path;
+                        return (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => {
+                              setEditingItem({ ...editingItem, imageUrl: path });
+                              setPreviewFileInfo(null);
+                            }}
+                            className={`relative aspect-square rounded-xl p-2 border-2 transition-all cursor-pointer bg-slate-50 hover:bg-emerald-50 ${
+                              isSelected
+                                ? 'border-emerald-600 ring-2 ring-emerald-300 bg-emerald-50 shadow-xs'
+                                : 'border-slate-200 hover:border-emerald-300'
+                            }`}
+                          >
+                            <img src={path} alt={`Guru ${idx + 1}`} className="w-full h-full object-contain" />
+                            {isSelected && (
+                              <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xs">
+                                <Check className="w-2.5 h-2.5 stroke-[3]" />
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* TAB 3: Input URL Gambar */}
+                {photoSourceType === 'url' && (
+                  <div className="space-y-2 bg-white p-4 rounded-2xl border border-slate-200">
+                    <label className="block text-xs font-bold text-slate-700">
+                      Masukkan URL / Tautan Langsung Foto Gambar:
+                    </label>
+                    <input
+                      type="url"
+                      value={editingItem.imageUrl || ''}
+                      onChange={(e) => {
+                        setEditingItem({ ...editingItem, imageUrl: e.target.value });
+                        setPreviewFileInfo(null);
+                      }}
+                      placeholder="https://... atau /assets/teachers/..."
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-600 bg-white"
+                    />
+                    <p className="text-[11px] text-slate-400">
+                      Pastikan URL berformat langsung gambar (.jpg, .jpeg, .png, atau .webp).
+                    </p>
+                  </div>
+                )}
+
+                {/* Pratinjau Terpilih (Global summary for preset or url) */}
+                {editingItem.imageUrl && (photoSourceType === 'preset' || photoSourceType === 'url') && (
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-200 shadow-2xs">
+                    <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-50 border border-slate-200 flex items-center justify-center p-1 shrink-0">
+                      <img
+                        src={resolveImageUrl(editingItem.imageUrl) || '/assets/teachers/guru-1.svg'}
+                        alt="Preview"
+                        className="w-full h-full object-contain"
+                        onError={(e) => {
+                          e.currentTarget.src = '/assets/teachers/guru-1.svg';
+                        }}
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-bold text-slate-800">
+                        {photoSourceType === 'preset' ? 'Avatar Ilustrasi Terpilih' : 'Tautan Gambar URL Terpilih'}
+                      </p>
+                      <p className="text-[11px] text-slate-500 truncate">{editingItem.imageUrl}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Biodata: Nama & Gelar */}
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
                 <div className="sm:col-span-8">
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
@@ -524,138 +873,6 @@ export const AdminTeachersTab: React.FC = () => {
                 </div>
               </div>
 
-              {/* Foto Profil Guru */}
-              <div className="space-y-3 pt-2 border-t border-slate-100">
-                <div className="flex items-center justify-between">
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    Foto / Avatar Guru
-                  </label>
-
-                  {/* Source Toggle Tabs */}
-                  <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs">
-                    <button
-                      type="button"
-                      onClick={() => setPhotoSourceType('preset')}
-                      className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                        photoSourceType === 'preset' ? 'bg-white text-emerald-700 shadow-2xs' : 'text-slate-600'
-                      }`}
-                    >
-                      Pilihan Avatar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPhotoSourceType('upload')}
-                      className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                        photoSourceType === 'upload' ? 'bg-white text-emerald-700 shadow-2xs' : 'text-slate-600'
-                      }`}
-                    >
-                      Upload File
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPhotoSourceType('url')}
-                      className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                        photoSourceType === 'url' ? 'bg-white text-emerald-700 shadow-2xs' : 'text-slate-600'
-                      }`}
-                    >
-                      URL Gambar
-                    </button>
-                  </div>
-                </div>
-
-                {/* Preset Avatars Grid */}
-                {photoSourceType === 'preset' && (
-                  <div className="space-y-2">
-                    <p className="text-xs text-slate-500">Pilih salah satu karakter ilustrasi dewan guru:</p>
-                    <div className="grid grid-cols-4 sm:grid-cols-7 gap-2.5">
-                      {PRESET_AVATARS.map((path, idx) => {
-                        const isSelected = editingItem.imageUrl === path;
-                        return (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => setEditingItem({ ...editingItem, imageUrl: path })}
-                            className={`relative aspect-square rounded-xl p-1.5 border-2 transition-all cursor-pointer bg-slate-50 hover:bg-emerald-50 ${
-                              isSelected
-                                ? 'border-emerald-600 ring-2 ring-emerald-300/60 bg-emerald-50'
-                                : 'border-slate-200 hover:border-emerald-300'
-                            }`}
-                          >
-                            <img src={path} alt={`Guru ${idx + 1}`} className="w-full h-full object-contain" />
-                            {isSelected && (
-                              <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xs">
-                                <Check className="w-2.5 h-2.5 stroke-[3]" />
-                              </div>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Upload File Input */}
-                {photoSourceType === 'upload' && (
-                  <div className="space-y-2">
-                    <div className="border-2 border-dashed border-slate-300 rounded-2xl p-4 text-center hover:border-emerald-500 transition-colors bg-slate-50">
-                      <input
-                        type="file"
-                        id="teacher-photo-upload"
-                        accept="image/*"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                      />
-                      <label htmlFor="teacher-photo-upload" className="cursor-pointer block space-y-2">
-                        <Upload className="w-8 h-8 text-slate-400 mx-auto" />
-                        <div>
-                          <span className="text-xs font-bold text-emerald-700 hover:underline">
-                            Klik untuk upload foto guru
-                          </span>
-                          <p className="text-[11px] text-slate-400 mt-0.5">PNG, JPG, atau WebP (Maksimal 5MB)</p>
-                        </div>
-                      </label>
-                      {isUploading && (
-                        <div className="flex items-center justify-center gap-2 text-xs text-emerald-600 font-bold mt-2">
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Mengunggah foto...</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* URL Input */}
-                {photoSourceType === 'url' && (
-                  <div>
-                    <input
-                      type="text"
-                      value={editingItem.imageUrl || ''}
-                      onChange={(e) => setEditingItem({ ...editingItem, imageUrl: e.target.value })}
-                      placeholder="https://... atau /assets/teachers/..."
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-600 bg-white"
-                    />
-                  </div>
-                )}
-
-                {/* Preview Thumbnail */}
-                {editingItem.imageUrl && (
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <img
-                      src={resolveImageUrl(editingItem.imageUrl) || '/assets/teachers/guru-1.svg'}
-                      alt="Preview"
-                      className="w-12 h-12 rounded-xl object-contain bg-white border border-slate-200 p-1"
-                      onError={(e) => {
-                        e.currentTarget.src = '/assets/teachers/guru-1.svg';
-                      }}
-                    />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold text-slate-800">Pratinjau Foto Profil Terpilih</p>
-                      <p className="text-[11px] text-slate-500 truncate">{editingItem.imageUrl}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
               {/* Modal Actions */}
               <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
                 <button
@@ -691,4 +908,3 @@ export const AdminTeachersTab: React.FC = () => {
     </div>
   );
 };
-

@@ -127,21 +127,28 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
             {teachers.map((t, idx) => {
               const fallbackAvatar = `/assets/teachers/guru-${(idx % 7) + 1}.svg`;
               const imageSrc = resolveImageUrl(t.imageUrl) || fallbackAvatar;
+              const isSvgAvatar =
+                typeof imageSrc === 'string' &&
+                (imageSrc.includes('.svg') || imageSrc.includes('/assets/teachers/guru-'));
 
               return (
                 <div 
                   key={t.id}
-                  className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
+                  className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
                 >
                   <div>
-                    <img
-                      src={imageSrc}
-                      alt={t.name}
-                      className="w-full h-56 object-cover bg-slate-100"
-                      onError={(e) => {
-                        e.currentTarget.src = fallbackAvatar;
-                      }}
-                    />
+                    <div className="w-full h-56 bg-slate-100 overflow-hidden flex items-center justify-center">
+                      <img
+                        src={imageSrc}
+                        alt={t.name}
+                        className={`w-full h-full transition-transform duration-300 group-hover:scale-105 ${
+                          isSvgAvatar ? 'object-contain p-3' : 'object-cover'
+                        }`}
+                        onError={(e) => {
+                          e.currentTarget.src = fallbackAvatar;
+                        }}
+                      />
+                    </div>
                   <div className="p-5 sm:p-6 space-y-2.5">
                     {t.degree && (
                       <span className="inline-block px-3 py-1 rounded bg-emerald-50 text-[#059669] font-bold text-xs border border-emerald-100">

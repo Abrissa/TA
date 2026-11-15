@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Teacher } from '../types';
-import { api } from '../services/api';
+import { api, resolveImageUrl } from '../services/api';
 import { 
   Sparkles, 
   BookOpen, 
@@ -28,13 +28,30 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenPPDB }) => {
   const [isLoadingTeachers, setIsLoadingTeachers] = useState(true);
 
   useEffect(() => {
-    api.getTeachers().then((data) => {
-      setTeachers(data);
-    }).catch(() => {
-      setTeachers([]);
-    }).finally(() => {
-      setIsLoadingTeachers(false);
-    });
+    const load = () => {
+      api.getTeachers().then((data) => {
+        if (data && data.length > 0) setTeachers(data);
+      }).catch(() => {
+        setTeachers([]);
+      }).finally(() => {
+        setIsLoadingTeachers(false);
+      });
+    };
+
+    load();
+
+    const handleTeachersChanged = (e: any) => {
+      if (e.detail) {
+        setTeachers(e.detail.filter((t: Teacher) => t.isActive !== false));
+      } else {
+        load();
+      }
+    };
+
+    window.addEventListener('mi_teachers_changed', handleTeachersChanged);
+    return () => {
+      window.removeEventListener('mi_teachers_changed', handleTeachersChanged);
+    };
   }, []);
 
   return (
@@ -125,22 +142,31 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenPPDB }) => {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {teachers.map((teacher) => (
-                  <div
-                    key={teacher.id}
-                    className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 text-center flex flex-col justify-between"
-                  >
-                    <div className="p-5">
-                      <div className="h-64 rounded-xl overflow-hidden bg-slate-100 mb-4">
-                        <img
-                          src={teacher.imageUrl || '/assets/principal.png'}
-                          alt={teacher.name}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                          onError={(e) => {
-                            e.currentTarget.src = '/assets/principal.png';
-                          }}
-                        />
-                      </div>
+                {teachers.map((teacher, idx) => {
+                  const fallbackAvatar = `/assets/teachers/guru-${(idx % 7) + 1}.svg`;
+                  const imageSrc = resolveImageUrl(teacher.imageUrl) || fallbackAvatar;
+                  const isSvgAvatar =
+                    typeof imageSrc === 'string' &&
+                    (imageSrc.includes('.svg') || imageSrc.includes('/assets/teachers/guru-'));
+
+                  return (
+                    <div
+                      key={teacher.id}
+                      className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 text-center flex flex-col justify-between group"
+                    >
+                      <div className="p-5">
+                        <div className="h-64 rounded-xl overflow-hidden bg-slate-100 mb-4 flex items-center justify-center">
+                          <img
+                            src={imageSrc}
+                            alt={teacher.name}
+                            className={`w-full h-full transition-transform duration-300 group-hover:scale-105 ${
+                              isSvgAvatar ? 'object-contain p-3' : 'object-cover'
+                            }`}
+                            onError={(e) => {
+                              e.currentTarget.src = fallbackAvatar;
+                            }}
+                          />
+                        </div>
                       <h3 className="text-lg font-bold font-heading text-slate-900">
                         {teacher.name}
                       </h3>
