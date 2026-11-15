@@ -13,7 +13,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Upload,
-  Image as ImageIcon,
   GraduationCap,
   BookOpen,
   Briefcase,
@@ -242,82 +241,82 @@ export const AdminTeachersTab: React.FC = () => {
   const totalInactive = teachers.length - totalActive;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 border border-slate-700 animate-slide-up">
+        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 bg-slate-900 text-white px-4 sm:px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 border border-slate-700 animate-slide-up max-w-[calc(100vw-2rem)]">
           <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-          <span className="text-sm font-medium">{toastMessage}</span>
+          <span className="text-xs sm:text-sm font-medium">{toastMessage}</span>
         </div>
       )}
 
       {/* Header Bar */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">
-            <Users className="w-4 h-4" />
+          <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">
+            <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Manajemen Tenaga Pendidik</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-heading">
-            Dewan Guru & Tenaga Kependidikan
+          <h2 className="text-lg sm:text-2xl font-extrabold text-slate-900 font-heading">
+            Dewan Guru & Staf
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Kelola profil pendidik, ustadz/ustadzah, mata pelajaran, foto asli (JPG/PNG), dan urutan tampil.
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5 leading-relaxed">
+            Kelola profil pendidik, mata pelajaran, foto asli (JPG/PNG), dan status tampil di website.
           </p>
         </div>
 
         <button
           onClick={handleOpenCreate}
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-950/10 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto"
+          className="w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-950/10 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
         >
           <Plus className="w-4 h-4" />
           <span>Tambah Guru Baru</span>
         </button>
       </div>
 
-      {/* Quick Statistics Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+      {/* Quick Statistics Bar - Compact 3-col on Mobile */}
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
+        <div className="bg-white p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-0">
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Guru & Staf</p>
-            <p className="text-2xl font-black text-slate-900 font-heading mt-1">{teachers.length}</p>
+            <p className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Total Guru</p>
+            <p className="text-lg sm:text-2xl font-black text-slate-900 font-heading mt-0.5 sm:mt-1">{teachers.length}</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <Users className="w-6 h-6" />
+          <div className="w-7 h-7 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center self-end sm:self-auto shrink-0">
+            <Users className="w-3.5 h-3.5 sm:w-6 sm:h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+        <div className="bg-white p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-0">
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Aktif Ditampilkan</p>
-            <p className="text-2xl font-black text-emerald-600 font-heading mt-1">{totalActive}</p>
+            <p className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Aktif</p>
+            <p className="text-lg sm:text-2xl font-black text-emerald-600 font-heading mt-0.5 sm:mt-1">{totalActive}</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <CheckCircle2 className="w-6 h-6" />
+          <div className="w-7 h-7 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center self-end sm:self-auto shrink-0">
+            <CheckCircle2 className="w-3.5 h-3.5 sm:w-6 sm:h-6" />
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+        <div className="bg-white p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-0">
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Status Non-Aktif / Draft</p>
-            <p className="text-2xl font-black text-slate-600 font-heading mt-1">{totalInactive}</p>
+            <p className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Non-Aktif</p>
+            <p className="text-lg sm:text-2xl font-black text-slate-600 font-heading mt-0.5 sm:mt-1">{totalInactive}</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center">
-            <Eye className="w-6 h-6" />
+          <div className="w-7 h-7 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center self-end sm:self-auto shrink-0">
+            <Eye className="w-3.5 h-3.5 sm:w-6 sm:h-6" />
           </div>
         </div>
       </div>
 
       {/* Search & Filter Toolbar */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-2xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Cari guru, jabatan, atau mata pelajaran..."
+            placeholder="Cari guru, jabatan, atau mapel..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
+            className="w-full pl-9 pr-4 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
           />
         </div>
 
@@ -326,7 +325,7 @@ export const AdminTeachersTab: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-700 focus:bg-white focus:outline-none focus:border-emerald-600 cursor-pointer"
+            className="w-full sm:w-auto px-3 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-700 focus:bg-white focus:outline-none focus:border-emerald-600 cursor-pointer"
           >
             <option value="all">Semua Status ({teachers.length})</option>
             <option value="active">Aktif ({totalActive})</option>
@@ -337,20 +336,20 @@ export const AdminTeachersTab: React.FC = () => {
 
       {/* Teachers Grid */}
       {isLoading ? (
-        <div className="flex items-center justify-center py-20 bg-white rounded-2xl border border-slate-200">
+        <div className="flex items-center justify-center py-16 sm:py-20 bg-white rounded-2xl border border-slate-200">
           <div className="flex flex-col items-center gap-2 text-slate-500">
             <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
             <span className="text-xs sm:text-sm font-medium">Memuat data dewan guru...</span>
           </div>
         </div>
       ) : filteredTeachers.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 p-6 space-y-3">
-          <Users className="w-12 h-12 text-slate-300 mx-auto" />
-          <p className="text-slate-600 font-semibold text-sm">Tidak ada data dewan guru yang sesuai.</p>
+        <div className="text-center py-12 sm:py-16 bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 space-y-3">
+          <Users className="w-10 h-10 sm:w-12 sm:h-12 text-slate-300 mx-auto" />
+          <p className="text-slate-600 font-semibold text-xs sm:text-sm">Tidak ada data dewan guru yang sesuai.</p>
           <p className="text-xs text-slate-400">
             {search
               ? 'Coba ubah kata kunci pencarian Anda.'
-              : 'Klik tombol "+ Tambah Guru Baru" untuk menambahkan foto dan profil pendidik.'}
+              : 'Klik tombol "+ Tambah Guru Baru" untuk menambahkan profil pendidik.'}
           </p>
           {!search && (
             <button
@@ -362,7 +361,7 @@ export const AdminTeachersTab: React.FC = () => {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-5">
           {filteredTeachers.map((t, idx) => {
             const fallbackAvatar = `/assets/teachers/guru-${(idx % 7) + 1}.svg`;
             const imageSrc = resolveImageUrl(t.imageUrl) || fallbackAvatar;
@@ -377,7 +376,7 @@ export const AdminTeachersTab: React.FC = () => {
               >
                 <div>
                   {/* Photo Thumbnail */}
-                  <div className="relative aspect-4/3 w-full bg-gradient-to-b from-slate-100 to-slate-200/80 overflow-hidden flex items-center justify-center">
+                  <div className="relative aspect-[16/10] sm:aspect-4/3 w-full bg-gradient-to-b from-slate-100 to-slate-200/80 overflow-hidden flex items-center justify-center">
                     <img
                       src={imageSrc}
                       alt={t.name}
@@ -405,7 +404,7 @@ export const AdminTeachersTab: React.FC = () => {
                       </span>
 
                       {!isSvgAvatar && (
-                        <span className="bg-emerald-950/70 backdrop-blur-xs text-emerald-200 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-xs">
+                        <span className="bg-emerald-950/75 backdrop-blur-xs text-emerald-200 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-xs">
                           Foto Asli
                         </span>
                       )}
@@ -421,7 +420,7 @@ export const AdminTeachersTab: React.FC = () => {
                   </div>
 
                   {/* Body Info */}
-                  <div className="p-4 space-y-2">
+                  <div className="p-3.5 sm:p-4 space-y-1.5 sm:space-y-2">
                     <div>
                       <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-snug group-hover:text-emerald-700 transition-colors line-clamp-1">
                         {t.name}
@@ -434,7 +433,7 @@ export const AdminTeachersTab: React.FC = () => {
                       )}
                     </div>
 
-                    <div className="pt-1 text-xs text-slate-600 space-y-1">
+                    <div className="pt-0.5 text-xs text-slate-600 space-y-1">
                       <div className="flex items-start gap-1.5">
                         <Briefcase className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
                         <span className="line-clamp-2 font-medium">{t.role}</span>
@@ -450,10 +449,10 @@ export const AdminTeachersTab: React.FC = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="p-3 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between gap-2">
+                <div className="p-2.5 sm:p-3 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between gap-2">
                   <button
                     onClick={() => handleOpenEdit(t)}
-                    className="flex-1 py-1.5 px-3 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 hover:text-emerald-700 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+                    className="flex-1 py-2 sm:py-1.5 px-3 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 hover:text-emerald-700 text-slate-700 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs min-h-[36px]"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
                     <span>Edit</span>
@@ -461,8 +460,9 @@ export const AdminTeachersTab: React.FC = () => {
 
                   <button
                     onClick={() => handleDelete(t.id, t.name)}
-                    className="py-1.5 px-2.5 rounded-lg bg-white border border-slate-200 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 text-slate-400 text-xs font-semibold flex items-center justify-center transition-colors cursor-pointer shadow-2xs"
+                    className="py-2 sm:py-1.5 px-3 rounded-lg bg-white border border-slate-200 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 text-slate-400 text-xs font-semibold flex items-center justify-center transition-colors cursor-pointer shadow-2xs min-h-[36px]"
                     title="Hapus data guru"
+                    aria-label={`Hapus ${t.name}`}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -473,24 +473,30 @@ export const AdminTeachersTab: React.FC = () => {
         </div>
       )}
 
-      {/* Modal Dialog: Tambah / Edit Guru */}
+      {/* Modal Dialog: Tambah / Edit Guru (Mobile Bottom Sheet & Desktop Dialog) */}
       {isModalOpen && editingItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-2xl w-full my-8 overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[92vh]">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/65 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full max-h-[94vh] sm:max-h-[90vh] overflow-hidden shadow-2xl border border-slate-200 flex flex-col animate-slide-up sm:animate-none">
+            
+            {/* Mobile Sheet Handle */}
+            <div className="bg-emerald-900 pt-2 pb-0 sm:hidden flex justify-center">
+              <div className="w-12 h-1 bg-white/40 rounded-full" />
+            </div>
+
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-emerald-800 to-teal-800 p-6 text-white flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center">
+            <div className="bg-gradient-to-r from-emerald-800 to-teal-800 px-4 py-3 sm:p-6 text-white flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
                   <GraduationCap className="w-5 h-5 text-amber-300" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold font-heading">
+                  <h3 className="text-base sm:text-lg font-bold font-heading">
                     {editingItem.id && !editingItem.id.toString().startsWith('t-new-')
                       ? 'Edit Data Dewan Guru'
                       : 'Tambah Guru Baru'}
                   </h3>
-                  <p className="text-xs text-emerald-200">
-                    Isi informasi biodata pendidik dan unggah foto profil (JPG/PNG)
+                  <p className="text-[11px] sm:text-xs text-emerald-200">
+                    Biodata pendidik dan unggah foto profil (JPG/PNG)
                   </p>
                 </div>
               </div>
@@ -498,71 +504,72 @@ export const AdminTeachersTab: React.FC = () => {
                 type="button"
                 onClick={() => setIsModalOpen(false)}
                 className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors cursor-pointer"
+                aria-label="Tutup form"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Modal Body / Form */}
-            <form onSubmit={handleSave} className="p-6 space-y-5 overflow-y-auto flex-1">
+            <form onSubmit={handleSave} className="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto flex-1">
               {uploadError && (
-                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
                   <span>{uploadError}</span>
                 </div>
               )}
 
               {/* FOTO PROFIL GURU (JPG / PNG / WebP) */}
-              <div className="space-y-3 bg-slate-50/70 p-4 rounded-2xl border border-slate-200">
+              <div className="space-y-3 bg-slate-50/80 p-3 sm:p-4 rounded-2xl border border-slate-200">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
                     <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
                       Foto Profil Guru <span className="text-emerald-700 font-semibold">(JPG / PNG / WebP)</span>
                     </label>
                     <p className="text-[11px] text-slate-500">
-                      Pilih foto resmi pendidik (format JPG, PNG, atau WebP)
+                      Pilih foto resmi guru atau gunakan opsi avatar ilustrasi
                     </p>
                   </div>
 
-                  {/* Mode Selector Tabs */}
-                  <div className="inline-flex items-center gap-1 bg-white p-1 rounded-xl text-xs font-semibold border border-slate-200 shadow-2xs self-start sm:self-auto">
+                  {/* Mode Selector Segmented Tabs - Mobile-optimized Grid */}
+                  <div className="grid grid-cols-3 gap-1 bg-white p-1 rounded-xl text-xs font-semibold border border-slate-200 shadow-2xs w-full sm:w-auto">
                     <button
                       type="button"
                       onClick={() => setPhotoSourceType('upload')}
-                      className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                      className={`px-2 sm:px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                         photoSourceType === 'upload'
                           ? 'bg-emerald-600 text-white shadow-xs font-bold'
                           : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
-                      <Upload className="w-3.5 h-3.5" />
-                      <span>Upload Foto (JPG/PNG)</span>
+                      <Upload className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">Upload</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setPhotoSourceType('preset')}
-                      className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                      className={`px-2 sm:px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                         photoSourceType === 'preset'
                           ? 'bg-emerald-600 text-white shadow-xs font-bold'
                           : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
-                      <Users className="w-3.5 h-3.5" />
-                      <span>Avatar Ilustrasi</span>
+                      <Users className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">Avatar</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setPhotoSourceType('url')}
-                      className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                      className={`px-2 sm:px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                         photoSourceType === 'url'
                           ? 'bg-emerald-600 text-white shadow-xs font-bold'
                           : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
-                      <Link2 className="w-3.5 h-3.5" />
-                      <span>Link URL</span>
+                      <Link2 className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">Link URL</span>
                     </button>
                   </div>
                 </div>
@@ -584,8 +591,8 @@ export const AdminTeachersTab: React.FC = () => {
                     !editingItem.imageUrl.includes('.svg') &&
                     !PRESET_AVATARS.includes(editingItem.imageUrl) ? (
                       /* Preview Box with Change/Remove Actions */
-                      <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4">
-                        <div className="relative w-28 h-36 shrink-0 rounded-xl overflow-hidden bg-white shadow-md border-2 border-emerald-500/40 group">
+                      <div className="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+                        <div className="relative w-24 h-32 sm:w-28 sm:h-36 shrink-0 rounded-xl overflow-hidden bg-white shadow-md border-2 border-emerald-500/40 group">
                           <img
                             src={resolveImageUrl(editingItem.imageUrl) || editingItem.imageUrl}
                             alt="Foto Guru"
@@ -602,36 +609,36 @@ export const AdminTeachersTab: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="flex-1 space-y-2 text-center sm:text-left min-w-0">
-                          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                              <span>Foto Guru Berhasil Dipilih</span>
+                        <div className="flex-1 space-y-2 text-center sm:text-left min-w-0 w-full sm:w-auto">
+                          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                              <span>Foto Berhasil Dipilih</span>
                             </span>
                             <span className="text-[10px] font-mono font-bold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200">
-                              JPG / PNG / WebP
+                              JPG/PNG/WebP
                             </span>
                           </div>
 
-                          <p className="text-xs text-slate-700 font-medium truncate">
+                          <p className="text-xs text-slate-700 font-medium truncate max-w-full">
                             {previewFileInfo?.name ||
                               (editingItem.imageUrl.startsWith('data:')
-                                ? 'Foto Gambar Tersimpan (Data Base64)'
+                                ? 'Foto Gambar Tersimpan (Base64)'
                                 : editingItem.imageUrl.split('/').pop())}
                           </p>
                           {previewFileInfo?.size && (
                             <p className="text-[11px] text-slate-400">Ukuran file: {previewFileInfo.size}</p>
                           )}
 
-                          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
+                          <div className="flex flex-col xs:flex-row items-stretch sm:items-center justify-center sm:justify-start gap-2 pt-1 w-full sm:w-auto">
                             <button
                               type="button"
                               onClick={() => fileInputRef.current?.click()}
                               disabled={isUploading}
-                              className="px-3.5 py-1.5 rounded-xl bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+                              className="px-3 py-2 sm:py-1.5 rounded-xl bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
                             >
-                              <Camera className="w-3.5 h-3.5" />
-                              <span>Ganti Foto (Upload Ulang)</span>
+                              <Camera className="w-3.5 h-3.5 shrink-0" />
+                              <span>Ganti Foto</span>
                             </button>
                             <button
                               type="button"
@@ -639,9 +646,9 @@ export const AdminTeachersTab: React.FC = () => {
                                 setEditingItem({ ...editingItem, imageUrl: '' });
                                 setPreviewFileInfo(null);
                               }}
-                              className="px-3.5 py-1.5 rounded-xl bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+                              className="px-3 py-2 sm:py-1.5 rounded-xl bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
+                              <Trash2 className="w-3.5 h-3.5 shrink-0" />
                               <span>Hapus Foto</span>
                             </button>
                           </div>
@@ -654,13 +661,13 @@ export const AdminTeachersTab: React.FC = () => {
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
                         onClick={() => fileInputRef.current?.click()}
-                        className={`border-2 border-dashed rounded-2xl p-6 sm:p-7 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-2.5 bg-white ${
+                        className={`border-2 border-dashed rounded-2xl p-5 sm:p-7 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-2 bg-white ${
                           isDragging
                             ? 'border-emerald-500 bg-emerald-50/80 scale-[1.01] shadow-md ring-4 ring-emerald-200/50'
                             : 'border-slate-300 hover:border-emerald-500 hover:bg-emerald-50/20'
                         }`}
                       >
-                        <div className="w-13 h-13 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shadow-2xs">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shadow-2xs">
                           {isUploading ? (
                             <Loader2 className="w-6 h-6 animate-spin text-emerald-600" />
                           ) : (
@@ -670,24 +677,24 @@ export const AdminTeachersTab: React.FC = () => {
 
                         <div className="space-y-1">
                           <p className="text-xs sm:text-sm font-bold text-slate-800">
-                            {isUploading ? 'Sedang Memproses Foto...' : 'Klik untuk Pilih Foto Guru atau Seret File ke Sini'}
+                            {isUploading ? 'Sedang Memproses Foto...' : 'Ketuk untuk Pilih Foto Guru'}
                           </p>
-                          <p className="text-xs text-slate-500">
-                            Format didukung: <span className="font-bold text-emerald-700">JPG, JPEG, PNG, WebP</span> (Maksimal 5 MB)
+                          <p className="text-[11px] sm:text-xs text-slate-500">
+                            Format didukung: <span className="font-bold text-emerald-700">JPG, JPEG, PNG, WebP</span> (Maks. 5 MB)
                           </p>
-                          <p className="text-[11px] text-slate-400">
-                            Disarankan foto potret/setengah badan dengan pencahayaan jelas
+                          <p className="text-[10px] sm:text-[11px] text-slate-400">
+                            Bisa ambil langsung dari kamera HP atau galeri foto
                           </p>
                         </div>
 
-                        <div className="flex items-center gap-2 pt-1">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                        <div className="flex items-center gap-1.5 pt-0.5">
+                          <span className="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
                             JPG
                           </span>
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                          <span className="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
                             PNG
                           </span>
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                          <span className="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
                             WEBP
                           </span>
                         </div>
@@ -698,12 +705,12 @@ export const AdminTeachersTab: React.FC = () => {
 
                 {/* TAB 2: Pilihan Avatar Ilustrasi */}
                 {photoSourceType === 'preset' && (
-                  <div className="space-y-2.5 bg-white p-4 rounded-2xl border border-slate-200">
+                  <div className="space-y-2.5 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200">
                     <div className="flex items-center justify-between">
-                      <p className="text-xs font-bold text-slate-700">Pilih salah satu karakter ilustrasi dewan guru:</p>
-                      <span className="text-[11px] text-slate-400">7 Pilihan Karakter</span>
+                      <p className="text-xs font-bold text-slate-700">Pilih karakter ilustrasi:</p>
+                      <span className="text-[10px] sm:text-[11px] text-slate-400">7 Pilihan</span>
                     </div>
-                    <div className="grid grid-cols-4 sm:grid-cols-7 gap-2.5">
+                    <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
                       {PRESET_AVATARS.map((path, idx) => {
                         const isSelected = editingItem.imageUrl === path;
                         return (
@@ -714,7 +721,7 @@ export const AdminTeachersTab: React.FC = () => {
                               setEditingItem({ ...editingItem, imageUrl: path });
                               setPreviewFileInfo(null);
                             }}
-                            className={`relative aspect-square rounded-xl p-2 border-2 transition-all cursor-pointer bg-slate-50 hover:bg-emerald-50 ${
+                            className={`relative aspect-square rounded-xl p-1.5 border-2 transition-all cursor-pointer bg-slate-50 hover:bg-emerald-50 ${
                               isSelected
                                 ? 'border-emerald-600 ring-2 ring-emerald-300 bg-emerald-50 shadow-xs'
                                 : 'border-slate-200 hover:border-emerald-300'
@@ -722,8 +729,8 @@ export const AdminTeachersTab: React.FC = () => {
                           >
                             <img src={path} alt={`Guru ${idx + 1}`} className="w-full h-full object-contain" />
                             {isSelected && (
-                              <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xs">
-                                <Check className="w-2.5 h-2.5 stroke-[3]" />
+                              <div className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xs">
+                                <Check className="w-2 h-2 stroke-[3]" />
                               </div>
                             )}
                           </button>
@@ -735,9 +742,9 @@ export const AdminTeachersTab: React.FC = () => {
 
                 {/* TAB 3: Input URL Gambar */}
                 {photoSourceType === 'url' && (
-                  <div className="space-y-2 bg-white p-4 rounded-2xl border border-slate-200">
+                  <div className="space-y-2 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200">
                     <label className="block text-xs font-bold text-slate-700">
-                      Masukkan URL / Tautan Langsung Foto Gambar:
+                      Tautan Langsung Gambar (URL):
                     </label>
                     <input
                       type="url"
@@ -747,18 +754,18 @@ export const AdminTeachersTab: React.FC = () => {
                         setPreviewFileInfo(null);
                       }}
                       placeholder="https://... atau /assets/teachers/..."
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-600 bg-white"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 bg-white"
                     />
-                    <p className="text-[11px] text-slate-400">
-                      Pastikan URL berformat langsung gambar (.jpg, .jpeg, .png, atau .webp).
+                    <p className="text-[10px] sm:text-[11px] text-slate-400">
+                      Pastikan URL berakhiran .jpg, .jpeg, .png, atau .webp.
                     </p>
                   </div>
                 )}
 
-                {/* Pratinjau Terpilih (Global summary for preset or url) */}
+                {/* Pratinjau Terpilih (Preset or URL) */}
                 {editingItem.imageUrl && (photoSourceType === 'preset' || photoSourceType === 'url') && (
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-200 shadow-2xs">
-                    <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-50 border border-slate-200 flex items-center justify-center p-1 shrink-0">
+                  <div className="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl bg-white border border-slate-200 shadow-2xs">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-slate-50 border border-slate-200 flex items-center justify-center p-1 shrink-0">
                       <img
                         src={resolveImageUrl(editingItem.imageUrl) || '/assets/teachers/guru-1.svg'}
                         alt="Preview"
@@ -770,7 +777,7 @@ export const AdminTeachersTab: React.FC = () => {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold text-slate-800">
-                        {photoSourceType === 'preset' ? 'Avatar Ilustrasi Terpilih' : 'Tautan Gambar URL Terpilih'}
+                        {photoSourceType === 'preset' ? 'Avatar Ilustrasi Terpilih' : 'URL Gambar Terpilih'}
                       </p>
                       <p className="text-[11px] text-slate-500 truncate">{editingItem.imageUrl}</p>
                     </div>
@@ -779,9 +786,9 @@ export const AdminTeachersTab: React.FC = () => {
               </div>
 
               {/* Biodata: Nama & Gelar */}
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4">
                 <div className="sm:col-span-8">
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Nama Lengkap Guru / Staf <span className="text-rose-500">*</span>
                   </label>
                   <input
@@ -790,12 +797,12 @@ export const AdminTeachersTab: React.FC = () => {
                     value={editingItem.name || ''}
                     onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })}
                     placeholder="Contoh: Ustadzah Fatimah Azzahra"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white"
                   />
                 </div>
 
                 <div className="sm:col-span-4">
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Gelar Akademik
                   </label>
                   <input
@@ -803,15 +810,15 @@ export const AdminTeachersTab: React.FC = () => {
                     value={editingItem.degree || ''}
                     onChange={(e) => setEditingItem({ ...editingItem, degree: e.target.value })}
                     placeholder="Contoh: S.Pd.I / M.Pd"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white"
                   />
                 </div>
               </div>
 
               {/* Jabatan & Mata Pelajaran */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Jabatan / Peran <span className="text-rose-500">*</span>
                   </label>
                   <input
@@ -819,29 +826,29 @@ export const AdminTeachersTab: React.FC = () => {
                     required
                     value={editingItem.role || ''}
                     onChange={(e) => setEditingItem({ ...editingItem, role: e.target.value })}
-                    placeholder="Contoh: Wali Kelas 3A & Pembina Pramuka"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white"
+                    placeholder="Contoh: Wali Kelas 3A"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Mata Pelajaran yang Diampu
                   </label>
                   <input
                     type="text"
                     value={editingItem.subjects || ''}
                     onChange={(e) => setEditingItem({ ...editingItem, subjects: e.target.value })}
-                    placeholder="Contoh: Al-Qur'an Hadits, Fiqih, Tahfidz"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white"
+                    placeholder="Contoh: Al-Qur'an Hadits, Fiqih"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white"
                   />
                 </div>
               </div>
 
               {/* Urutan & Status Tampil */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-0.5">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Urutan Tampil (Order)
                   </label>
                   <input
@@ -849,16 +856,16 @@ export const AdminTeachersTab: React.FC = () => {
                     min="1"
                     value={editingItem.order ?? 1}
                     onChange={(e) => setEditingItem({ ...editingItem, order: parseInt(e.target.value) || 1 })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white"
                   />
-                  <p className="text-[11px] text-slate-500 mt-1">Urutan posisi tampil guru di website publik.</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 mt-1">Urutan nomor urut tampil guru di website.</p>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Status Publikasi
                   </label>
-                  <label className="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-colors">
+                  <label className="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-colors">
                     <input
                       type="checkbox"
                       checked={editingItem.isActive !== false}
@@ -866,19 +873,19 @@ export const AdminTeachersTab: React.FC = () => {
                       className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer"
                     />
                     <div className="text-xs">
-                      <span className="font-bold text-slate-800">Tampilkan di Website Publik</span>
-                      <p className="text-slate-500 text-[11px]">Centang agar profil guru dapat dilihat pengunjung.</p>
+                      <span className="font-bold text-slate-800">Tampilkan di Website</span>
+                      <p className="text-slate-500 text-[10px] sm:text-[11px]">Centang agar profil guru tampil di web publik.</p>
                     </div>
                   </label>
                 </div>
               </div>
 
-              {/* Modal Actions */}
-              <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
+              {/* Modal Sticky Actions */}
+              <div className="pt-3 sm:pt-4 border-t border-slate-200 flex items-center justify-end gap-2.5 sm:gap-3 sticky bottom-0 bg-white/95 backdrop-blur-xs pb-1 sm:pb-0">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                  className="flex-1 sm:flex-initial px-4 sm:px-5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold transition-colors cursor-pointer text-center"
                 >
                   Batal
                 </button>
@@ -886,7 +893,7 @@ export const AdminTeachersTab: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSaving || isUploading}
-                  className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="flex-1 sm:flex-initial px-5 sm:px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {isSaving ? (
                     <>

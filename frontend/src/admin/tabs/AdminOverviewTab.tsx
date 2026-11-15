@@ -171,24 +171,24 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
   return (
     <div className="space-y-8">
       {/* Top Banner Notice */}
-      <div className="bg-gradient-to-r from-emerald-900 to-slate-900 border border-emerald-800/40 rounded-2xl p-6 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+      <div className="bg-gradient-to-r from-emerald-900 to-slate-900 border border-emerald-800/40 rounded-2xl p-4 sm:p-6 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shadow-sm">
         <div>
-          <h2 className="text-xl font-bold tracking-tight">Pusat Kendali MI AL-AHMAD</h2>
-          <p className="text-sm text-emerald-200/80 mt-1">
+          <h2 className="text-lg sm:text-xl font-bold tracking-tight">Pusat Kendali MI AL-AHMAD</h2>
+          <p className="text-xs sm:text-sm text-emerald-200/80 mt-1 leading-relaxed">
             Pantau arus pendaftaran santri baru, kelola dewan guru, moderasi formulir alumni, dan kendalikan portal secara real-time.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
           <button
             onClick={() => onNavigateTab('teachers')}
-            className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-sm cursor-pointer whitespace-nowrap flex items-center gap-2"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-sm cursor-pointer whitespace-nowrap flex items-center justify-center gap-2"
           >
             <UserCheck className="w-4 h-4 text-slate-950" />
             <span>+ Tambah & Kelola Guru</span>
           </button>
           <button
             onClick={() => onNavigateTab('page-control')}
-            className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs sm:text-sm transition-colors shadow-sm cursor-pointer whitespace-nowrap"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs sm:text-sm transition-colors shadow-sm cursor-pointer whitespace-nowrap text-center"
           >
             Kendali Tampilan Web →
           </button>

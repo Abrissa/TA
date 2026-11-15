@@ -71,29 +71,29 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
 
       {/* STATS BAR */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-xs">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
             
             <div className="space-y-1">
-              <p className="text-3xl sm:text-4xl font-extrabold text-[#059669] font-heading">
+              <p className="text-2xl sm:text-4xl font-extrabold text-[#059669] font-heading">
                 {teachers.length > 0 ? teachers.length : '32'}
               </p>
-              <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">Guru & Staf</p>
+              <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">Guru & Staf</p>
             </div>
 
             <div className="space-y-1 border-l border-slate-100">
-              <p className="text-3xl sm:text-4xl font-extrabold text-[#059669] font-heading">100%</p>
-              <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">Lulusan S1 / S2</p>
+              <p className="text-2xl sm:text-4xl font-extrabold text-[#059669] font-heading">100%</p>
+              <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">Lulusan S1 / S2</p>
             </div>
 
-            <div className="space-y-1 border-l-0 md:border-l border-slate-100">
-              <p className="text-3xl sm:text-4xl font-extrabold text-[#059669] font-heading">15:1</p>
-              <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">Rasio Guru:Siswa</p>
+            <div className="space-y-1 border-l-0 md:border-l border-slate-100 pt-3 md:pt-0 border-t md:border-t-0">
+              <p className="text-2xl sm:text-4xl font-extrabold text-[#059669] font-heading">15:1</p>
+              <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">Rasio Guru:Siswa</p>
             </div>
 
-            <div className="space-y-1 border-l border-slate-100">
-              <p className="text-3xl sm:text-4xl font-extrabold text-amber-600 font-heading">Sertifikasi</p>
-              <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">Kemenag & Kemdikbud</p>
+            <div className="space-y-1 border-l border-slate-100 pt-3 md:pt-0 border-t md:border-t-0">
+              <p className="text-2xl sm:text-4xl font-extrabold text-amber-600 font-heading">Sertifikasi</p>
+              <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">Kemenag & Kemdikbud</p>
             </div>
 
           </div>
@@ -101,29 +101,29 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
       </section>
 
       {/* TEACHERS GRID */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-sm font-bold uppercase tracking-wider text-[#059669]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+        <div className="text-center max-w-2xl mx-auto space-y-1.5 sm:space-y-2">
+          <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#059669]">
             Pendidik Dedikatif
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900">
+          <h2 className="text-xl sm:text-3xl font-bold font-heading text-slate-900">
             Direktori Guru & Staf Pengajar
           </h2>
-          <p className="text-base sm:text-lg text-slate-600">
+          <p className="text-xs sm:text-base text-slate-600">
             Mendidik dengan hati, menginspirasi melalui keilmuan Al-Qur'an dan sains.
           </p>
         </div>
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-10 h-10 animate-spin text-emerald-600" />
+          <div className="flex items-center justify-center py-16 sm:py-20">
+            <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 animate-spin text-emerald-600" />
           </div>
         ) : teachers.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 text-slate-500">
+          <div className="text-center py-12 sm:py-16 bg-white rounded-2xl border border-slate-200 text-slate-500 text-xs sm:text-sm">
             Belum ada data guru yang dipublikasikan.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {teachers.map((t, idx) => {
               const fallbackAvatar = `/assets/teachers/guru-${(idx % 7) + 1}.svg`;
               const imageSrc = resolveImageUrl(t.imageUrl) || fallbackAvatar;
@@ -134,10 +134,10 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
               return (
                 <div 
                   key={t.id}
-                  className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
+                  className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
                 >
                   <div>
-                    <div className="w-full h-56 bg-slate-100 overflow-hidden flex items-center justify-center">
+                    <div className="w-full h-52 sm:h-60 bg-slate-100 overflow-hidden flex items-center justify-center">
                       <img
                         src={imageSrc}
                         alt={t.name}
@@ -149,16 +149,16 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
                         }}
                       />
                     </div>
-                  <div className="p-5 sm:p-6 space-y-2.5">
+                  <div className="p-4 sm:p-6 space-y-2">
                     {t.degree && (
-                      <span className="inline-block px-3 py-1 rounded bg-emerald-50 text-[#059669] font-bold text-xs border border-emerald-100">
+                      <span className="inline-block px-2.5 py-0.5 rounded-md bg-emerald-50 text-[#059669] font-bold text-xs border border-emerald-100">
                         {t.degree}
                       </span>
                     )}
-                    <h3 className="font-bold text-slate-900 text-lg leading-snug font-heading">{t.name}</h3>
-                    <p className="text-sm font-bold text-[#059669]">{t.role}</p>
+                    <h3 className="font-bold text-slate-900 text-base sm:text-lg leading-snug font-heading">{t.name}</h3>
+                    <p className="text-xs sm:text-sm font-bold text-[#059669]">{t.role}</p>
                     {t.subjects && (
-                      <p className="text-sm text-slate-600 pt-1.5 border-t border-slate-100">
+                      <p className="text-xs sm:text-sm text-slate-600 pt-1.5 border-t border-slate-100">
                         Mata Pelajaran: <span className="font-medium text-slate-800">{t.subjects}</span>
                       </p>
                     )}
