@@ -16,7 +16,8 @@ import {
   Building,
   Edit2,
   Check,
-  X
+  X,
+  UserCheck
 } from 'lucide-react';
 
 interface AdminOverviewTabProps {
@@ -140,6 +141,14 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
       actionTab: 'alumni',
     },
     {
+      title: 'Dewan Guru & Staf',
+      value: stats?.total_teachers ?? 0,
+      sublabel: 'Pendidik aktif terdaftar',
+      badgeColor: 'teal',
+      icon: UserCheck,
+      actionTab: 'teachers',
+    },
+    {
       title: 'Artikel & Berita',
       value: stats?.total_articles ?? 0,
       sublabel: 'Publikasi aktif di portal',
@@ -166,10 +175,17 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
         <div>
           <h2 className="text-xl font-bold tracking-tight">Pusat Kendali MI AL-AHMAD</h2>
           <p className="text-sm text-emerald-200/80 mt-1">
-            Pantau arus pendaftaran santri baru, moderasi formulir alumni, dan kendalikan visibilitas halaman secara real-time.
+            Pantau arus pendaftaran santri baru, kelola dewan guru, moderasi formulir alumni, dan kendalikan portal secara real-time.
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={() => onNavigateTab('teachers')}
+            className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-sm cursor-pointer whitespace-nowrap flex items-center gap-2"
+          >
+            <UserCheck className="w-4 h-4 text-slate-950" />
+            <span>+ Tambah & Kelola Guru</span>
+          </button>
           <button
             onClick={() => onNavigateTab('page-control')}
             className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs sm:text-sm transition-colors shadow-sm cursor-pointer whitespace-nowrap"
@@ -362,7 +378,7 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
       </div>
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-5">
         {kpis.map((kpi, idx) => {
           const Icon = kpi.icon;
           return (

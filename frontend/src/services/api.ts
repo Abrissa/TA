@@ -355,11 +355,7 @@ export const api = {
     } catch (e) {
       console.warn('API getTeachers failed, using mock data:', e);
     }
-    return TEACHERS_DATA.map((t, idx) => ({
-      ...t,
-      id: String(t.id),
-      imageUrl: resolveImageUrl(t.imageUrl) || `/assets/teachers/guru-${(idx % 7) + 1}.svg`,
-    }));
+    return mockAdminStore.getTeachers();
   },
 
   async getFacilities(): Promise<Facility[]> {
@@ -783,6 +779,79 @@ export const api = {
     } catch (err: any) {
       if (isNetworkError(err)) {
         mockAdminStore.deleteAchievement(id);
+        return;
+      }
+      throw err;
+    }
+  },
+
+  async getAdminTeachers(): Promise<Teacher[]> {
+    try {
+      const res = await fetch(`${BASE_URL}/api/admin/teachers`, {
+        headers: getAuthHeaders(),
+      });
+      const json = await handleResponse<{ success: boolean; data: any[] }>(res);
+      if (json.data) {
+        return json.data.map((t: any, idx: number) => ({
+          ...t,
+          id: String(t.id),
+          imageUrl: resolveImageUrl(t.imageUrl || t.image_url) || `/assets/teachers/guru-${(idx % 7) + 1}.svg`,
+        }));
+      }
+    } catch (err: any) {
+      if (isNetworkError(err)) {
+        return mockAdminStore.getTeachers();
+      }
+      throw err;
+    }
+    return mockAdminStore.getTeachers();
+  },
+
+  async saveTeacher(data: Partial<Teacher>, id?: string | number): Promise<Teacher> {
+    const url = id ? `${BASE_URL}/api/admin/teachers/${id}` : `${BASE_URL}/api/admin/teachers`;
+    const method = id ? 'PUT' : 'POST';
+    const payload = {
+      name: data.name,
+      degree: data.degree || null,
+      role: data.role,
+      subjects: data.subjects || null,
+      image_url: data.imageUrl ?? (data as any).image_url ?? null,
+      order: data.order ?? 0,
+      is_active: data.isActive ?? true,
+    };
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload),
+      });
+      const json = await handleResponse<{ success: boolean; data: any }>(res);
+      const savedTeacher: Teacher = {
+        ...json.data,
+        id: String(json.data.id),
+        imageUrl: resolveImageUrl(json.data.imageUrl || json.data.image_url) || (data.imageUrl || '/assets/teachers/guru-1.svg'),
+      };
+      mockAdminStore.saveTeacher(savedTeacher, id);
+      return savedTeacher;
+    } catch (err: any) {
+      if (isNetworkError(err)) {
+        return mockAdminStore.saveTeacher(data, id);
+      }
+      throw err;
+    }
+  },
+
+  async deleteTeacher(id: string | number): Promise<void> {
+    try {
+      const res = await fetch(`${BASE_URL}/api/admin/teachers/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
+      await handleResponse(res);
+      mockAdminStore.deleteTeacher(id);
+    } catch (err: any) {
+      if (isNetworkError(err)) {
+        mockAdminStore.deleteTeacher(id);
         return;
       }
       throw err;

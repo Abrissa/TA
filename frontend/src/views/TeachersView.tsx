@@ -21,12 +21,30 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    const handleTeachersChanged = (e?: any) => {
+      if (e?.detail && Array.isArray(e.detail)) {
+        setTeachers(e.detail);
+      } else {
+        api.getTeachers().then((data) => {
+          if (data && data.length > 0) setTeachers(data);
+        }).catch(() => {});
+      }
+    };
+
+    window.addEventListener('mi_teachers_changed', handleTeachersChanged);
+    window.addEventListener('storage', handleTeachersChanged);
+
     api.getTeachers()
       .then((data) => {
         if (data && data.length > 0) setTeachers(data);
       })
       .catch(() => {})
       .finally(() => setIsLoading(false));
+
+    return () => {
+      window.removeEventListener('mi_teachers_changed', handleTeachersChanged);
+      window.removeEventListener('storage', handleTeachersChanged);
+    };
   }, []);
 
   return (

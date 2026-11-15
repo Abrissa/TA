@@ -1,5 +1,5 @@
 import { AdminStats, AdminUser, AlumniSubmissionRecord, MasterAcademicYear, MasterDataResponse, MasterPpdbPath, PpdbRecord, SchoolProfileData } from './api';
-import { Article, Achievement } from '../types';
+import { Article, Achievement, Teacher } from '../types';
 import { ARTICLES_DATA, ACHIEVEMENTS_DATA, TEACHERS_DATA, SCHOOL_INFO } from '../data/mockData';
 
 export function isNetworkError(err: any): boolean {
@@ -423,6 +423,80 @@ export const mockAdminStore = {
     } catch {}
   },
 
+  getTeachers(search?: string): Teacher[] {
+    let list = readStorage<Teacher[]>('mi_mock_teachers', TEACHERS_DATA.map((t, idx) => ({
+      ...t,
+      id: String(t.id),
+      imageUrl: t.imageUrl || `/assets/teachers/guru-${(idx % 7) + 1}.svg`,
+      order: idx + 1,
+      isActive: true,
+    })));
+    if (search && search.trim()) {
+      const q = search.toLowerCase();
+      list = list.filter((t) =>
+        t.name.toLowerCase().includes(q) ||
+        (t.degree && t.degree.toLowerCase().includes(q)) ||
+        t.role.toLowerCase().includes(q) ||
+        (t.subjects && t.subjects.toLowerCase().includes(q))
+      );
+    }
+    return list;
+  },
+
+  saveTeacher(data: Partial<Teacher>, id?: string | number): Teacher {
+    const list = this.getTeachers();
+    let result: Teacher;
+    if (id) {
+      const idx = list.findIndex((t) => String(t.id) === String(id));
+      if (idx !== -1) {
+        result = {
+          ...list[idx],
+          ...data,
+          id: String(id),
+        };
+        list[idx] = result;
+      } else {
+        result = {
+          id: String(id),
+          name: data.name || '',
+          degree: data.degree || '',
+          role: data.role || 'Tenaga Pendidik',
+          subjects: data.subjects || '',
+          imageUrl: data.imageUrl || '/assets/teachers/guru-1.svg',
+          order: data.order ?? list.length + 1,
+          isActive: data.isActive ?? true,
+        };
+        list.push(result);
+      }
+    } else {
+      const newId = `t-${Date.now()}`;
+      result = {
+        id: newId,
+        name: data.name || '',
+        degree: data.degree || '',
+        role: data.role || 'Tenaga Pendidik',
+        subjects: data.subjects || '',
+        imageUrl: data.imageUrl || '/assets/teachers/guru-1.svg',
+        order: data.order ?? list.length + 1,
+        isActive: data.isActive ?? true,
+      };
+      list.push(result);
+    }
+    writeStorage('mi_mock_teachers', list);
+    try {
+      window.dispatchEvent(new CustomEvent('mi_teachers_changed', { detail: list }));
+    } catch {}
+    return result;
+  },
+
+  deleteTeacher(id: string | number): void {
+    const list = this.getTeachers().filter((t) => String(t.id) !== String(id));
+    writeStorage('mi_mock_teachers', list);
+    try {
+      window.dispatchEvent(new CustomEvent('mi_teachers_changed', { detail: list }));
+    } catch {}
+  },
+
   saveArticle(article: Partial<Article>, id?: number): Article {
     const list = this.getArticles();
     let result: Article;
@@ -685,7 +759,7 @@ export const mockAdminStore = {
     return {
       total_articles: articles.length,
       total_achievements: this.getAchievements().length,
-      total_teachers: TEACHERS_DATA.length,
+      total_teachers: this.getTeachers().length,
       total_ppdb: ppdb.length,
       pending_ppdb: ppdb.filter((r) => r.status === 'menunggu_verifikasi').length,
       pending_alumni: alumni.filter((r) => r.status === 'pending').length,

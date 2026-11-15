@@ -3,6 +3,7 @@ import { AdminUser, api } from '../services/api';
 import { mockAdminStore } from '../services/mockAdminData';
 import { AdminOverviewTab } from './tabs/AdminOverviewTab';
 import { AdminPageControlTab } from './tabs/AdminPageControlTab';
+import { AdminTeachersTab } from './tabs/AdminTeachersTab';
 import { AdminArticlesTab } from './tabs/AdminArticlesTab';
 import { AdminAchievementsTab } from './tabs/AdminAchievementsTab';
 import { AdminPpdbTab } from './tabs/AdminPpdbTab';
@@ -21,7 +22,8 @@ import {
   Menu, 
   X, 
   ShieldCheck, 
-  ChevronRight 
+  ChevronRight,
+  UserCheck
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -78,6 +80,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   const menuItems = [
     { id: 'overview', label: 'Ringkasan Dashboard', icon: LayoutDashboard },
     { id: 'page-control', label: 'Konten Website & CMS', icon: Sliders },
+    { id: 'teachers', label: 'Dewan Guru & Staf', icon: UserCheck },
     { id: 'achievements', label: 'Prestasi Santri & Kejuaraan', icon: Trophy },
     { id: 'articles', label: 'Berita & Pengumuman', icon: FileText },
     { id: 'ppdb', label: 'Pendaftar PPDB (Santri Baru)', icon: Users },
@@ -255,6 +258,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
           {activeTab === 'overview' && <AdminOverviewTab onNavigateTab={setActiveTab} />}
           {activeTab === 'page-control' && <AdminPageControlTab />}
+          {activeTab === 'teachers' && <AdminTeachersTab />}
           {activeTab === 'achievements' && <AdminAchievementsTab />}
           {activeTab === 'articles' && <AdminArticlesTab />}
           {activeTab === 'ppdb' && <AdminPpdbTab />}

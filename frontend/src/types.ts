@@ -7,6 +7,8 @@ export interface Teacher {
   role: string;
   subjects: string;
   imageUrl: string;
+  order?: number;
+  isActive?: boolean;
 }
 
 export interface Facility {
