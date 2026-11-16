@@ -70,27 +70,58 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           {/* 2-Column Grid Layout: Foto & Teks Terpisah Rapi */}
           <div className="relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 items-end min-h-[340px] sm:min-h-[400px] lg:min-h-[430px]">
-            {/* Kolom Kiri (5 Kolom): Foto Siswa Setengah Paha Pas & Proporsional */}
-            <div className="lg:col-span-5 relative flex justify-center lg:justify-start items-end order-2 lg:order-1 h-full px-4 lg:pl-10 lg:pr-0 overflow-visible">
+            {/* Kolom Kiri (5 Kolom): Foto Siswa + Baris Statistik Khusus Mobile (Tepat di Bawah Foto) */}
+            <div className="lg:col-span-5 relative flex flex-col justify-end items-center lg:items-start order-2 lg:order-1 h-full px-4 lg:pl-10 lg:pr-0 overflow-visible w-full">
               <motion.div
                 initial={{ opacity: 0, scale: 0.94, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full max-w-[240px] sm:max-w-[340px] lg:max-w-[420px] flex items-end justify-center lg:justify-start overflow-visible origin-bottom pt-2 sm:pt-0"
+                className="relative w-full max-w-[260px] sm:max-w-[340px] lg:max-w-[420px] flex items-end justify-center lg:justify-start overflow-visible origin-bottom pt-2 sm:pt-0"
               >
                 <img
                   src={studentsImage}
                   alt="Siswa Berprestasi MI AL-AHMAD"
-                  className="w-full h-auto max-h-[250px] sm:max-h-[350px] lg:max-h-[430px] xl:max-h-[450px] object-contain object-bottom drop-shadow-[0_20px_25px_rgba(0,0,0,0.35)] lg:-mt-4"
+                  className="w-full h-auto max-h-[260px] sm:max-h-[350px] lg:max-h-[430px] xl:max-h-[450px] object-contain object-bottom drop-shadow-[0_20px_25px_rgba(0,0,0,0.35)] lg:-mt-4"
                   onError={(e) => {
                     e.currentTarget.src = '/assets/hero-students.png';
                   }}
                 />
               </motion.div>
+
+              {/* Baris Statistik Khusus Mobile (Tepat di Bawah Foto Siswa Sesuai Permintaan) */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="w-full lg:hidden pt-3 pb-5 px-2 sm:px-4"
+              >
+                <div className="border-t border-white/25 pt-3.5 flex items-center justify-around text-white">
+                  <div className="text-center">
+                    <p className="text-xl sm:text-2xl font-extrabold font-heading">
+                      <AnimatedCounter end={statStudents} suffix="+" duration={1800} delay={400} />
+                    </p>
+                    <p className="text-xs text-emerald-100 font-semibold">Siswa Aktif</p>
+                  </div>
+                  <div className="w-px h-8 bg-white/30" />
+                  <div className="text-center">
+                    <p className="text-xl sm:text-2xl font-extrabold font-heading">
+                      <AnimatedCounter end={statAlumni} suffix="+" duration={2000} delay={400} />
+                    </p>
+                    <p className="text-xs text-emerald-100 font-semibold">Alumni</p>
+                  </div>
+                  <div className="w-px h-8 bg-white/30" />
+                  <div className="text-center">
+                    <p className="text-xl sm:text-2xl font-extrabold font-heading">
+                      <AnimatedCounter end={statAchievements} suffix="+" duration={1800} delay={400} />
+                    </p>
+                    <p className="text-xs text-emerald-100 font-semibold">Prestasi</p>
+                  </div>
+                </div>
+              </motion.div>
             </div>
 
-            {/* Kolom Kanan: Teks Judul, Tombol, dan Statistik */}
-            <div className="lg:col-span-7 order-1 lg:order-2 px-4 sm:px-10 lg:pr-16 lg:pl-6 py-6 sm:py-10 lg:py-10 text-center lg:text-left space-y-3.5 sm:space-y-5 lg:space-y-5">
+            {/* Kolom Kanan: Teks Judul, Tombol, dan Statistik Desktop */}
+            <div className="lg:col-span-7 order-1 lg:order-2 px-4 sm:px-10 lg:pr-16 lg:pl-6 pt-6 pb-2 sm:py-10 lg:py-10 text-center lg:text-left space-y-3.5 sm:space-y-5 lg:space-y-5">
               {/* Subjudul Badge */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -150,32 +181,32 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </button>
               </motion.div>
 
-              {/* Baris Statistik */}
+              {/* Baris Statistik - Desktop Only */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="pt-3 sm:pt-4 border-t border-white/25 flex items-center justify-around sm:justify-center lg:justify-start gap-2 sm:gap-8 lg:gap-12 text-white"
+                className="pt-3 sm:pt-4 border-t border-white/25 hidden lg:flex items-center justify-start gap-8 lg:gap-12 text-white"
               >
-                <div className="text-center sm:text-left">
-                  <p className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
+                <div className="text-left">
+                  <p className="text-3xl lg:text-4xl font-extrabold font-heading">
                     <AnimatedCounter end={statStudents} suffix="+" duration={1800} delay={400} />
                   </p>
-                  <p className="text-xs sm:text-base text-emerald-100 font-semibold">Siswa Aktif</p>
+                  <p className="text-base text-emerald-100 font-semibold">Siswa Aktif</p>
                 </div>
-                <div className="w-px h-8 sm:h-10 bg-white/30" />
-                <div className="text-center sm:text-left">
-                  <p className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
+                <div className="w-px h-10 bg-white/30" />
+                <div className="text-left">
+                  <p className="text-3xl lg:text-4xl font-extrabold font-heading">
                     <AnimatedCounter end={statAlumni} suffix="+" duration={2000} delay={400} />
                   </p>
-                  <p className="text-xs sm:text-base text-emerald-100 font-semibold">Alumni</p>
+                  <p className="text-base text-emerald-100 font-semibold">Alumni</p>
                 </div>
-                <div className="w-px h-8 sm:h-10 bg-white/30" />
-                <div className="text-center sm:text-left">
-                  <p className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-heading">
+                <div className="w-px h-10 bg-white/30" />
+                <div className="text-left">
+                  <p className="text-3xl lg:text-4xl font-extrabold font-heading">
                     <AnimatedCounter end={statAchievements} suffix="+" duration={1800} delay={400} />
                   </p>
-                  <p className="text-xs sm:text-base text-emerald-100 font-semibold">Prestasi</p>
+                  <p className="text-base text-emerald-100 font-semibold">Prestasi</p>
                 </div>
               </motion.div>
             </div>
