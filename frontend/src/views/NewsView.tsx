@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Article, PageTab } from '../types';
-import { api } from '../services/api';
+import { api, resolveImageUrl } from '../services/api';
 import { mockAdminStore } from '../services/mockAdminData';
 import { ARTICLES_DATA } from '../data/mockData';
 import {
