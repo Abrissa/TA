@@ -95,16 +95,28 @@ export const AlumniView: React.FC<AlumniViewProps> = ({ setActiveTab, settings }
         <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-xs">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <div className="space-y-1">
-              <p className="text-3xl sm:text-4xl font-extrabold text-[#059669] font-heading">3,500+</p>
-              <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">Lulusan Tersebar</p>
+              <p className="text-3xl sm:text-4xl font-extrabold text-[#059669] font-heading">
+                {settings?.alumni_stat_graduates || '3,500+'}
+              </p>
+              <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">
+                {settings?.alumni_stat_graduates_label || 'Lulusan Tersebar'}
+              </p>
             </div>
             <div className="space-y-1 md:border-l border-slate-100">
-              <p className="text-3xl sm:text-4xl font-extrabold text-[#059669] font-heading">45+ Tahun</p>
-              <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">Perjalanan Pengabdian</p>
+              <p className="text-3xl sm:text-4xl font-extrabold text-[#059669] font-heading">
+                {settings?.alumni_stat_years || '45+ Tahun'}
+              </p>
+              <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">
+                {settings?.alumni_stat_years_label || 'Perjalanan Pengabdian'}
+              </p>
             </div>
             <div className="space-y-1 md:border-l border-slate-100">
-              <p className="text-3xl sm:text-4xl font-extrabold text-amber-600 font-heading">Ikatan Alumni</p>
-              <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">Jejak Silaturahmi Terjaga</p>
+              <p className="text-3xl sm:text-4xl font-extrabold text-amber-600 font-heading">
+                {settings?.alumni_stat_network || 'Ikatan Alumni'}
+              </p>
+              <p className="text-sm font-bold text-slate-600 uppercase tracking-wider">
+                {settings?.alumni_stat_network_label || 'Jejak Silaturahmi Terjaga'}
+              </p>
             </div>
           </div>
         </div>
@@ -113,8 +125,12 @@ export const AlumniView: React.FC<AlumniViewProps> = ({ setActiveTab, settings }
       {/* ALUMNI CARDS */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900">Profil Lulusan Berprestasi</h2>
-          <p className="text-base text-slate-600">Kisah inspiratif alumni MI AL-AHMAD di berbagai bidang profesi.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold font-heading text-slate-900">
+            {settings?.alumni_section_title || 'Profil Lulusan Berprestasi'}
+          </h2>
+          <p className="text-base text-slate-600">
+            {settings?.alumni_section_subtitle || 'Kisah inspiratif alumni MI AL-AHMAD di berbagai bidang profesi.'}
+          </p>
         </div>
 
         {isLoading ? (

@@ -1760,6 +1760,106 @@ export const AdminPageControlTab: React.FC = () => {
             </div>
           </div>
 
+          {/* STATISTIK & COUNTER ALUMNI */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Award className="w-5 h-5 text-emerald-600" />
+              <span>Statistik & Counter Alumni (3 Baris Angka)</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Statistik 1: Lulusan</label>
+                <input
+                  type="text"
+                  value={settings['alumni_stat_graduates'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_stat_graduates', e.target.value)}
+                  placeholder="3,500+"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900"
+                />
+                <input
+                  type="text"
+                  value={settings['alumni_stat_graduates_label'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_stat_graduates_label', e.target.value)}
+                  placeholder="LULUSAN TERSEBAR"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Statistik 2: Pengabdian</label>
+                <input
+                  type="text"
+                  value={settings['alumni_stat_years'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_stat_years', e.target.value)}
+                  placeholder="45+ Tahun"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900"
+                />
+                <input
+                  type="text"
+                  value={settings['alumni_stat_years_label'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_stat_years_label', e.target.value)}
+                  placeholder="PERJALANAN PENGABDIAN"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Statistik 3: Jaringan</label>
+                <input
+                  type="text"
+                  value={settings['alumni_stat_network'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_stat_network', e.target.value)}
+                  placeholder="Ikatan Alumni"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-amber-600"
+                />
+                <input
+                  type="text"
+                  value={settings['alumni_stat_network_label'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_stat_network_label', e.target.value)}
+                  placeholder="JEJAK SILATURAHMI TERJAGA"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* HEADING DIREKTORI ALUMNI */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-amber-500" />
+              <span>Judul & Pengantar Seksi Direktori Alumni</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Judul Seksi Profil Alumni
+                </label>
+                <input
+                  type="text"
+                  value={settings['alumni_section_title'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_section_title', e.target.value)}
+                  placeholder="Profil Lulusan Berprestasi"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Deskripsi / Subjudul Seksi Profil Alumni
+                </label>
+                <textarea
+                  rows={2}
+                  value={settings['alumni_section_subtitle'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_section_subtitle', e.target.value)}
+                  placeholder="Kisah inspiratif alumni MI AL-AHMAD di berbagai bidang profesi."
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Kontak & Informasi Sekretariat Alumni */}
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
             <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
