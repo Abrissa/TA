@@ -20,6 +20,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { ArticleCard } from '../components/cards/ArticleCard';
+import { StackedArticleSlider } from '../components/cards/StackedArticleSlider';
 import { motion, AnimatePresence } from 'motion/react';
 import { PageHeroBanner } from '../components/ui/PageHeroBanner';
 
@@ -41,8 +42,6 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [featuredIndex, setFeaturedIndex] = useState<number>(0);
-  const [isFeaturedHovered, setIsFeaturedHovered] = useState<boolean>(false);
   const articlesListRef = useRef<HTMLDivElement>(null);
 
   // Reset tab/halaman ke pertama saat kategori atau pencarian berubah
@@ -88,26 +87,6 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
       ? articles
       : articles.filter((a) => a.category === selectedCategory);
   const featuredList = activeCategoryArticles.length > 0 ? activeCategoryArticles : articles;
-  const currentFeatured = featuredList.length > 0 ? (featuredList[featuredIndex % featuredList.length] || featuredList[0]) : null;
-
-  const handleNextFeatured = () => {
-    setFeaturedIndex((prev) => (prev + 1) % featuredList.length);
-  };
-
-  const handlePrevFeatured = () => {
-    setFeaturedIndex((prev) => (prev - 1 + featuredList.length) % featuredList.length);
-  };
-
-  // Auto-play timer: slides automatically every 4.5 seconds and pauses on hover
-  useEffect(() => {
-    if (isFeaturedHovered || featuredList.length <= 1) return;
-
-    const timer = setInterval(() => {
-      setFeaturedIndex((prev) => (prev + 1) % featuredList.length);
-    }, 4500);
-
-    return () => clearInterval(timer);
-  }, [isFeaturedHovered, featuredList.length]);
 
   const filteredArticles = articles.filter((art) => {
     const matchesCategory =
@@ -149,175 +128,73 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        {/* SPOTLIGHT STACKED CARD CAROUSEL (PERSIS SEPERTI DI PRESTASI) */}
         {isLoadingArticles ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="w-10 h-10 animate-spin text-emerald-600" />
           </div>
-        ) : !searchQuery && currentFeatured ? (
-          <div
-            onMouseEnter={() => setIsFeaturedHovered(true)}
-            onMouseLeave={() => setIsFeaturedHovered(false)}
-            className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 text-white border border-emerald-500/40 shadow-xl overflow-hidden relative group"
-          >
-            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl pointer-events-none" />
+        ) : articles.length === 0 ? (
+          <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 text-slate-500 text-sm">
+            Belum ada berita atau artikel yang dipublikasikan.
+          </div>
+        ) : !searchQuery && featuredList.length > 0 ? (
+          <div className="bg-gradient-to-br from-[#EEFBF4] via-emerald-50/70 to-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-emerald-200/80 shadow-md relative overflow-hidden">
+            {/* Ambient background glow accents */}
+            <div className="pointer-events-none absolute -right-20 -top-20 w-80 h-80 rounded-full bg-emerald-300/20 blur-3xl" />
+            <div className="pointer-events-none absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-amber-200/25 blur-3xl" />
 
-            {/* Slider Controls Bar */}
-            <div className="flex items-center justify-between gap-3 pb-3 sm:pb-4 mb-3 sm:mb-4 border-b border-white/10 relative z-10">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-amber-400 text-slate-950 text-xs sm:text-sm font-black uppercase tracking-wider shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-950" />
-                  Berita Pilihan
-                </span>
-                <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-semibold">
-                  Bergeser Otomatis
-                </span>
-              </div>
-
-              {/* Prev / Next Buttons & Counter */}
-              <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-mono font-bold text-amber-300 mr-1">
-                  {String((featuredIndex % featuredList.length) + 1).padStart(2, '0')} / {String(featuredList.length).padStart(2, '0')}
-                </span>
-                <button
-                  onClick={handlePrevFeatured}
-                  aria-label="Berita Sebelumnya"
-                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/15"
-                  title="Sebelumnya"
-                >
-                  <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
-                <button
-                  onClick={handleNextFeatured}
-                  aria-label="Berita Selanjutnya"
-                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/15"
-                  title="Berikutnya"
-                >
-                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Animated Slide Content */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentFeatured.id}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 lg:gap-8 items-center relative z-10"
-              >
-                {/* Photo Thumbnail */}
-                <div className="lg:col-span-5 flex justify-center">
-                  <div
-                    onClick={() => onSelectArticle(currentFeatured)}
-                    className="relative cursor-pointer rounded-2xl overflow-hidden shadow-2xl border-2 border-amber-400/60 w-full aspect-[4/3] bg-slate-950/60"
-                  >
-                    <img
-                      src={currentFeatured.imageUrl || '/assets/berita-maulana-ksm.jpg'}
-                      alt={currentFeatured.title}
-                      className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                      onError={(e) => {
-                        e.currentTarget.src = '/assets/berita-maulana-ksm.jpg';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
-                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
-                      <span className="px-2.5 sm:px-3 py-1 rounded-md bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">
-                        {currentFeatured.category}
-                      </span>
-                      {currentFeatured.readTime && (
-                        <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5 text-amber-300" />
-                          {currentFeatured.readTime}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              {/* Kolom Kiri: Heading & Pengantar Berita Pilihan */}
+              <div className="lg:col-span-7 space-y-4 sm:space-y-6">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-bold shadow-xs">
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <span>Sorotan Berita Pilihan</span>
                 </div>
 
-                {/* Text Info */}
-                <div className="lg:col-span-7 space-y-3 sm:space-y-4">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-emerald-800/80 text-emerald-200 text-xs sm:text-sm font-semibold border border-emerald-600/50 flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
-                      {currentFeatured.date}
-                    </span>
-                    {currentFeatured.sourceName && (
-                      <span className="px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs sm:text-sm font-medium">
-                        Liputan {currentFeatured.sourceName}
-                      </span>
-                    )}
-                  </div>
-
-                  <div>
-                    <h2
-                      onClick={() => onSelectArticle(currentFeatured)}
-                      className="text-xl sm:text-2xl lg:text-4xl font-black font-heading text-white leading-tight hover:text-amber-300 transition-colors cursor-pointer"
-                    >
-                      {currentFeatured.title}
-                    </h2>
-                    <p className="text-amber-300 font-bold text-xs sm:text-base mt-1.5 flex items-center gap-2">
-                      <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
-                      Oleh {currentFeatured.author} ({currentFeatured.authorRole})
-                    </p>
-                  </div>
-
-                  <p className="text-slate-200 text-sm sm:text-base lg:text-lg leading-relaxed line-clamp-3">
-                    {currentFeatured.excerpt}
+                <div className="space-y-2">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading text-slate-900 leading-tight">
+                    Kabar & Informasi Terkini <br className="hidden sm:inline" />
+                    <span className="text-[#059669]">MI AL-AHMAD</span> Krian
+                  </h2>
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
+                    Informasi terpercaya seputar kegiatan madrasah, prestasi santri, artikel edukasi, dan wawasan Islami terkini yang menginspirasi.
                   </p>
+                </div>
 
-                  {currentFeatured.tags && (
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {currentFeatured.tags.map((tag, tIdx) => (
-                        <span
-                          key={tIdx}
-                          className="px-3 py-1 rounded-md bg-white/10 text-slate-200 text-xs font-medium border border-white/10"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="pt-2 flex flex-wrap items-center gap-3">
-                    <button
-                      onClick={() => onSelectArticle(currentFeatured)}
-                      className="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-sm sm:text-base flex items-center gap-2 transition-all shadow-md cursor-pointer"
-                    >
-                      <span>Baca Berita Selengkapnya</span>
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                    {currentFeatured.sourceUrl && (
-                      <a
-                        href={currentFeatured.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-emerald-300 hover:text-white font-semibold flex items-center gap-1 transition-colors"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        Sumber Media
-                      </a>
-                    )}
+                {/* Stat Badges */}
+                <div className="grid grid-cols-3 gap-3 pt-1">
+                  <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
+                    <p className="text-lg sm:text-2xl font-black text-emerald-700 font-heading">{articles.length}+</p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Artikel Terbit</p>
+                  </div>
+                  <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
+                    <p className="text-lg sm:text-2xl font-black text-emerald-700 font-heading">Aktual</p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Liputan Resmi</p>
+                  </div>
+                  <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
+                    <p className="text-lg sm:text-2xl font-black text-amber-600 font-heading">Edukatif</p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Inspirasi Santri</p>
                   </div>
                 </div>
-              </motion.div>
-            </AnimatePresence>
 
-            {/* Dots Indicator */}
-            <div className="flex items-center justify-center gap-2 pt-4 mt-3 border-t border-white/10 relative z-10">
-              {featuredList.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setFeaturedIndex(idx)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    (featuredIndex % featuredList.length) === idx
-                      ? 'w-7 bg-amber-400'
-                      : 'w-2 bg-white/30 hover:bg-white/50'
-                  }`}
-                  aria-label={`Go to slide ${idx + 1}`}
+                <div className="pt-2">
+                  <button
+                    onClick={() => articlesListRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs sm:text-sm transition-all shadow-md cursor-pointer"
+                  >
+                    <span>Lihat Semua Berita & Artikel</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Kolom Kanan: Card Bertumpuk (Stacked Cards Slider) */}
+              <div className="lg:col-span-5 flex justify-center lg:justify-end">
+                <StackedArticleSlider
+                  articles={featuredList}
+                  onSelectArticle={(art) => onSelectArticle(art)}
                 />
-              ))}
+              </div>
             </div>
           </div>
         ) : null}
