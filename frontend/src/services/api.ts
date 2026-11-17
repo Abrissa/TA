@@ -430,7 +430,7 @@ export const api = {
         const item = mockAdminStore.addAlumniSubmission({
           full_name: data.fullName,
           graduation_year: data.graduationYear,
-          job_role: data.currentRole,
+          job_role: data.jobRole || data.currentRole || 'Alumni',
           photo_url: data.photoUrl,
           social_media: data.socialMedia,
           phone: data.phone,
