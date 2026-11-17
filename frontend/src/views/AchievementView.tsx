@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PageHeroBanner } from '../components/ui/PageHeroBanner';
+import { StackedAchievementSlider } from '../components/cards/StackedAchievementSlider';
 
 const ITEMS_PER_ROW = 3;
 const ROWS_PER_PAGE = 3;
@@ -191,169 +192,66 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
           <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 text-slate-500 text-sm">
             Belum ada data prestasi yang dipublikasikan.
           </div>
-        ) : !searchQuery && currentSpotlight ? (
-          <div
-            onMouseEnter={() => setIsSpotlightHovered(true)}
-            onMouseLeave={() => setIsSpotlightHovered(false)}
-            className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 text-white border border-emerald-500/40 shadow-xl overflow-hidden relative group"
-          >
-            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl pointer-events-none" />
+        ) : !searchQuery && spotlightList.length > 0 ? (
+          <div className="bg-gradient-to-br from-[#EEFBF4] via-emerald-50/70 to-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-emerald-200/80 shadow-md relative overflow-hidden">
+            {/* Ambient background glow accents */}
+            <div className="pointer-events-none absolute -right-20 -top-20 w-80 h-80 rounded-full bg-emerald-300/20 blur-3xl" />
+            <div className="pointer-events-none absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-amber-200/25 blur-3xl" />
 
-            {/* Slider Controls Bar */}
-            <div className="flex items-center justify-between gap-3 pb-3 sm:pb-4 mb-3 sm:mb-4 border-b border-white/10 relative z-10">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-amber-400 text-slate-950 text-xs sm:text-sm font-black uppercase tracking-wider shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-950" />
-                  Prestasi Pilihan
-                </span>
-                <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-semibold">
-                  Bergeser Otomatis
-                </span>
-              </div>
-
-              {/* Prev / Next Buttons & Counter */}
-              <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-mono font-bold text-amber-300 mr-1">
-                  {String((spotlightIndex % spotlightList.length) + 1).padStart(2, '0')} / {String(spotlightList.length).padStart(2, '0')}
-                </span>
-                <button
-                  onClick={handlePrevSpotlight}
-                  aria-label="Prestasi Sebelumnya"
-                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/15"
-                  title="Sebelumnya"
-                >
-                  <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
-                <button
-                  onClick={handleNextSpotlight}
-                  aria-label="Prestasi Selanjutnya"
-                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/15"
-                  title="Berikutnya"
-                >
-                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Animated Slide Content */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentSpotlight.id}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 lg:gap-8 items-center relative z-10"
-              >
-                {/* Photo Thumbnail */}
-                <div className="lg:col-span-5 flex justify-center">
-                  <div
-                    onClick={() => setActiveModalItem(currentSpotlight)}
-                    className="relative cursor-pointer rounded-2xl overflow-hidden shadow-2xl border-2 border-amber-400/60 w-full aspect-[4/3] bg-slate-950/60"
-                  >
-                    <img
-                      src={currentSpotlight.imageUrl || '/assets/prestasi-iksc-2025.jpg'}
-                      alt={currentSpotlight.title}
-                      className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                      onError={(e) => {
-                        e.currentTarget.src = '/assets/prestasi-iksc-2025.jpg';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
-                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
-                      <span className="px-2.5 sm:px-3 py-1 rounded-md bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">
-                        {currentSpotlight.category ? `Tingkat ${currentSpotlight.category}` : 'Prestasi'}
-                      </span>
-                      {currentSpotlight.rank && (
-                        <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1">
-                          <Trophy className="w-3.5 h-3.5 text-amber-300" />
-                          {currentSpotlight.rank}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              {/* Kolom Kiri: Heading & Pengantar Prestasi Pilihan */}
+              <div className="lg:col-span-7 space-y-4 sm:space-y-6">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-bold shadow-xs">
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <span>Sorotan Prestasi Pilihan</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-slate-400 font-normal">Bergeser Otomatis</span>
                 </div>
 
-                {/* Text Info */}
-                <div className="lg:col-span-7 space-y-3 sm:space-y-4">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-emerald-800/80 text-emerald-200 text-xs sm:text-sm font-semibold border border-emerald-600/50 flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
-                      {currentSpotlight.year ? `Tahun ${currentSpotlight.year}` : (currentSpotlight.date || 'Tahun 2025')}
-                    </span>
-                    {currentSpotlight.event && (
-                      <span className="px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs sm:text-sm font-medium">
-                        {currentSpotlight.event}
-                      </span>
-                    )}
-                  </div>
-
-                  <div>
-                    <h2
-                      onClick={() => setActiveModalItem(currentSpotlight)}
-                      className="text-xl sm:text-2xl lg:text-4xl font-black font-heading text-white leading-tight hover:text-amber-300 transition-colors cursor-pointer"
-                    >
-                      {currentSpotlight.title}
-                    </h2>
-                    {(currentSpotlight.winner || currentSpotlight.winnerRole) && (
-                      <p className="text-amber-300 font-bold text-xs sm:text-base mt-1.5 flex items-center gap-2">
-                        <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
-                        {currentSpotlight.winnerRole ? `${currentSpotlight.winnerRole} • ` : 'Peraih Prestasi: '}
-                        {currentSpotlight.winner}
-                      </p>
-                    )}
-                  </div>
-
-                  <p className="text-slate-200 text-sm sm:text-base lg:text-lg leading-relaxed line-clamp-3">
-                    {currentSpotlight.description}
+                <div className="space-y-2">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading text-slate-900 leading-tight">
+                    Kilau Prestasi Santri <br className="hidden sm:inline" />
+                    <span className="text-[#059669]">MI AL-AHMAD</span> di Berbagai Ajang
+                  </h2>
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
+                    Koleksi prestasi teratas yang diraih santri MI AL-AHMAD Krian. Dari ajang olimpiade sains internasional, robotika, seni Islami, hingga hafalan Al-Qur'an tingkat nasional.
                   </p>
+                </div>
 
-                  {/* Details / Tags */}
-                  {((currentSpotlight.details && currentSpotlight.details.length > 0) || currentSpotlight.highlight) && (
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {currentSpotlight.highlight && (
-                        <span className="px-3 py-1 rounded-md bg-amber-400/20 text-amber-300 text-xs font-semibold border border-amber-400/30">
-                          {currentSpotlight.highlight}
-                        </span>
-                      )}
-                      {currentSpotlight.details?.slice(0, 4).map((detail, dIdx) => (
-                        <span
-                          key={dIdx}
-                          className="px-3 py-1 rounded-md bg-white/10 text-slate-200 text-xs font-medium border border-white/10"
-                        >
-                          #{detail.replace(/^#/, '')}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="pt-2 flex flex-wrap items-center gap-3">
-                    <button
-                      onClick={() => setActiveModalItem(currentSpotlight)}
-                      className="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-sm sm:text-base flex items-center gap-2 transition-all shadow-md cursor-pointer"
-                    >
-                      <span>Lihat Detail Prestasi</span>
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
+                {/* Stat Badges */}
+                <div className="grid grid-cols-3 gap-3 pt-1">
+                  <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
+                    <p className="text-lg sm:text-2xl font-black text-emerald-700 font-heading">500+</p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Trofi Kejuaraan</p>
+                  </div>
+                  <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
+                    <p className="text-lg sm:text-2xl font-black text-emerald-700 font-heading">Global</p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Internasional</p>
+                  </div>
+                  <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
+                    <p className="text-lg sm:text-2xl font-black text-amber-600 font-heading">Juara 1</p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Sains & Tahfidz</p>
                   </div>
                 </div>
-              </motion.div>
-            </AnimatePresence>
 
-            {/* Dots Indicator */}
-            <div className="flex items-center justify-center gap-2 pt-4 mt-3 border-t border-white/10 relative z-10">
-              {spotlightList.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSpotlightIndex(idx)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    (spotlightIndex % spotlightList.length) === idx
-                      ? 'w-7 bg-amber-400'
-                      : 'w-2 bg-white/30 hover:bg-white/50'
-                  }`}
-                  aria-label={`Go to slide ${idx + 1}`}
+                <div className="pt-2">
+                  <button
+                    onClick={() => achievementsGridRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs sm:text-sm transition-all shadow-md cursor-pointer"
+                  >
+                    <span>Lihat Semua Koleksi Prestasi</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Kolom Kanan: Card Bertumpuk (Stacked Cards Slider) persis seperti di Beranda */}
+              <div className="lg:col-span-5 flex justify-center lg:justify-end">
+                <StackedAchievementSlider
+                  achievements={spotlightList}
+                  onSelectAchievement={(ach) => setActiveModalItem(ach)}
                 />
-              ))}
+              </div>
             </div>
           </div>
         ) : null}
