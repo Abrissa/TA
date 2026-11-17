@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Achievement, PageTab } from '../types';
-import { api } from '../services/api';
+import { api, resolveImageUrl } from '../services/api';
 import { mockAdminStore } from '../services/mockAdminData';
 import { ACHIEVEMENTS_DATA } from '../data/mockData';
 import {
@@ -204,8 +204,6 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-bold shadow-xs">
                   <Sparkles className="w-4 h-4 text-amber-500" />
                   <span>Sorotan Prestasi Pilihan</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-slate-400 font-normal">Bergeser Otomatis</span>
                 </div>
 
                 <div className="space-y-2">
@@ -406,7 +404,7 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
                     <div>
                       <div className="relative rounded-xl overflow-hidden bg-slate-50 border border-slate-100 h-64 sm:h-72 flex items-center justify-center p-2 mb-4">
                         <img
-                          src={ach.imageUrl || '/assets/prestasi-iksc-2025.jpg'}
+                          src={resolveImageUrl(ach.imageUrl) || '/assets/prestasi-iksc-2025.jpg'}
                           alt={ach.title}
                           className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                           onError={(e) => {
@@ -609,7 +607,7 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
               {/* Poster Preview Section */}
               <div className="md:w-1/2 bg-slate-900 flex items-center justify-center p-4 sm:p-6 relative min-h-[300px]">
                 <img
-                  src={activeModalItem.imageUrl || '/assets/prestasi-iksc-2025.jpg'}
+                  src={resolveImageUrl(activeModalItem.imageUrl) || '/assets/prestasi-iksc-2025.jpg'}
                   alt={activeModalItem.title}
                   className="max-h-[75vh] w-auto object-contain rounded-xl shadow-lg"
                   onError={(e) => {

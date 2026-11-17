@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Trophy, Calendar, User, ArrowUpRight, Sparkles } from 'lucide-react';
+import { ChevronRight, Trophy, Calendar, User, ArrowUpRight, Sparkles, Eye } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Achievement } from '../../types';
 import { resolveImageUrl } from '../../services/api';
@@ -61,29 +61,47 @@ export const StackedAchievementSlider: React.FC<StackedAchievementSliderProps> =
     return (
       <div className="p-4 sm:p-5 space-y-3 sm:space-y-3.5 flex flex-col justify-between h-full bg-white rounded-3xl">
         <div className="space-y-3">
-          {/* Thumbnail */}
-          <div className="relative rounded-2xl overflow-hidden h-40 sm:h-48 bg-slate-100">
+          {/* Thumbnail Container: object-contain with ambient blurred backdrop for 100% full visibility */}
+          <div
+            onClick={() => onSelectAchievement(item)}
+            className="relative rounded-2xl overflow-hidden h-44 sm:h-52 bg-slate-950 flex items-center justify-center cursor-pointer group/img select-none border border-slate-900/10 shadow-inner"
+            title="Klik untuk melihat foto & sertifikat penuh"
+          >
+            {/* Ambient blurred backdrop so any aspect ratio fills gracefully */}
+            <img
+              src={imgSrc}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover blur-md scale-110 opacity-35 select-none pointer-events-none"
+            />
+            {/* Sharp, fully-contained original image without any cropping */}
             <img
               src={imgSrc}
               alt={item.title}
-              className="w-full h-full object-cover object-top"
+              className="relative z-10 max-h-full max-w-full object-contain p-1.5 transition-transform duration-300 group-hover/img:scale-[1.03]"
               onError={(e) => {
                 e.currentTarget.src = '/assets/prestasi-iksc-2025.jpg';
               }}
             />
-            {/* Top Right Category Badge */}
-            <span className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 bg-emerald-950/90 text-amber-300 text-[11px] sm:text-xs font-black uppercase px-2.5 sm:px-3 py-1 rounded-full shadow-md tracking-wider border border-amber-400/30">
-              {item.category ? `Tingkat ${item.category}` : 'Prestasi Pilihan'}
-            </span>
+            {/* Subtle click-to-view hint overlay on hover */}
+            <div className="absolute inset-0 z-20 bg-slate-950/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-white text-xs font-bold backdrop-blur-[2px]">
+              <Eye className="w-4 h-4 text-white" />
+              <span>Lihat Foto Penuh</span>
+            </div>
           </div>
 
-          {/* Meta Info Row */}
-          <div className="flex items-center justify-between text-xs sm:text-sm text-slate-500 font-medium">
-            <span className="flex items-center gap-1.5 text-amber-800 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200 truncate max-w-[65%]">
-              <Trophy className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-              <span className="truncate">{item.rank || 'Prestasi Unggulan'}</span>
-            </span>
-            <span className="flex items-center gap-1 text-slate-500 shrink-0">
+          {/* Meta Info Row: Cleanly separates category & rank so it never blocks the poster */}
+          <div className="flex items-center justify-between text-xs sm:text-sm text-slate-500 font-medium gap-2">
+            <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+              <span className="inline-flex items-center gap-1 bg-emerald-900 text-emerald-100 text-[11px] sm:text-xs font-extrabold uppercase px-2.5 py-0.5 rounded-full border border-emerald-700/50 shrink-0">
+                {item.category ? `Tingkat ${item.category}` : 'Prestasi Pilihan'}
+              </span>
+              <span className="inline-flex items-center gap-1 text-amber-800 font-bold bg-amber-50 px-2 sm:px-2.5 py-0.5 rounded-full border border-amber-200 text-[11px] sm:text-xs truncate max-w-[140px] sm:max-w-[180px]">
+                <Trophy className="w-3 h-3 text-amber-600 shrink-0" />
+                <span className="truncate">{item.rank || 'Prestasi Unggulan'}</span>
+              </span>
+            </div>
+            <span className="flex items-center gap-1 text-slate-500 shrink-0 text-xs">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
               <span>{item.year ? `Tahun ${item.year}` : (item.date || '2025')}</span>
             </span>
@@ -151,7 +169,7 @@ export const StackedAchievementSlider: React.FC<StackedAchievementSliderProps> =
           }}
           transition={{ type: 'spring', stiffness: 260, damping: 28, mass: 0.8 }}
           style={{ zIndex: 2 }}
-          className="absolute top-0 right-0 left-0 min-h-[430px] sm:min-h-[460px] overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-md pointer-events-none"
+          className="absolute top-0 right-0 left-0 min-h-[450px] sm:min-h-[480px] overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-md pointer-events-none"
           aria-hidden="true"
         >
           {renderStackCard(nextAch)}
@@ -170,14 +188,14 @@ export const StackedAchievementSlider: React.FC<StackedAchievementSliderProps> =
           }}
           transition={{ type: 'spring', stiffness: 260, damping: 28, mass: 0.8 }}
           style={{ zIndex: 1 }}
-          className="absolute top-0 right-0 left-0 min-h-[430px] sm:min-h-[460px] overflow-hidden rounded-3xl border border-slate-200/70 bg-white shadow-sm pointer-events-none"
+          className="absolute top-0 right-0 left-0 min-h-[450px] sm:min-h-[480px] overflow-hidden rounded-3xl border border-slate-200/70 bg-white shadow-sm pointer-events-none"
           aria-hidden="true"
         >
           {renderStackCard(thirdAch)}
         </motion.div>
 
         {/* Main Front Active Card */}
-        <div className="relative z-20 min-h-[430px] sm:min-h-[460px] [perspective:1200px]">
+        <div className="relative z-20 min-h-[450px] sm:min-h-[480px] [perspective:1200px]">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={currentAch.id}
@@ -232,3 +250,4 @@ export const StackedAchievementSlider: React.FC<StackedAchievementSliderProps> =
     </div>
   );
 };
+
