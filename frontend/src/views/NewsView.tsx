@@ -34,7 +34,7 @@ interface NewsViewProps {
   settings?: Record<string, string>;
 }
 
-export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTab }) => {
+export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTab, settings }) => {
   const [articles, setArticles] = useState<Article[]>(() => {
     return mockAdminStore.getArticles();
   });

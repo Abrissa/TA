@@ -37,7 +37,7 @@ interface AchievementViewProps {
   settings?: Record<string, string>;
 }
 
-export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact, setActiveTab }) => {
+export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact, setActiveTab, settings }) => {
   const [achievements, setAchievements] = useState<Achievement[]>(() => {
     return mockAdminStore.getAchievements();
   });

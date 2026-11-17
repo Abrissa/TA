@@ -30,10 +30,15 @@ export default function App() {
     return false;
   };
 
+  const normalizePath = (p: string) => {
+    return p.toLowerCase().replace(/[\/\\]+$/, '') || '/';
+  };
+
   const getInitialTab = (): PageTab => {
-    const pathname = window.location.pathname.toLowerCase();
+    const pathname = normalizePath(window.location.pathname);
     if (pathname === '/ppdb') return 'ppdb';
     if (pathname === '/alumni') return 'alumni';
+    if (pathname === '/form-alumni') return 'form-alumni';
     if (pathname === '/guru') return 'guru';
     if (pathname === '/prestasi') return 'prestasi';
     if (pathname === '/artikel') return 'artikel';
@@ -47,6 +52,16 @@ export default function App() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   const [isAdminRoute, setIsAdminRoute] = useState<boolean>(checkIsAdmin);
+
+  const navigateToTab = (tab: PageTab) => {
+    setActiveTab(tab);
+    if (!isAdminRoute) {
+      const targetPath = tab === 'beranda' ? '/' : `/${tab}`;
+      if (normalizePath(window.location.pathname) !== normalizePath(targetPath)) {
+        window.history.pushState(null, '', targetPath);
+      }
+    }
+  };
   const [settings, setSettings] = useState<Record<string, string>>(() => {
     return mockAdminStore.getSettings();
   });
@@ -82,9 +97,10 @@ export default function App() {
       setIsAdminRoute(isAdmin);
 
       if (!isAdmin) {
-        const path = window.location.pathname.toLowerCase();
+        const path = normalizePath(window.location.pathname);
         if (path === '/ppdb') setActiveTab('ppdb');
         else if (path === '/alumni') setActiveTab('alumni');
+        else if (path === '/form-alumni') setActiveTab('form-alumni');
         else if (path === '/guru') setActiveTab('guru');
         else if (path === '/prestasi') setActiveTab('prestasi');
         else if (path === '/artikel') setActiveTab('artikel');
@@ -178,7 +194,7 @@ export default function App() {
   return (
     <MainLayout
       activeTab={activeTab}
-      setActiveTab={setActiveTab}
+      setActiveTab={navigateToTab}
       isContactOpen={isContactOpen}
       setIsContactOpen={setIsContactOpen}
       onOpenAdmin={handleOpenAdmin}
@@ -186,10 +202,10 @@ export default function App() {
     >
       {activeTab === 'beranda' && (
         <HomeView
-          setActiveTab={setActiveTab}
+          setActiveTab={navigateToTab}
           onOpenContact={() => setIsContactOpen(true)}
           onOpenPPDB={() => {
-            setActiveTab('ppdb');
+            navigateToTab('ppdb');
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           onSelectArticle={handleSelectArticle}
@@ -204,7 +220,7 @@ export default function App() {
       {(activeTab === 'visi-misi' || activeTab === 'profil') && (
         <VisiMisiView
           onOpenContact={() => setIsContactOpen(true)}
-          setActiveTab={setActiveTab}
+          setActiveTab={navigateToTab}
           settings={settings}
         />
       )}
@@ -212,7 +228,7 @@ export default function App() {
       {activeTab === 'guru' && (
         <TeachersView
           onOpenContact={() => setIsContactOpen(true)}
-          setActiveTab={setActiveTab}
+          setActiveTab={navigateToTab}
           settings={settings}
         />
       )}
@@ -220,7 +236,7 @@ export default function App() {
       {activeTab === 'prestasi' && (
         <AchievementView
           onOpenContact={() => setIsContactOpen(true)}
-          setActiveTab={setActiveTab}
+          setActiveTab={navigateToTab}
           settings={settings}
         />
       )}
@@ -228,7 +244,7 @@ export default function App() {
       {activeTab === 'artikel' && !selectedArticle && (
         <NewsView
           onSelectArticle={handleSelectArticle}
-          setActiveTab={setActiveTab}
+          setActiveTab={navigateToTab}
           settings={settings}
         />
       )}
@@ -244,9 +260,9 @@ export default function App() {
         />
       )}
 
-      {activeTab === 'alumni' && <AlumniView setActiveTab={setActiveTab} settings={settings} />}
+      {activeTab === 'alumni' && <AlumniView setActiveTab={navigateToTab} settings={settings} />}
 
-      {activeTab === 'form-alumni' && <AlumniFormView setActiveTab={setActiveTab} settings={settings} />}
+      {activeTab === 'form-alumni' && <AlumniFormView setActiveTab={navigateToTab} settings={settings} />}
     </MainLayout>
   );
 }
