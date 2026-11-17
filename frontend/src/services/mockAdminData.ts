@@ -1,5 +1,5 @@
 import { AdminStats, AdminUser, AlumniSubmissionRecord, MasterAcademicYear, MasterDataResponse, MasterPpdbPath, PpdbRecord, SchoolProfileData } from './api';
-import { Article, Achievement, Teacher } from '../types';
+import { Article, Achievement, Teacher, AlumniProfile } from '../types';
 import { ARTICLES_DATA, ACHIEVEMENTS_DATA, TEACHERS_DATA, SCHOOL_INFO } from '../data/mockData';
 
 export function isNetworkError(err: any): boolean {
@@ -147,6 +147,45 @@ export const INITIAL_MOCK_ALUMNI_SUBMISSIONS: AlumniSubmissionRecord[] = [
     notes: null,
     created_at: '2026-10-27 10:45:00',
     reviewed_at: null,
+  },
+];
+
+export const INITIAL_BASE_ALUMNI_PROFILES: AlumniProfile[] = [
+  {
+    id: 'alm-1',
+    name: 'Dr. Ahmad Faisal, M.Sc.',
+    graduationYear: '2005',
+    title: 'Senior Researcher & Innovator',
+    profession: 'Peneliti Senior di Pusat Inovasi Teknologi Global',
+    currentRole: 'Peneliti Senior di Pusat Inovasi Teknologi Global',
+    bio: 'Fokus pada pengembangan energi terbarukan yang berkelanjutan.',
+    quote: 'Fokus pada pengembangan energi terbarukan yang berkelanjutan.',
+    imageUrl: '/assets/alumni/alumni-1.svg',
+    categoryBadge: '50+ Dokter & Peneliti',
+  },
+  {
+    id: 'alm-2',
+    name: 'Siti Aminah, B.Des.',
+    graduationYear: '2012',
+    title: 'Creative Director',
+    profession: 'Creative Director di Agency ternama di Jakarta',
+    currentRole: 'Creative Director di Agency ternama di Jakarta',
+    bio: 'Memimpin kampanye sosial kreatif dan komunikasi visual dampak tinggi.',
+    quote: 'Memimpin kampanye sosial kreatif dan komunikasi visual dampak tinggi.',
+    imageUrl: '/assets/alumni/alumni-2.svg',
+    categoryBadge: '120+ Insinyur & Kreatif',
+  },
+  {
+    id: 'alm-3',
+    name: 'Budi Santoso, S.Kom.',
+    graduationYear: '2015',
+    title: 'Founder Startup Edutech',
+    profession: 'CEO & Founder EduNusantara',
+    currentRole: 'CEO & Founder EduNusantara',
+    bio: 'Memberdayakan ribuan guru di pelosok daerah melalui teknologi.',
+    quote: 'Memberdayakan ribuan guru di pelosok daerah melalui teknologi.',
+    imageUrl: '/assets/alumni/alumni-3.svg',
+    categoryBadge: '30+ Praktisi Hukum & Tech',
   },
 ];
 
@@ -697,6 +736,77 @@ export const mockAdminStore = {
       window.dispatchEvent(new CustomEvent('mi_alumni_changed'));
     } catch {}
     return newRecord;
+  },
+
+  getAlumniProfiles(): AlumniProfile[] {
+    const deletedIds = readStorage<string[]>('mi_mock_deleted_alumni_ids', []);
+
+    // 1. Approved Submissions
+    const approvedSubmissions = this.getAlumniSubmissions('approved');
+    const submissionProfiles: AlumniProfile[] = approvedSubmissions
+      .filter((sub) => !deletedIds.includes(`sub-${sub.id}`) && !deletedIds.includes(String(sub.id)))
+      .map((sub, idx) => ({
+        id: `sub-${sub.id}`,
+        name: sub.full_name,
+        graduationYear: String(sub.graduation_year || '').replace(/^[^\d]*/, ''),
+        title: sub.job_role,
+        profession: sub.job_role,
+        currentRole: sub.job_role,
+        bio: sub.message,
+        quote: sub.message,
+        imageUrl: sub.photo_url || `/assets/alumni/alumni-${(idx % 3) + 1}.svg`,
+        socialUrl: sub.social_media || undefined,
+        categoryBadge: 'Alumni Berprestasi',
+      }));
+
+    // 2. Base Profiles (Budi Santoso, Siti Aminah, Dr. Ahmad Faisal, etc.)
+    const baseList = readStorage<AlumniProfile[]>('mi_mock_base_alumni_profiles', INITIAL_BASE_ALUMNI_PROFILES);
+    const baseProfiles = baseList
+      .filter((p) => !deletedIds.includes(String(p.id)))
+      .map((p, idx) => ({
+        ...p,
+        id: String(p.id),
+        imageUrl: p.imageUrl || `/assets/alumni/alumni-${(idx % 3) + 1}.svg`,
+        graduationYear: String(p.graduationYear || '').replace(/^[^\d]*/, ''),
+        profession: p.profession || p.currentRole || p.title || '',
+        currentRole: p.currentRole || p.title || '',
+        quote: p.quote || p.bio || '',
+      }));
+
+    return [...submissionProfiles, ...baseProfiles];
+  },
+
+  deleteAlumniProfile(id: string | number): void {
+    const strId = String(id);
+    const deletedIds = readStorage<string[]>('mi_mock_deleted_alumni_ids', []);
+    if (!deletedIds.includes(strId)) {
+      deletedIds.push(strId);
+      writeStorage('mi_mock_deleted_alumni_ids', deletedIds);
+    }
+
+    if (strId.startsWith('sub-')) {
+      const numId = parseInt(strId.replace('sub-', ''), 10);
+      this.deleteAlumniSubmission(numId);
+    } else {
+      const numId = parseInt(strId, 10);
+      if (!isNaN(numId)) {
+        this.deleteAlumniSubmission(numId);
+      }
+      const baseList = readStorage<AlumniProfile[]>('mi_mock_base_alumni_profiles', INITIAL_BASE_ALUMNI_PROFILES)
+        .filter((p) => String(p.id) !== strId);
+      writeStorage('mi_mock_base_alumni_profiles', baseList);
+      try {
+        window.dispatchEvent(new CustomEvent('mi_alumni_changed'));
+      } catch {}
+    }
+  },
+
+  resetAlumniProfiles(): void {
+    writeStorage('mi_mock_deleted_alumni_ids', []);
+    writeStorage('mi_mock_base_alumni_profiles', INITIAL_BASE_ALUMNI_PROFILES);
+    try {
+      window.dispatchEvent(new CustomEvent('mi_alumni_changed'));
+    } catch {}
   },
 
   getMasterData(): MasterDataResponse {

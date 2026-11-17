@@ -12,6 +12,9 @@ import {
   Send, 
   CheckCircle2,
   Globe,
+  Instagram,
+  Linkedin,
+  Quote,
   MapPin,
   Phone,
   Mail,
@@ -24,6 +27,21 @@ import {
   Loader2,
   Sparkles,
 } from 'lucide-react';
+
+const parseSocialLink = (url?: string | null) => {
+  if (!url || !url.trim()) return null;
+  const raw = url.trim();
+  const fullUrl = raw.startsWith('http://') || raw.startsWith('https://') ? raw : `https://${raw}`;
+  const isInstagram = /instagram\.com|instagr\.am/i.test(raw);
+  const isLinkedIn = /linkedin\.com/i.test(raw);
+  const display = raw.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+  return {
+    url: fullUrl,
+    display,
+    isInstagram,
+    isLinkedIn,
+  };
+};
 
 interface AlumniFormViewProps {
   setActiveTab?: (tab: PageTab) => void;
@@ -541,53 +559,80 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab }) 
             {approvedAlumni.map((alm, idx) => {
               const fallbackAvatar = `/assets/alumni/alumni-${(idx % 3) + 1}.svg`;
               const imageSrc = resolveImageUrl(alm.imageUrl) || fallbackAvatar;
+              const socialInfo = parseSocialLink(alm.socialUrl);
 
               return (
                 <div
                   key={alm.id || idx}
-                  className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs hover:shadow-md transition-all space-y-4 flex flex-col justify-between"
+                  className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
                 >
-                  <div className="flex items-start gap-3.5">
-                    <img
-                      src={imageSrc}
-                      alt={alm.name}
-                      className="w-14 h-14 rounded-full object-cover border-2 border-[#059669] shrink-0"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = fallbackAvatar;
-                      }}
-                    />
-                    <div className="space-y-1 min-w-0 flex-1">
-                      <h4 className="font-bold font-heading text-slate-900 text-base truncate">{alm.name}</h4>
-                      {alm.graduationYear && (
-                        <span className="inline-block px-2.5 py-0.5 bg-emerald-50 text-[#059669] font-bold text-xs rounded border border-emerald-100">
-                          Angkatan {alm.graduationYear.replace(/^[^\d]*/, '')}
-                        </span>
-                      )}
-                      <p className="font-medium text-slate-700 text-sm pt-0.5 line-clamp-2">
-                        {alm.profession || alm.currentRole || alm.title}
-                      </p>
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3.5">
+                      <img
+                        src={imageSrc}
+                        alt={alm.name}
+                        className="w-14 h-14 rounded-full object-cover border-2 border-[#059669] shrink-0"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = fallbackAvatar;
+                        }}
+                      />
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <h4 className="font-bold font-heading text-slate-900 text-base truncate">{alm.name}</h4>
+                        {alm.graduationYear && (
+                          <span className="inline-block px-2.5 py-0.5 bg-emerald-50 text-[#059669] font-bold text-xs rounded border border-emerald-100">
+                            Angkatan {alm.graduationYear.replace(/^[^\d]*/, '')}
+                          </span>
+                        )}
+                        <p className="font-medium text-slate-700 text-sm pt-0.5 line-clamp-2">
+                          {alm.profession || alm.currentRole || alm.title}
+                        </p>
+                      </div>
                     </div>
+
+                    {(alm.quote || alm.bio) && (
+                      <p className="text-sm text-slate-700 italic bg-slate-50 p-3 rounded-xl border border-slate-100 leading-relaxed line-clamp-3">
+                        "{alm.quote || alm.bio}"
+                      </p>
+                    )}
                   </div>
 
-                  {(alm.quote || alm.bio) && (
-                    <p className="text-sm text-slate-700 italic bg-slate-50 p-3 rounded-xl border border-slate-100 leading-relaxed line-clamp-3">
-                      "{alm.quote || alm.bio}"
-                    </p>
-                  )}
+                  {/* Card Footer - always present and consistent across all cards */}
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs mt-4">
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span>Alumni Terverifikasi</span>
+                    </span>
 
-                  {alm.socialUrl && (
-                    <div className="pt-2 text-right border-t border-slate-100">
+                    {socialInfo ? (
                       <a
-                        href={alm.socialUrl.startsWith('http') ? alm.socialUrl : `https://${alm.socialUrl}`}
+                        href={socialInfo.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-xs font-bold text-[#059669] hover:underline inline-flex items-center gap-1.5"
+                        className={`inline-flex items-center gap-1.5 text-xs font-semibold hover:underline transition-colors max-w-[150px] sm:max-w-[180px] truncate ${
+                          socialInfo.isInstagram
+                            ? 'text-pink-600 hover:text-pink-700'
+                            : socialInfo.isLinkedIn
+                            ? 'text-sky-700 hover:text-sky-800'
+                            : 'text-[#059669] hover:text-[#047857]'
+                        }`}
+                        title={socialInfo.display}
                       >
-                        <Globe className="w-4 h-4" />
-                        <span className="truncate max-w-[200px]">{alm.socialUrl.replace(/^https?:\/\//, '')}</span>
+                        {socialInfo.isInstagram ? (
+                          <Instagram className="w-3.5 h-3.5 shrink-0 text-pink-600" />
+                        ) : socialInfo.isLinkedIn ? (
+                          <Linkedin className="w-3.5 h-3.5 shrink-0 text-sky-700" />
+                        ) : (
+                          <Globe className="w-3.5 h-3.5 shrink-0 text-[#059669]" />
+                        )}
+                        <span className="truncate">{socialInfo.display}</span>
                       </a>
-                    </div>
-                  )}
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100">
+                        <GraduationCap className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span>MI AL-AHMAD</span>
+                      </span>
+                    )}
+                  </div>
                 </div>
               );
             })}

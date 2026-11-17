@@ -388,32 +388,7 @@ export const api = {
       console.warn('API getAlumni failed, using mock data:', e);
     }
 
-    const approvedSubmissions = mockAdminStore.getAlumniSubmissions('approved');
-    const submissionProfiles: AlumniProfile[] = approvedSubmissions.map((sub, idx) => ({
-      id: `sub-${sub.id}`,
-      name: sub.full_name,
-      graduationYear: String(sub.graduation_year || '').replace(/^[^\d]*/, ''),
-      title: sub.job_role,
-      profession: sub.job_role,
-      currentRole: sub.job_role,
-      bio: sub.message,
-      quote: sub.message,
-      imageUrl: resolveImageUrl(sub.photo_url) || `/assets/alumni/alumni-${(idx % 3) + 1}.svg`,
-      socialUrl: sub.social_media || undefined,
-      categoryBadge: 'Alumni Berprestasi',
-    }));
-
-    const baseProfiles: AlumniProfile[] = ALUMNI_DATA.map((alm, idx) => ({
-      ...alm,
-      id: String(alm.id),
-      imageUrl: resolveImageUrl(alm.imageUrl) || `/assets/alumni/alumni-${(idx % 3) + 1}.svg`,
-      graduationYear: String(alm.graduationYear || '').replace(/^[^\d]*/, ''),
-      profession: alm.profession || alm.currentRole || alm.title || '',
-      currentRole: alm.currentRole || alm.title || '',
-      quote: alm.quote || alm.bio || '',
-    }));
-
-    return [...submissionProfiles, ...baseProfiles];
+    return mockAdminStore.getAlumniProfiles();
   },
 
 
@@ -970,6 +945,37 @@ export const api = {
       }
       throw err;
     }
+  },
+
+  async deleteAlumniProfile(id: string | number): Promise<void> {
+    const strId = String(id);
+    try {
+      if (strId.startsWith('sub-')) {
+        const numId = parseInt(strId.replace('sub-', ''), 10);
+        const res = await fetch(`${BASE_URL}/api/admin/alumni/submissions/${numId}`, {
+          method: 'DELETE',
+          headers: getAuthHeaders(),
+        });
+        await handleResponse(res);
+      } else {
+        const res = await fetch(`${BASE_URL}/api/admin/alumni/profiles/${strId}`, {
+          method: 'DELETE',
+          headers: getAuthHeaders(),
+        });
+        await handleResponse(res);
+      }
+    } catch (err: any) {
+      if (isNetworkError(err)) {
+        mockAdminStore.deleteAlumniProfile(strId);
+        return;
+      }
+      console.warn('API deleteAlumniProfile failed:', err);
+    }
+    mockAdminStore.deleteAlumniProfile(strId);
+  },
+
+  async resetAlumniDirectory(): Promise<void> {
+    mockAdminStore.resetAlumniProfiles();
   },
 
   async getMasterData(): Promise<MasterDataResponse> {
