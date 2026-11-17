@@ -14,9 +14,10 @@ import { PageHeroBanner } from '../components/ui/PageHeroBanner';
 interface TeachersViewProps {
   onOpenContact: () => void;
   setActiveTab: (tab: PageTab) => void;
+  settings?: Record<string, string>;
 }
 
-export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setActiveTab }) => {
+export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setActiveTab, settings }) => {
   const [teachers, setTeachers] = useState<Teacher[]>(TEACHERS_DATA);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -57,15 +58,19 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
           { label: 'Dewan Guru & Staf' },
         ]}
         title={
-          <>
-            Dewan Guru & Tenaga Kependidikan <br />
-            <span className="text-amber-300 underline decoration-amber-400/60 underline-offset-8">
-              MI AL-AHMAD Krian
-            </span>
-          </>
+          settings?.teachers_banner_title ? (
+            settings.teachers_banner_title
+          ) : (
+            <>
+              Dewan Guru & Tenaga Kependidikan <br />
+              <span className="text-amber-300 underline decoration-amber-400/60 underline-offset-8">
+                MI AL-AHMAD Krian
+              </span>
+            </>
+          )
         }
-        subtitle="Tenaga pendidik profesional berijazah sarjana & magister yang siap mendidik murid dengan keikhlasan, ilmu, dan kearifan akhlak Qur'ani."
-        backgroundImageUrl="/assets/dewan-guru-mi-al-ahmad.jpg"
+        subtitle={settings?.teachers_banner_subtitle || "Tenaga pendidik profesional berijazah sarjana & magister yang siap mendidik murid dengan keikhlasan, ilmu, dan kearifan akhlak Qur'ani."}
+        backgroundImageUrl={resolveImageUrl(settings?.teachers_banner_image) || "/assets/dewan-guru-mi-al-ahmad.jpg"}
         imagePosition="object-[center_62%]"
       />
 
@@ -82,18 +87,24 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
             </div>
 
             <div className="space-y-1 border-l border-slate-100">
-              <p className="text-2xl sm:text-4xl font-extrabold text-[#059669] font-heading">100%</p>
+              <p className="text-2xl sm:text-4xl font-extrabold text-[#059669] font-heading">
+                {settings?.teachers_stat_degree || '100%'}
+              </p>
               <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">Lulusan S1 / S2</p>
             </div>
 
             <div className="space-y-1 border-l-0 md:border-l border-slate-100 pt-3 md:pt-0 border-t md:border-t-0">
-              <p className="text-2xl sm:text-4xl font-extrabold text-[#059669] font-heading">15:1</p>
+              <p className="text-2xl sm:text-4xl font-extrabold text-[#059669] font-heading">
+                {settings?.teachers_stat_ratio || '15:1'}
+              </p>
               <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">Rasio Guru:Siswa</p>
             </div>
 
             <div className="space-y-1 border-l border-slate-100 pt-3 md:pt-0 border-t md:border-t-0">
               <p className="text-2xl sm:text-4xl font-extrabold text-amber-600 font-heading">Sertifikasi</p>
-              <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">Kemenag & Kemdikbud</p>
+              <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">
+                {settings?.teachers_stat_cert || 'Kemenag & Kemdikbud'}
+              </p>
             </div>
 
           </div>

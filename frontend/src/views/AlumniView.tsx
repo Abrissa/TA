@@ -32,9 +32,10 @@ const parseSocialLink = (url?: string | null) => {
 
 interface AlumniViewProps {
   setActiveTab: (tab: PageTab) => void;
+  settings?: Record<string, string>;
 }
 
-export const AlumniView: React.FC<AlumniViewProps> = ({ setActiveTab }) => {
+export const AlumniView: React.FC<AlumniViewProps> = ({ setActiveTab, settings }) => {
   const [profiles, setProfiles] = useState<AlumniProfile[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -64,14 +65,19 @@ export const AlumniView: React.FC<AlumniViewProps> = ({ setActiveTab }) => {
           { label: 'Alumni' },
         ]}
         title={
-          <>
-            Jejak Langkah Alumni <br />
-            <span className="text-amber-300 underline decoration-amber-400/60 underline-offset-8">
-              MI AL-AHMAD Krian
-            </span>
-          </>
+          settings?.alumni_banner_title ? (
+            settings.alumni_banner_title
+          ) : (
+            <>
+              Jejak Langkah Alumni <br />
+              <span className="text-amber-300 underline decoration-amber-400/60 underline-offset-8">
+                MI AL-AHMAD Krian
+              </span>
+            </>
+          )
         }
-        subtitle="Mencetak generasi Qur'ani dan cendekia berakhlak mulia yang berkiprah di berbagai penjuru nusantara dan dunia."
+        subtitle={settings?.alumni_banner_subtitle || "Mencetak generasi Qur'ani dan cendekia berakhlak mulia yang berkiprah di berbagai penjuru nusantara dan dunia."}
+        backgroundImageUrl={resolveImageUrl(settings?.alumni_banner_image) || "/assets/gedung-mi-al-ahmad.jpg"}
       >
         <div className="pt-2">
           <button
@@ -79,7 +85,7 @@ export const AlumniView: React.FC<AlumniViewProps> = ({ setActiveTab }) => {
             className="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm sm:text-base transition-colors inline-flex items-center gap-2 shadow-md cursor-pointer"
           >
             <UserCheck className="w-5 h-5 text-slate-950" />
-            <span>Isi Formulir Pendataan Alumni</span>
+            <span>{settings?.alumni_cta_text || 'Isi Formulir Pendataan Alumni'}</span>
           </button>
         </div>
       </PageHeroBanner>

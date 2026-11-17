@@ -121,9 +121,20 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
           { label: 'Beranda', onClick: () => setActiveTab && setActiveTab('beranda') },
           { label: 'Berita & Artikel' },
         ]}
-        title={<>Berita, Artikel & <br /><span className="text-amber-300 underline decoration-amber-400/60 underline-offset-8">Kabar Prestasi</span></>}
-        subtitle="Ikuti perkembangan terkini seputar prestasi santri, liputan kegiatan sekolah, pengumuman resmi, dan artikel edukasi islami di MI AL-AHMAD."
-        backgroundImageUrl="/assets/gedung-berita-mi-al-ahmad.jpg"
+        title={
+          settings?.news_banner_title ? (
+            settings.news_banner_title
+          ) : (
+            <>
+              Berita, Artikel & <br />
+              <span className="text-amber-300 underline decoration-amber-400/60 underline-offset-8">
+                Kabar Prestasi
+              </span>
+            </>
+          )
+        }
+        subtitle={settings?.news_banner_subtitle || "Ikuti perkembangan terkini seputar prestasi santri, liputan kegiatan sekolah, pengumuman resmi, dan artikel edukasi islami di MI AL-AHMAD."}
+        backgroundImageUrl={resolveImageUrl(settings?.news_banner_image) || "/assets/gedung-berita-mi-al-ahmad.jpg"}
         imagePosition="object-[center_45%]"
       />
 
@@ -153,11 +164,15 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
 
                 <div className="space-y-2">
                   <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading text-slate-900 leading-tight">
-                    Kabar & Informasi Terkini <br className="hidden sm:inline" />
-                    <span className="text-[#059669]">MI AL-AHMAD</span> Krian
+                    {settings?.news_spotlight_headline || (
+                      <>
+                        Kabar & Informasi Terkini <br className="hidden sm:inline" />
+                        <span className="text-[#059669]">MI AL-AHMAD</span> Krian
+                      </>
+                    )}
                   </h2>
                   <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
-                    Informasi terpercaya seputar kegiatan madrasah, prestasi santri, artikel edukasi, dan wawasan Islami terkini yang menginspirasi.
+                    {settings?.news_spotlight_desc || "Informasi terpercaya seputar kegiatan madrasah, prestasi santri, artikel edukasi, dan wawasan Islami terkini yang menginspirasi."}
                   </p>
                 </div>
 
@@ -168,12 +183,20 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
                     <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Artikel Terbit</p>
                   </div>
                   <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
-                    <p className="text-lg sm:text-2xl font-black text-emerald-700 font-heading">Aktual</p>
-                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Liputan Resmi</p>
+                    <p className="text-lg sm:text-2xl font-black text-emerald-700 font-heading">
+                      {settings?.news_stat_coverage || 'Aktual'}
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                      {settings?.news_stat_coverage_label || 'Liputan Resmi'}
+                    </p>
                   </div>
                   <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
-                    <p className="text-lg sm:text-2xl font-black text-amber-600 font-heading">Edukatif</p>
-                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Inspirasi Santri</p>
+                    <p className="text-lg sm:text-2xl font-black text-amber-600 font-heading">
+                      {settings?.news_stat_education || 'Edukatif'}
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                      {settings?.news_stat_education_label || 'Inspirasi Santri'}
+                    </p>
                   </div>
                 </div>
 

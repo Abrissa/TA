@@ -213,6 +213,7 @@ export default function App() {
         <TeachersView
           onOpenContact={() => setIsContactOpen(true)}
           setActiveTab={setActiveTab}
+          settings={settings}
         />
       )}
 
@@ -243,9 +244,9 @@ export default function App() {
         />
       )}
 
-      {activeTab === 'alumni' && <AlumniView setActiveTab={setActiveTab} />}
+      {activeTab === 'alumni' && <AlumniView setActiveTab={setActiveTab} settings={settings} />}
 
-      {activeTab === 'form-alumni' && <AlumniFormView setActiveTab={setActiveTab} />}
+      {activeTab === 'form-alumni' && <AlumniFormView setActiveTab={setActiveTab} settings={settings} />}
     </MainLayout>
   );
 }

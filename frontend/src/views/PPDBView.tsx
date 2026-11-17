@@ -161,12 +161,18 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-heading text-white tracking-tight leading-tight">
-              Penerimaan Peserta Didik Baru <br className="hidden sm:inline" />
-              <span className="text-amber-300">{schoolName}</span>
+              {siteSettings.ppdb_banner_title ? (
+                siteSettings.ppdb_banner_title
+              ) : (
+                <>
+                  Penerimaan Peserta Didik Baru <br className="hidden sm:inline" />
+                  <span className="text-amber-300">{schoolName}</span>
+                </>
+              )}
             </h1>
 
             <p className="text-base sm:text-lg text-emerald-100/95 leading-relaxed font-body">
-              {introText}
+              {siteSettings.ppdb_banner_subtitle || introText}
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-4 text-xs sm:text-sm font-medium text-emerald-100">
@@ -235,10 +241,26 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { phase: 'Tahap 1', title: 'Pendaftaran Online', desc: 'Lengkapi biodata calon santri dan kontak wali secara daring melalui formulir di bawah ini.' },
-            { phase: 'Tahap 2', title: 'Penerbitan Bukti Daftar', desc: 'Simpan nomor registrasi resmi yang diterbitkan sistem untuk konfirmasi berkas panitia.' },
-            { phase: 'Tahap 3', title: 'Observasi Ramah Anak', desc: 'Ananda diundang mengikuti observasi kesiapan belajar dan penyerahan berkas fisik.' },
-            { phase: 'Tahap 4', title: 'Pengumuman & Registrasi', desc: 'Pemberitahuan hasil seleksi resmi melalui portal website dan kontak WhatsApp terdaftar.' },
+            { 
+              phase: 'Tahap 1', 
+              title: siteSettings.ppdb_step_1_title || 'Pendaftaran Online', 
+              desc: siteSettings.ppdb_step_1_desc || 'Lengkapi biodata calon santri dan kontak wali secara daring melalui formulir di bawah ini.' 
+            },
+            { 
+              phase: 'Tahap 2', 
+              title: siteSettings.ppdb_step_2_title || 'Penerbitan Bukti Registrasi', 
+              desc: siteSettings.ppdb_step_2_desc || 'Simpan nomor registrasi resmi yang diterbitkan sistem untuk konfirmasi berkas panitia.' 
+            },
+            { 
+              phase: 'Tahap 3', 
+              title: siteSettings.ppdb_step_3_title || 'Observasi Ramah Anak', 
+              desc: siteSettings.ppdb_step_3_desc || 'Ananda diundang mengikuti observasi kesiapan belajar dan penyerahan berkas fisik.' 
+            },
+            { 
+              phase: 'Tahap 4', 
+              title: siteSettings.ppdb_step_4_title || 'Daftar Ulang & Orientasi', 
+              desc: siteSettings.ppdb_step_4_desc || 'Pemberitahuan hasil seleksi resmi melalui portal website dan kontak WhatsApp terdaftar.' 
+            },
           ].map((item, idx) => (
             <div key={idx} className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-xs relative overflow-hidden group hover:border-emerald-400 transition-all">
               <span className="inline-block px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 mb-3">

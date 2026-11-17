@@ -21,7 +21,12 @@ import {
   Building,
   Target,
   FileText,
-  Globe
+  Globe,
+  Trophy,
+  Users,
+  GraduationCap,
+  Clock,
+  Award
 } from 'lucide-react';
 
 type CmsSection = 
@@ -29,7 +34,12 @@ type CmsSection =
   | 'hero' 
   | 'principal' 
   | 'visimisi' 
+  | 'page_prestasi'
+  | 'page_berita'
+  | 'page_guru'
+  | 'page_alumni'
   | 'ppdb' 
+  | 'appearance'
   | 'announcement' 
   | 'contact' 
   | 'footer' 
@@ -144,10 +154,15 @@ export const AdminPageControlTab: React.FC = () => {
 
   const navTabs: { id: CmsSection; label: string; icon: React.ReactNode }[] = [
     { id: 'branding', label: 'Identitas & Logo', icon: <Building className="w-4 h-4" /> },
-    { id: 'hero', label: 'Banner Utama', icon: <Sparkles className="w-4 h-4" /> },
+    { id: 'hero', label: 'Banner Beranda', icon: <Sparkles className="w-4 h-4" /> },
     { id: 'principal', label: 'Sambutan Kepala', icon: <User className="w-4 h-4" /> },
     { id: 'visimisi', label: 'Visi, Misi & Pilar', icon: <Target className="w-4 h-4" /> },
-    { id: 'ppdb', label: 'Admisi PPDB', icon: <UserCheck className="w-4 h-4" /> },
+    { id: 'page_prestasi', label: 'Halaman Prestasi', icon: <Trophy className="w-4 h-4" /> },
+    { id: 'page_berita', label: 'Halaman Berita', icon: <FileText className="w-4 h-4" /> },
+    { id: 'page_guru', label: 'Halaman Guru & Staf', icon: <GraduationCap className="w-4 h-4" /> },
+    { id: 'page_alumni', label: 'Halaman Alumni', icon: <Users className="w-4 h-4" /> },
+    { id: 'ppdb', label: 'Halaman & Alur PPDB', icon: <UserCheck className="w-4 h-4" /> },
+    { id: 'appearance', label: 'Navigasi & Tombol CTA', icon: <Sliders className="w-4 h-4" /> },
     { id: 'announcement', label: 'Pita Pengumuman', icon: <Megaphone className="w-4 h-4" /> },
     { id: 'contact', label: 'Kontak & Sosmed', icon: <Phone className="w-4 h-4" /> },
     { id: 'footer', label: 'Footer & Hak Cipta', icon: <FileText className="w-4 h-4" /> },
@@ -792,6 +807,100 @@ export const AdminPageControlTab: React.FC = () => {
       {/* VISI, MISI & PILAR KARAKTER */}
       {activeSubTab === 'visimisi' && (
         <div className="space-y-6">
+          {/* Header Banner Visi Misi */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Target className="w-5 h-5 text-emerald-600" />
+              <span>Banner Header Halaman Visi & Misi</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Judul Banner Visi Misi
+                </label>
+                <input
+                  type="text"
+                  value={settings['visimisi_banner_title'] ?? ''}
+                  onChange={(e) => handleTextChange('visimisi_banner_title', e.target.value)}
+                  placeholder="Visi, Misi & Landasan Pendidikan"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Subjudul / Deskripsi Banner
+                </label>
+                <textarea
+                  rows={2}
+                  value={settings['visimisi_banner_subtitle'] ?? ''}
+                  onChange={(e) => handleTextChange('visimisi_banner_subtitle', e.target.value)}
+                  placeholder="Membangun pendidikan dasar Islam berkarakter..."
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Foto Latar Banner Visi Misi
+                </label>
+                <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
+                    <img
+                      src={resolveImageUrl(settings['visimisi_banner_image']) || '/assets/plang-mi-al-ahmad.jpg'}
+                      alt="Preview Banner Visi Misi"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = '/assets/plang-mi-al-ahmad.jpg';
+                      }}
+                    />
+                    {settings['visimisi_banner_image'] && (
+                      <button
+                        type="button"
+                        onClick={() => handleTextChange('visimisi_banner_image', '')}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors"
+                        title="Hapus / Reset Foto"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex-1 w-full space-y-2">
+                    <label className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 hover:border-emerald-600 text-slate-700 hover:text-emerald-700 text-xs font-semibold rounded-xl cursor-pointer shadow-xs transition-colors">
+                      {uploadingField === 'visimisi_banner_image' ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+                          <span>Mengunggah Foto...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 text-emerald-600" />
+                          <span>Unggah Foto Banner Visi Misi</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, 'visimisi_banner_image', 'profile')}
+                        disabled={uploadingField !== null}
+                        className="hidden"
+                      />
+                    </label>
+                    <input
+                      type="text"
+                      value={settings['visimisi_banner_image'] ?? ''}
+                      onChange={(e) => handleTextChange('visimisi_banner_image', e.target.value)}
+                      placeholder="Atau masukkan tautan URL foto (/storage/...)"
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-600 focus:outline-none focus:border-emerald-600"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-5">
             <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
               <Target className="w-5 h-5 text-emerald-600" />
@@ -931,6 +1040,800 @@ export const AdminPageControlTab: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Pilar Karakter Madrasah */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Award className="w-5 h-5 text-emerald-600" />
+              <span>4 Pilar Fondasi Karakter Madrasah</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Pilar 1: Karakter Qur'ani</label>
+                <input
+                  type="text"
+                  value={settings['pillar_1_title'] ?? ''}
+                  onChange={(e) => handleTextChange('pillar_1_title', e.target.value)}
+                  placeholder="Religius & Qur'ani"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900"
+                />
+                <textarea
+                  rows={2}
+                  value={settings['pillar_1_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('pillar_1_desc', e.target.value)}
+                  placeholder="Uraian pilar..."
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Pilar 2: Karakter Akademik</label>
+                <input
+                  type="text"
+                  value={settings['pillar_2_title'] ?? ''}
+                  onChange={(e) => handleTextChange('pillar_2_title', e.target.value)}
+                  placeholder="Unggul Akademik"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900"
+                />
+                <textarea
+                  rows={2}
+                  value={settings['pillar_2_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('pillar_2_desc', e.target.value)}
+                  placeholder="Uraian pilar..."
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Pilar 3: Karakter Akhlak</label>
+                <input
+                  type="text"
+                  value={settings['pillar_3_title'] ?? ''}
+                  onChange={(e) => handleTextChange('pillar_3_title', e.target.value)}
+                  placeholder="Berakhlak Mulia"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900"
+                />
+                <textarea
+                  rows={2}
+                  value={settings['pillar_3_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('pillar_3_desc', e.target.value)}
+                  placeholder="Uraian pilar..."
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Pilar 4: Karakter IT & Wawasan</label>
+                <input
+                  type="text"
+                  value={settings['pillar_4_title'] ?? ''}
+                  onChange={(e) => handleTextChange('pillar_4_title', e.target.value)}
+                  placeholder="Berwawasan IT"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900"
+                />
+                <textarea
+                  rows={2}
+                  value={settings['pillar_4_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('pillar_4_desc', e.target.value)}
+                  placeholder="Uraian pilar..."
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* HALAMAN PRESTASI SANTRI */}
+      {activeSubTab === 'page_prestasi' && (
+        <div className="space-y-6">
+          {/* Header Banner Prestasi */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-emerald-600" />
+              <span>Banner Header Halaman Prestasi</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Judul Banner Prestasi
+                </label>
+                <input
+                  type="text"
+                  value={settings['achievements_banner_title'] ?? ''}
+                  onChange={(e) => handleTextChange('achievements_banner_title', e.target.value)}
+                  placeholder="Etalase Prestasi Gemilang Siswa MI AL-AHMAD"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Subjudul / Deskripsi Banner
+                </label>
+                <textarea
+                  rows={2}
+                  value={settings['achievements_banner_subtitle'] ?? ''}
+                  onChange={(e) => handleTextChange('achievements_banner_subtitle', e.target.value)}
+                  placeholder="Bukti nyata dedikasi, kedisiplinan..."
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Foto Latar Banner Prestasi
+                </label>
+                <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
+                    <img
+                      src={resolveImageUrl(settings['achievements_banner_image']) || '/assets/trofi-prestasi-mi-al-ahmad.jpg'}
+                      alt="Preview Banner Prestasi"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = '/assets/trofi-prestasi-mi-al-ahmad.jpg';
+                      }}
+                    />
+                    {settings['achievements_banner_image'] && (
+                      <button
+                        type="button"
+                        onClick={() => handleTextChange('achievements_banner_image', '')}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors"
+                        title="Hapus / Reset Foto"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex-1 w-full space-y-2">
+                    <label className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 hover:border-emerald-600 text-slate-700 hover:text-emerald-700 text-xs font-semibold rounded-xl cursor-pointer shadow-xs transition-colors">
+                      {uploadingField === 'achievements_banner_image' ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+                          <span>Mengunggah Foto...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 text-emerald-600" />
+                          <span>Unggah Foto Banner Prestasi</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, 'achievements_banner_image', 'prestasi')}
+                        disabled={uploadingField !== null}
+                        className="hidden"
+                      />
+                    </label>
+                    <input
+                      type="text"
+                      value={settings['achievements_banner_image'] ?? ''}
+                      onChange={(e) => handleTextChange('achievements_banner_image', e.target.value)}
+                      placeholder="Atau masukkan tautan URL foto (/storage/...)"
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-600 focus:outline-none focus:border-emerald-600"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Spotlight & Statistik Prestasi */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-amber-500" />
+              <span>Sorotan Card Pilihan & Statistik Prestasi</span>
+            </h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Headline Sorotan Prestasi
+                </label>
+                <input
+                  type="text"
+                  value={settings['achievements_spotlight_headline'] ?? ''}
+                  onChange={(e) => handleTextChange('achievements_spotlight_headline', e.target.value)}
+                  placeholder="Kilau Prestasi Santri MI AL-AHMAD di Berbagai Ajang"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Deskripsi Narasi Sorotan
+                </label>
+                <textarea
+                  rows={2}
+                  value={settings['achievements_spotlight_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('achievements_spotlight_desc', e.target.value)}
+                  placeholder="Koleksi prestasi teratas yang diraih santri MI AL-AHMAD..."
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Badge 1: Total Trofi</label>
+                  <input
+                    type="text"
+                    value={settings['achievements_stat_trophies'] ?? ''}
+                    onChange={(e) => handleTextChange('achievements_stat_trophies', e.target.value)}
+                    placeholder="500+"
+                    className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900"
+                  />
+                  <input
+                    type="text"
+                    value={settings['achievements_stat_trophies_label'] ?? ''}
+                    onChange={(e) => handleTextChange('achievements_stat_trophies_label', e.target.value)}
+                    placeholder="Trofi Kejuaraan"
+                    className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                  />
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Badge 2: Jangkauan Ajang</label>
+                  <input
+                    type="text"
+                    value={settings['achievements_stat_global'] ?? ''}
+                    onChange={(e) => handleTextChange('achievements_stat_global', e.target.value)}
+                    placeholder="Global"
+                    className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900"
+                  />
+                  <input
+                    type="text"
+                    value={settings['achievements_stat_global_label'] ?? ''}
+                    onChange={(e) => handleTextChange('achievements_stat_global_label', e.target.value)}
+                    placeholder="Internasional"
+                    className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                  />
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Badge 3: Kategori Utama</label>
+                  <input
+                    type="text"
+                    value={settings['achievements_stat_favorite'] ?? ''}
+                    onChange={(e) => handleTextChange('achievements_stat_favorite', e.target.value)}
+                    placeholder="Juara 1"
+                    className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900"
+                  />
+                  <input
+                    type="text"
+                    value={settings['achievements_stat_favorite_label'] ?? ''}
+                    onChange={(e) => handleTextChange('achievements_stat_favorite_label', e.target.value)}
+                    placeholder="Sains & Tahfidz"
+                    className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* HALAMAN BERITA & ARTIKEL */}
+      {activeSubTab === 'page_berita' && (
+        <div className="space-y-6">
+          {/* Header Banner Berita */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-emerald-600" />
+              <span>Banner Header Halaman Berita & Artikel</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Judul Banner Berita
+                </label>
+                <input
+                  type="text"
+                  value={settings['news_banner_title'] ?? ''}
+                  onChange={(e) => handleTextChange('news_banner_title', e.target.value)}
+                  placeholder="Berita, Artikel & Kabar Prestasi"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Subjudul / Deskripsi Banner
+                </label>
+                <textarea
+                  rows={2}
+                  value={settings['news_banner_subtitle'] ?? ''}
+                  onChange={(e) => handleTextChange('news_banner_subtitle', e.target.value)}
+                  placeholder="Ikuti perkembangan terkini seputar prestasi santri..."
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Foto Latar Banner Berita
+                </label>
+                <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
+                    <img
+                      src={resolveImageUrl(settings['news_banner_image']) || '/assets/gedung-berita-mi-al-ahmad.jpg'}
+                      alt="Preview Banner Berita"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = '/assets/gedung-berita-mi-al-ahmad.jpg';
+                      }}
+                    />
+                    {settings['news_banner_image'] && (
+                      <button
+                        type="button"
+                        onClick={() => handleTextChange('news_banner_image', '')}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors"
+                        title="Hapus / Reset Foto"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex-1 w-full space-y-2">
+                    <label className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 hover:border-emerald-600 text-slate-700 hover:text-emerald-700 text-xs font-semibold rounded-xl cursor-pointer shadow-xs transition-colors">
+                      {uploadingField === 'news_banner_image' ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+                          <span>Mengunggah Foto...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 text-emerald-600" />
+                          <span>Unggah Foto Banner Berita</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, 'news_banner_image', 'berita')}
+                        disabled={uploadingField !== null}
+                        className="hidden"
+                      />
+                    </label>
+                    <input
+                      type="text"
+                      value={settings['news_banner_image'] ?? ''}
+                      onChange={(e) => handleTextChange('news_banner_image', e.target.value)}
+                      placeholder="Atau masukkan tautan URL foto (/storage/...)"
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-600 focus:outline-none focus:border-emerald-600"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Spotlight & Kategori Liputan Berita */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-amber-500" />
+              <span>Sorotan Liputan & Lencana Statistik</span>
+            </h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Headline Sorotan Liputan
+                </label>
+                <input
+                  type="text"
+                  value={settings['news_spotlight_headline'] ?? ''}
+                  onChange={(e) => handleTextChange('news_spotlight_headline', e.target.value)}
+                  placeholder="Kabar & Informasi Terkini MI AL-AHMAD Krian"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Deskripsi Narasi Sorotan
+                </label>
+                <textarea
+                  rows={2}
+                  value={settings['news_spotlight_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('news_spotlight_desc', e.target.value)}
+                  placeholder="Informasi terpercaya seputar kegiatan madrasah..."
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Badge 1: Liputan Resmi</label>
+                  <input
+                    type="text"
+                    value={settings['news_stat_coverage'] ?? ''}
+                    onChange={(e) => handleTextChange('news_stat_coverage', e.target.value)}
+                    placeholder="Aktual"
+                    className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900"
+                  />
+                  <input
+                    type="text"
+                    value={settings['news_stat_coverage_label'] ?? ''}
+                    onChange={(e) => handleTextChange('news_stat_coverage_label', e.target.value)}
+                    placeholder="Liputan Resmi"
+                    className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                  />
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                  <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">Badge 2: Artikel Edukatif</label>
+                  <input
+                    type="text"
+                    value={settings['news_stat_education'] ?? ''}
+                    onChange={(e) => handleTextChange('news_stat_education', e.target.value)}
+                    placeholder="Edukatif"
+                    className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900"
+                  />
+                  <input
+                    type="text"
+                    value={settings['news_stat_education_label'] ?? ''}
+                    onChange={(e) => handleTextChange('news_stat_education_label', e.target.value)}
+                    placeholder="Inspirasi Santri"
+                    className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* HALAMAN DEWAN GURU & STAF */}
+      {activeSubTab === 'page_guru' && (
+        <div className="space-y-6">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <GraduationCap className="w-5 h-5 text-emerald-600" />
+              <span>Banner Header Dewan Guru & Tenaga Pendidik</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Judul Banner Halaman Guru
+                </label>
+                <input
+                  type="text"
+                  value={settings['teachers_banner_title'] ?? ''}
+                  onChange={(e) => handleTextChange('teachers_banner_title', e.target.value)}
+                  placeholder="Dewan Guru & Tenaga Kependidikan MI AL-AHMAD Krian"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Subjudul / Deskripsi Banner Guru
+                </label>
+                <textarea
+                  rows={2}
+                  value={settings['teachers_banner_subtitle'] ?? ''}
+                  onChange={(e) => handleTextChange('teachers_banner_subtitle', e.target.value)}
+                  placeholder="Tenaga pendidik profesional berijazah sarjana & magister..."
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Foto Latar Banner Dewan Guru
+                </label>
+                <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
+                    <img
+                      src={resolveImageUrl(settings['teachers_banner_image']) || '/assets/dewan-guru-mi-al-ahmad.jpg'}
+                      alt="Preview Banner Guru"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = '/assets/dewan-guru-mi-al-ahmad.jpg';
+                      }}
+                    />
+                    {settings['teachers_banner_image'] && (
+                      <button
+                        type="button"
+                        onClick={() => handleTextChange('teachers_banner_image', '')}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors"
+                        title="Hapus / Reset Foto"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex-1 w-full space-y-2">
+                    <label className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 hover:border-emerald-600 text-slate-700 hover:text-emerald-700 text-xs font-semibold rounded-xl cursor-pointer shadow-xs transition-colors">
+                      {uploadingField === 'teachers_banner_image' ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+                          <span>Mengunggah Foto...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 text-emerald-600" />
+                          <span>Unggah Foto Dewan Guru</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, 'teachers_banner_image', 'teachers')}
+                        disabled={uploadingField !== null}
+                        className="hidden"
+                      />
+                    </label>
+                    <input
+                      type="text"
+                      value={settings['teachers_banner_image'] ?? ''}
+                      onChange={(e) => handleTextChange('teachers_banner_image', e.target.value)}
+                      placeholder="Atau masukkan tautan URL foto (/storage/...)"
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-600 focus:outline-none focus:border-emerald-600"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Statistik & Filosofi Guru */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Award className="w-5 h-5 text-amber-500" />
+              <span>Filosofi & Metrik Kompetensi Guru</span>
+            </h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Kutipan Filosofi Pendidikan Dewan Guru
+                </label>
+                <input
+                  type="text"
+                  value={settings['teachers_quote_text'] ?? ''}
+                  onChange={(e) => handleTextChange('teachers_quote_text', e.target.value)}
+                  placeholder="Mendidik dengan keikhlasan, ilmu, dan kearifan akhlak Qur'ani."
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Rasio Guru : Murid
+                  </label>
+                  <input
+                    type="text"
+                    value={settings['teachers_stat_ratio'] ?? ''}
+                    onChange={(e) => handleTextChange('teachers_stat_ratio', e.target.value)}
+                    placeholder="15:1"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Tingkat Pendidikan Guru
+                  </label>
+                  <input
+                    type="text"
+                    value={settings['teachers_stat_degree'] ?? ''}
+                    onChange={(e) => handleTextChange('teachers_stat_degree', e.target.value)}
+                    placeholder="100% S1 / S2"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Sertifikasi Pendidik
+                  </label>
+                  <input
+                    type="text"
+                    value={settings['teachers_stat_cert'] ?? ''}
+                    onChange={(e) => handleTextChange('teachers_stat_cert', e.target.value)}
+                    placeholder="Sertifikasi Kemenag & Kemdikbud"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* HALAMAN ALUMNI & SEKRETARIAT */}
+      {activeSubTab === 'page_alumni' && (
+        <div className="space-y-6">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Users className="w-5 h-5 text-emerald-600" />
+              <span>Banner Header Halaman Alumni</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Judul Banner Alumni
+                </label>
+                <input
+                  type="text"
+                  value={settings['alumni_banner_title'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_banner_title', e.target.value)}
+                  placeholder="Jejak Langkah Alumni MI AL-AHMAD Krian"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Subjudul / Deskripsi Banner Alumni
+                </label>
+                <textarea
+                  rows={2}
+                  value={settings['alumni_banner_subtitle'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_banner_subtitle', e.target.value)}
+                  placeholder="Mencetak generasi Qur'ani dan cendekia..."
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Teks Tombol Aksi Formulir Alumni
+                </label>
+                <input
+                  type="text"
+                  value={settings['alumni_cta_text'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_cta_text', e.target.value)}
+                  placeholder="Isi Formulir Pendataan Alumni"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Foto Latar Banner Alumni
+                </label>
+                <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
+                    <img
+                      src={resolveImageUrl(settings['alumni_banner_image']) || '/assets/gedung-mi-al-ahmad.jpg'}
+                      alt="Preview Banner Alumni"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                      }}
+                    />
+                    {settings['alumni_banner_image'] && (
+                      <button
+                        type="button"
+                        onClick={() => handleTextChange('alumni_banner_image', '')}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors"
+                        title="Hapus / Reset Foto"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex-1 w-full space-y-2">
+                    <label className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 hover:border-emerald-600 text-slate-700 hover:text-emerald-700 text-xs font-semibold rounded-xl cursor-pointer shadow-xs transition-colors">
+                      {uploadingField === 'alumni_banner_image' ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+                          <span>Mengunggah Foto...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 text-emerald-600" />
+                          <span>Unggah Foto Banner Alumni</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, 'alumni_banner_image', 'alumni')}
+                        disabled={uploadingField !== null}
+                        className="hidden"
+                      />
+                    </label>
+                    <input
+                      type="text"
+                      value={settings['alumni_banner_image'] ?? ''}
+                      onChange={(e) => handleTextChange('alumni_banner_image', e.target.value)}
+                      placeholder="Atau masukkan tautan URL foto (/storage/...)"
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-600 focus:outline-none focus:border-emerald-600"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Kontak & Informasi Sekretariat Alumni */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Building className="w-5 h-5 text-emerald-600" />
+              <span>Sekretariat Ikatan Alumni & Layanan Legalisir</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Judul Kantor Sekretariat
+                </label>
+                <input
+                  type="text"
+                  value={settings['alumni_secretariat_title'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_secretariat_title', e.target.value)}
+                  placeholder="Sekretariat Ikatan Alumni"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Lokasi Gedung / Ruangan
+                </label>
+                <input
+                  type="text"
+                  value={settings['alumni_secretariat_location'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_secretariat_location', e.target.value)}
+                  placeholder="Gedung Kesiswaan Lt. 2 MI AL-AHMAD"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Uraian Deskripsi / Layanan Sekretariat
+                </label>
+                <textarea
+                  rows={2}
+                  value={settings['alumni_secretariat_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_secretariat_desc', e.target.value)}
+                  placeholder="Punya pertanyaan mengenai temu alumni, legalisir ijazah, atau jejaring karier?..."
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Narahubung / WhatsApp Alumni
+                </label>
+                <input
+                  type="text"
+                  value={settings['alumni_secretariat_phone'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_secretariat_phone', e.target.value)}
+                  placeholder="+62 812-9876-5432 (Ustadz Rahmat)"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Email Khusus Alumni
+                </label>
+                <input
+                  type="email"
+                  value={settings['alumni_secretariat_email'] ?? ''}
+                  onChange={(e) => handleTextChange('alumni_secretariat_email', e.target.value)}
+                  placeholder="alumni@mialahmad.sch.id"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -958,6 +1861,32 @@ export const AdminPageControlTab: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                Judul Banner Halaman PPDB
+              </label>
+              <input
+                type="text"
+                value={settings['ppdb_banner_title'] ?? ''}
+                onChange={(e) => handleTextChange('ppdb_banner_title', e.target.value)}
+                placeholder="Penerimaan Peserta Didik Baru (PPDB)"
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                Subjudul / Tagline Banner PPDB
+              </label>
+              <textarea
+                rows={2}
+                value={settings['ppdb_banner_subtitle'] ?? ''}
+                onChange={(e) => handleTextChange('ppdb_banner_subtitle', e.target.value)}
+                placeholder="Mari bergabung bersama keluarga besar madrasah berprestasi..."
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+              />
+            </div>
+
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
                 Tahun Ajaran PPDB
@@ -1034,6 +1963,180 @@ export const AdminPageControlTab: React.FC = () => {
                 placeholder="Narasi pengantar..."
                 className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
               />
+            </div>
+          </div>
+
+          {/* Tahapan Alur Seleksi PPDB */}
+          <div className="pt-5 border-t border-slate-100 space-y-4">
+            <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>4 Tahapan Alur Penerimaan Santri Baru</span>
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Tahap 1</span>
+                <input
+                  type="text"
+                  value={settings['ppdb_step_1_title'] ?? ''}
+                  onChange={(e) => handleTextChange('ppdb_step_1_title', e.target.value)}
+                  placeholder="Pendaftaran Online"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900"
+                />
+                <textarea
+                  rows={2}
+                  value={settings['ppdb_step_1_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('ppdb_step_1_desc', e.target.value)}
+                  placeholder="Uraian tahap 1..."
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Tahap 2</span>
+                <input
+                  type="text"
+                  value={settings['ppdb_step_2_title'] ?? ''}
+                  onChange={(e) => handleTextChange('ppdb_step_2_title', e.target.value)}
+                  placeholder="Penerbitan Bukti Registrasi"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900"
+                />
+                <textarea
+                  rows={2}
+                  value={settings['ppdb_step_2_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('ppdb_step_2_desc', e.target.value)}
+                  placeholder="Uraian tahap 2..."
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Tahap 3</span>
+                <input
+                  type="text"
+                  value={settings['ppdb_step_3_title'] ?? ''}
+                  onChange={(e) => handleTextChange('ppdb_step_3_title', e.target.value)}
+                  placeholder="Observasi Ramah Anak"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900"
+                />
+                <textarea
+                  rows={2}
+                  value={settings['ppdb_step_3_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('ppdb_step_3_desc', e.target.value)}
+                  placeholder="Uraian tahap 3..."
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Tahap 4</span>
+                <input
+                  type="text"
+                  value={settings['ppdb_step_4_title'] ?? ''}
+                  onChange={(e) => handleTextChange('ppdb_step_4_title', e.target.value)}
+                  placeholder="Daftar Ulang & Orientasi"
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900"
+                />
+                <textarea
+                  rows={2}
+                  value={settings['ppdb_step_4_desc'] ?? ''}
+                  onChange={(e) => handleTextChange('ppdb_step_4_desc', e.target.value)}
+                  placeholder="Uraian tahap 4..."
+                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NAVIGASI & TOMBOL CTA */}
+      {activeSubTab === 'appearance' && (
+        <div className="space-y-6">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Sliders className="w-5 h-5 text-emerald-600" />
+              <span>Tombol Navigasi & Aksi (Navbar & Header)</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Teks Tombol Utama PPDB Navbar
+                </label>
+                <input
+                  type="text"
+                  value={settings['navbar_cta_text'] ?? ''}
+                  onChange={(e) => handleTextChange('navbar_cta_text', e.target.value)}
+                  placeholder="Daftar PPDB"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+                <p className="text-xs text-slate-400 mt-1">Tombol sorotan di bilah navigasi atas.</p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Teks Tombol Modal Kontak
+                </label>
+                <input
+                  type="text"
+                  value={settings['navbar_contact_text'] ?? ''}
+                  onChange={(e) => handleTextChange('navbar_contact_text', e.target.value)}
+                  placeholder="Kontak"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+                <p className="text-xs text-slate-400 mt-1">Tombol pembuka jendela kontak & lokasi di pojok kanan atas.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-emerald-600" />
+                <h3 className="font-bold text-slate-900 text-base">Status Operasional & Jam Pelayanan Madrasah</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleToggle('school_is_open')}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                  settings['school_is_open'] === 'true' ? 'bg-emerald-600' : 'bg-slate-300'
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    settings['school_is_open'] === 'true' ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Jam Operasional Pelayanan Kantor
+                </label>
+                <input
+                  type="text"
+                  value={settings['office_hours'] ?? ''}
+                  onChange={(e) => handleTextChange('office_hours', e.target.value)}
+                  placeholder="Senin - Sabtu: 07.00 - 14.00 WIB"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Catatan Tambahan Status Operasional
+                </label>
+                <input
+                  type="text"
+                  value={settings['school_status_note'] ?? ''}
+                  onChange={(e) => handleTextChange('school_status_note', e.target.value)}
+                  placeholder="Contoh: Kantor buka melayani konsultasi langsung"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                />
+              </div>
             </div>
           </div>
         </div>

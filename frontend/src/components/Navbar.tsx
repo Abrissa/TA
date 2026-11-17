@@ -352,7 +352,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={onOpenContact}
               className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 transition-colors border border-slate-200 cursor-pointer"
             >
-              Kontak
+              {settings?.navbar_contact_text || 'Kontak'}
             </button>
             <button
               onClick={() => handleNavClick('ppdb')}
@@ -363,7 +363,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <FileText className={`w-4 h-4 ${activeTab === 'ppdb' ? 'text-slate-950' : 'text-amber-300'}`} />
-              <span>Daftar PPDB</span>
+              <span>{settings?.navbar_cta_text || 'Daftar PPDB'}</span>
             </button>
           </div>
 

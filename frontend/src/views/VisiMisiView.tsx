@@ -78,9 +78,9 @@ export const VisiMisiView: React.FC<VisiMisiViewProps> = ({ onOpenContact, setAc
           { label: 'Beranda', onClick: () => setActiveTab('beranda') },
           { label: 'Visi & Misi' },
         ]}
-        title="Visi, Misi & Landasan Pendidikan"
-        subtitle="Membangun pendidikan dasar Islam berkarakter, berorientasi Al-Qur'an, serta unggul dalam penguasaan sains dan teknologi."
-        backgroundImageUrl="/assets/plang-mi-al-ahmad.jpg"
+        title={settings?.visimisi_banner_title || "Visi, Misi & Landasan Pendidikan"}
+        subtitle={settings?.visimisi_banner_subtitle || "Membangun pendidikan dasar Islam berkarakter, berorientasi Al-Qur'an, serta unggul dalam penguasaan sains dan teknologi."}
+        backgroundImageUrl={resolveImageUrl(settings?.visimisi_banner_image) || "/assets/plang-mi-al-ahmad.jpg"}
         imagePosition="object-[center_60%]"
       />
 

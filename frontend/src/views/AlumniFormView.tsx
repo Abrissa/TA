@@ -45,9 +45,10 @@ const parseSocialLink = (url?: string | null) => {
 
 interface AlumniFormViewProps {
   setActiveTab?: (tab: PageTab) => void;
+  settings?: Record<string, string>;
 }
 
-export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab }) => {
+export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, settings }) => {
   const [formData, setFormData] = useState<AlumniFormData>({
     fullName: '',
     graduationYear: '2015',
@@ -502,23 +503,23 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab }) 
 
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
               <h3 className="text-lg font-bold font-heading text-slate-900">
-                Sekretariat Ikatan Alumni
+                {settings?.alumni_secretariat_title || 'Sekretariat Ikatan Alumni'}
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Punya pertanyaan mengenai temu alumni, legalisir ijazah, atau jejaring karier? Hubungi sekretariat kami.
+                {settings?.alumni_secretariat_desc || 'Punya pertanyaan mengenai temu alumni, legalisir ijazah, atau jejaring karier? Hubungi sekretariat kami.'}
               </p>
               <div className="space-y-3 pt-2 text-xs sm:text-sm text-slate-700">
                 <div className="flex items-center gap-3">
                   <MapPin className="w-4 h-4 text-[#059669] shrink-0" />
-                  <span>Gedung Kesiswaan Lt. 2 MI AL-AHMAD</span>
+                  <span>{settings?.alumni_secretariat_location || 'Gedung Kesiswaan Lt. 2 MI AL-AHMAD'}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-[#059669] shrink-0" />
-                  <span>+62 812-9876-5432 (Ustadz Rahmat)</span>
+                  <span>{settings?.alumni_secretariat_phone || '+62 812-9876-5432 (Ustadz Rahmat)'}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-[#059669] shrink-0" />
-                  <span>alumni@mialahmad.sch.id</span>
+                  <span>{settings?.alumni_secretariat_email || 'alumni@mialahmad.sch.id'}</span>
                 </div>
               </div>
             </div>

@@ -169,15 +169,19 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
           { label: 'Prestasi Siswa' },
         ]}
         title={
-          <>
-            Etalase Prestasi Gemilang <br />
-            <span className="text-amber-300 underline decoration-amber-400/60 underline-offset-8">
-              Siswa MI AL-AHMAD
-            </span>
-          </>
+          settings?.achievements_banner_title ? (
+            settings.achievements_banner_title
+          ) : (
+            <>
+              Etalase Prestasi Gemilang <br />
+              <span className="text-amber-300 underline decoration-amber-400/60 underline-offset-8">
+                Siswa MI AL-AHMAD
+              </span>
+            </>
+          )
         }
-        subtitle="Bukti nyata dedikasi, kedisiplinan, dan ikhtiar santri bersama para pembimbing dalam mengharumkan nama madrasah dari tingkat kecamatan hingga kancah internasional."
-        backgroundImageUrl="/assets/trofi-prestasi-mi-al-ahmad.jpg"
+        subtitle={settings?.achievements_banner_subtitle || "Bukti nyata dedikasi, kedisiplinan, dan ikhtiar santri bersama para pembimbing dalam mengharumkan nama madrasah dari tingkat kecamatan hingga kancah internasional."}
+        backgroundImageUrl={resolveImageUrl(settings?.achievements_banner_image) || "/assets/trofi-prestasi-mi-al-ahmad.jpg"}
         imagePosition="object-[center_65%]"
       />
 
@@ -208,27 +212,43 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
 
                 <div className="space-y-2">
                   <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-heading text-slate-900 leading-tight">
-                    Kilau Prestasi Santri <br className="hidden sm:inline" />
-                    <span className="text-[#059669]">MI AL-AHMAD</span> di Berbagai Ajang
+                    {settings?.achievements_spotlight_headline || (
+                      <>
+                        Kilau Prestasi Santri <br className="hidden sm:inline" />
+                        <span className="text-[#059669]">MI AL-AHMAD</span> di Berbagai Ajang
+                      </>
+                    )}
                   </h2>
                   <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
-                    Koleksi prestasi teratas yang diraih santri MI AL-AHMAD Krian. Dari ajang olimpiade sains internasional, robotika, seni Islami, hingga hafalan Al-Qur'an tingkat nasional.
+                    {settings?.achievements_spotlight_desc || "Koleksi prestasi teratas yang diraih santri MI AL-AHMAD Krian. Dari ajang olimpiade sains internasional, robotika, seni Islami, hingga hafalan Al-Qur'an tingkat nasional."}
                   </p>
                 </div>
 
                 {/* Stat Badges */}
                 <div className="grid grid-cols-3 gap-3 pt-1">
                   <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
-                    <p className="text-lg sm:text-2xl font-black text-emerald-700 font-heading">500+</p>
-                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Trofi Kejuaraan</p>
+                    <p className="text-lg sm:text-2xl font-black text-emerald-700 font-heading">
+                      {settings?.achievements_stat_trophies || '500+'}
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                      {settings?.achievements_stat_trophies_label || 'Trofi Kejuaraan'}
+                    </p>
                   </div>
                   <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
-                    <p className="text-lg sm:text-2xl font-black text-emerald-700 font-heading">Global</p>
-                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Internasional</p>
+                    <p className="text-lg sm:text-2xl font-black text-emerald-700 font-heading">
+                      {settings?.achievements_stat_global || 'Global'}
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                      {settings?.achievements_stat_global_label || 'Internasional'}
+                    </p>
                   </div>
                   <div className="bg-white/90 p-3 sm:p-3.5 rounded-2xl border border-emerald-100 shadow-xs">
-                    <p className="text-lg sm:text-2xl font-black text-amber-600 font-heading">Juara 1</p>
-                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Sains & Tahfidz</p>
+                    <p className="text-lg sm:text-2xl font-black text-amber-600 font-heading">
+                      {settings?.achievements_stat_favorite || 'Juara 1'}
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                      {settings?.achievements_stat_favorite_label || 'Sains & Tahfidz'}
+                    </p>
                   </div>
                 </div>
 

@@ -296,6 +296,81 @@ export const DEFAULT_CMS_SETTINGS: Record<string, string> = {
   section_articles_visible: 'true',
   section_facilities_visible: 'true',
   section_marquee_visible: 'true',
+
+  // Halaman Prestasi Santri
+  achievements_banner_title: 'Etalase Prestasi Gemilang Siswa MI AL-AHMAD',
+  achievements_banner_subtitle: 'Bukti nyata dedikasi, kedisiplinan, dan ikhtiar santri bersama para pembimbing dalam mengharumkan nama madrasah dari tingkat kecamatan hingga kancah internasional.',
+  achievements_banner_image: '/assets/trofi-prestasi-mi-al-ahmad.jpg',
+  achievements_spotlight_headline: 'Kilau Prestasi Santri MI AL-AHMAD di Berbagai Ajang',
+  achievements_spotlight_desc: 'Koleksi prestasi teratas yang diraih santri MI AL-AHMAD Krian. Dari ajang olimpiade sains internasional, robotika, seni Islami, hingga hafalan Al-Qur\'an tingkat nasional.',
+  achievements_stat_trophies: '500+',
+  achievements_stat_trophies_label: 'Trofi Kejuaraan',
+  achievements_stat_global: 'Global',
+  achievements_stat_global_label: 'Internasional',
+  achievements_stat_favorite: 'Juara 1',
+  achievements_stat_favorite_label: 'Sains & Tahfidz',
+
+  // Halaman Berita & Artikel
+  news_banner_title: 'Berita, Artikel & Kabar Prestasi',
+  news_banner_subtitle: 'Ikuti perkembangan terkini seputar prestasi santri, liputan kegiatan sekolah, pengumuman resmi, dan artikel edukasi islami di MI AL-AHMAD.',
+  news_banner_image: '/assets/gedung-berita-mi-al-ahmad.jpg',
+  news_spotlight_headline: 'Kabar & Informasi Terkini MI AL-AHMAD Krian',
+  news_spotlight_desc: 'Informasi terpercaya seputar kegiatan madrasah, prestasi santri, artikel edukasi, dan wawasan Islami terkini yang menginspirasi.',
+  news_stat_coverage: 'Aktual',
+  news_stat_coverage_label: 'Liputan Resmi',
+  news_stat_education: 'Edukatif',
+  news_stat_education_label: 'Inspirasi Santri',
+
+  // Halaman Dewan Guru & Tenaga Pendidik
+  teachers_banner_title: 'Dewan Guru & Tenaga Kependidikan MI AL-AHMAD Krian',
+  teachers_banner_subtitle: 'Tenaga pendidik profesional berijazah sarjana & magister yang siap mendidik murid dengan keikhlasan, ilmu, dan kearifan akhlak Qur\'ani.',
+  teachers_banner_image: '/assets/dewan-guru-mi-al-ahmad.jpg',
+  teachers_stat_ratio: '15:1',
+  teachers_stat_degree: '100% S1 / S2',
+  teachers_stat_cert: 'Sertifikasi Kemenag & Kemdikbud',
+  teachers_quote_text: 'Mendidik dengan keikhlasan, ilmu, dan kearifan akhlak Qur\'ani.',
+
+  // Halaman Alumni & Sekretariat
+  alumni_banner_title: 'Jejak Langkah Alumni MI AL-AHMAD Krian',
+  alumni_banner_subtitle: 'Mencetak generasi Qur\'ani dan cendekia berakhlak mulia yang berkiprah di berbagai penjuru nusantara dan dunia.',
+  alumni_banner_image: '/assets/gedung-mi-al-ahmad.jpg',
+  alumni_cta_text: 'Isi Formulir Pendataan Alumni',
+  alumni_secretariat_title: 'Sekretariat Ikatan Alumni',
+  alumni_secretariat_desc: 'Punya pertanyaan mengenai temu alumni, legalisir ijazah, atau jejaring karier? Hubungi sekretariat kami.',
+  alumni_secretariat_location: 'Gedung Kesiswaan Lt. 2 MI AL-AHMAD',
+  alumni_secretariat_phone: '+62 812-9876-5432 (Ustadz Rahmat)',
+  alumni_secretariat_email: 'alumni@mialahmad.sch.id',
+
+  // Halaman Visi Misi & Profil
+  visimisi_banner_title: 'Visi, Misi & Landasan Pendidikan',
+  visimisi_banner_subtitle: 'Membangun pendidikan dasar Islam berkarakter, berorientasi Al-Qur\'an, serta unggul dalam penguasaan sains dan teknologi.',
+  visimisi_banner_image: '/assets/plang-mi-al-ahmad.jpg',
+  profile_history_title: 'Sejarah & Perjalanan MI AL-AHMAD',
+  profile_history_text: 'Didirikan dengan komitmen teguh menghadirkan pendidikan madrasah berkualitas tinggi yang memadukan kedalaman ilmu agama Islam dengan keunggulan sains dan teknologi modern.',
+  pillar_1_title: "Religius & Qur'ani",
+  pillar_1_desc: "Menjadikan Al-Qur'an dan Sunnah sebagai pedoman utama dalam sikap dan tindakan.",
+  pillar_2_title: "Unggul Akademik",
+  pillar_2_desc: "Menguasai ilmu pengetahuan sains, matematika, dan bahasa dengan hasil memuaskan.",
+  pillar_3_title: "Berakhlak Mulia",
+  pillar_3_desc: "Menghormati orang tua, guru, serta memiliki empati sosial yang tinggi di masyarakat.",
+  pillar_4_title: "Berwawasan IT",
+  pillar_4_desc: "Menguasai pemanfaatan teknologi digital secara bijak dan produktif sejak dini.",
+
+  // Halaman PPDB Alur & Tahapan
+  ppdb_banner_title: 'Penerimaan Peserta Didik Baru (PPDB)',
+  ppdb_banner_subtitle: 'Mari bergabung bersama keluarga besar madrasah berprestasi dengan kurikulum integrasi Kemenag, pembinaan tahfidz Al-Qur\'an terpadu, dan pembinaan sains berstandar internasional.',
+  ppdb_step_1_title: 'Pendaftaran Online',
+  ppdb_step_1_desc: 'Lengkapi biodata calon santri dan kontak wali secara daring melalui formulir resmi.',
+  ppdb_step_2_title: 'Penerbitan Bukti Registrasi',
+  ppdb_step_2_desc: 'Simpan nomor registrasi resmi yang diterbitkan sistem untuk konfirmasi panitia.',
+  ppdb_step_3_title: 'Observasi Ramah Anak',
+  ppdb_step_3_desc: 'Ananda diundang mengikuti observasi kesiapan belajar dan penyerahan berkas fisik.',
+  ppdb_step_4_title: 'Daftar Ulang & Orientasi',
+  ppdb_step_4_desc: 'Penyelesaian administrasi perlengkapan santri dan temu orientasi Matsama.',
+
+  // Navigasi & Tampilan Global
+  navbar_cta_text: 'Daftar PPDB',
+  navbar_contact_text: 'Kontak',
 };
 
 export const mockAdminStore = {
