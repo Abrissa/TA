@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AlumniFormData, AlumniProfile, PageTab } from '../types';
 import { api, resolveImageUrl } from '../services/api';
-import { PageHeroBanner } from '../components/ui/PageHeroBanner';
 import { 
   User, 
   GraduationCap, 
@@ -182,16 +181,28 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
           { label: 'Alumni', onClick: () => setActiveTab && setActiveTab('alumni') },
           { label: 'Formulir Pendataan' },
         ]}
-        title={settings?.alumni_form_banner_title || 'Formulir Pendataan Alumni'}
+        title={
+          settings?.alumni_form_banner_title ? (
+            settings.alumni_form_banner_title
+          ) : (
+            <>
+              Formulir Pendataan <br />
+              <span className="text-amber-300 underline decoration-amber-400/60 underline-offset-8">
+                Alumni MI AL-AHMAD
+              </span>
+            </>
+          )
+        }
         subtitle={
           settings?.alumni_form_banner_subtitle ||
           'Silakan perbarui data diri Anda untuk mempererat silaturahmi dan memperluas jejaring alumni MI AL-AHMAD.'
         }
         backgroundImageUrl={
-          settings?.alumni_form_banner_image && settings.alumni_form_banner_image !== '/assets/gedung-mi-al-ahmad.jpg'
-            ? resolveImageUrl(settings.alumni_form_banner_image)
-            : undefined
+          resolveImageUrl(settings?.alumni_form_banner_image) ||
+          resolveImageUrl(settings?.alumni_banner_image) ||
+          '/assets/gedung-mi-al-ahmad.jpg'
         }
+        imagePosition="object-[center_50%]"
       />
 
       {/* FORM & SIDEBAR LAYOUT */}

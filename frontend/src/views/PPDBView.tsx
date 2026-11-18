@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api, MasterPpdbPath, resolveImageUrl } from '../services/api';
-import { IslamicSilhouette } from '../components/ui/PageHeroBanner';
+import { PageHeroBanner } from '../components/ui/PageHeroBanner';
 import { PPDBFormData } from '../types';
 import {
   GraduationCap,
@@ -149,82 +149,44 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
   const hours = siteSettings.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB';
   const logoUrl = siteSettings.school_logo_url || '/assets/logo-mi-al-ahmad.png';
 
-  const hasCustomPhoto = Boolean(
-    siteSettings.ppdb_banner_image &&
-    siteSettings.ppdb_banner_image.trim() !== '' &&
-    siteSettings.ppdb_banner_image !== '/assets/gedung-mi-al-ahmad.jpg'
-  );
-
   return (
     <div className="bg-slate-50 min-h-screen pb-24">
-      <section className="relative bg-slate-950 text-white py-16 sm:py-20 lg:py-24 overflow-hidden border-b-4 border-amber-400">
-        {/* Background Architectural Watermark or Custom Photo */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
-          <img
-            src={resolveImageUrl(siteSettings.ppdb_banner_image) || "/assets/gedung-mi-al-ahmad.jpg"}
-            alt=""
-            aria-hidden="true"
-            className={`w-full h-full object-cover object-center transition-all duration-700 ${
-              hasCustomPhoto
-                ? 'opacity-90 brightness-95 contrast-105'
-                : 'filter grayscale contrast-150 brightness-90 opacity-20 mix-blend-luminosity scale-105'
-            }`}
-            onError={(e) => {
-              e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
-            }}
-          />
-          {hasCustomPhoto ? (
-            <>
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/92 via-slate-950/60 to-black/30" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.2),transparent_65%)]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/30" />
-            </>
+      <PageHeroBanner
+        breadcrumbs={[
+          { label: 'Beranda', onClick: () => window.location.href = '/' },
+          { label: 'PPDB Online' },
+        ]}
+        title={
+          siteSettings.ppdb_banner_title ? (
+            siteSettings.ppdb_banner_title
           ) : (
             <>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#065F46] via-[#047857] to-[#064E3B]" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.25),transparent_70%)]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+              Penerimaan Peserta Didik Baru <br className="hidden sm:inline" />
+              <span className="text-amber-300 underline decoration-amber-400/60 underline-offset-8">
+                {schoolName}
+              </span>
             </>
-          )}
-        </div>
-
-        {!hasCustomPhoto && <IslamicSilhouette />}
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 border border-white/20 text-xs sm:text-sm font-semibold tracking-wider uppercase text-emerald-100 backdrop-blur-xs">
-              <Sparkles className="w-4 h-4 text-amber-300" />
-              <span>PPDB Tahun Ajaran {academicYear} • {wave}</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-heading text-white tracking-tight leading-tight">
-              {siteSettings.ppdb_banner_title ? (
-                siteSettings.ppdb_banner_title
-              ) : (
-                <>
-                  Penerimaan Peserta Didik Baru <br className="hidden sm:inline" />
-                  <span className="text-amber-300">{schoolName}</span>
-                </>
-              )}
-            </h1>
-
-            <p className="text-base sm:text-lg text-emerald-100/95 leading-relaxed font-body">
-              {siteSettings.ppdb_banner_subtitle || introText}
-            </p>
-
-            <div className="pt-2 flex flex-wrap items-center gap-4 text-xs sm:text-sm font-medium text-emerald-100">
-              <div className="flex items-center gap-2 bg-emerald-950/40 px-3.5 py-2 rounded-xl border border-emerald-700/50">
-                <Calendar className="w-4 h-4 text-amber-300" />
-                <span>Pendaftaran: <strong>{dates}</strong></span>
-              </div>
-              <div className="flex items-center gap-2 bg-emerald-950/40 px-3.5 py-2 rounded-xl border border-emerald-700/50">
-                <Award className="w-4 h-4 text-emerald-300" />
-                <span>Akreditasi: <strong>{accreditation}</strong></span>
-              </div>
-            </div>
+          )
+        }
+        subtitle={siteSettings.ppdb_banner_subtitle || introText}
+        backgroundImageUrl={resolveImageUrl(siteSettings.ppdb_banner_image) || "/assets/gedung-mi-al-ahmad.jpg"}
+        imagePosition="object-[center_40%]"
+      >
+        <div className="pt-2 flex flex-wrap items-center gap-4 text-xs sm:text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/20 text-xs font-semibold tracking-wider uppercase text-amber-300 backdrop-blur-md">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>PPDB Tahun Ajaran {academicYear} • {wave}</span>
+          </div>
+          <div className="flex items-center gap-2 bg-slate-900/60 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/15">
+            <Calendar className="w-4 h-4 text-amber-300" />
+            <span>Pendaftaran: <strong>{dates}</strong></span>
+          </div>
+          <div className="flex items-center gap-2 bg-slate-900/60 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/15">
+            <Award className="w-4 h-4 text-emerald-300" />
+            <span>Akreditasi: <strong>{accreditation}</strong></span>
           </div>
         </div>
-      </section>
+      </PageHeroBanner>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

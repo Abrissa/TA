@@ -17,10 +17,10 @@ interface PageHeroBannerProps {
   imagePosition?: string;
 }
 
-export const IslamicSilhouette: React.FC = () => (
+const IslamicSilhouette: React.FC = () => (
   <svg
     aria-hidden="true"
-    className="absolute inset-0 w-full h-full pointer-events-none select-none z-0"
+    className="absolute inset-0 w-full h-full pointer-events-none select-none"
     xmlns="http://www.w3.org/2000/svg"
     preserveAspectRatio="xMidYMid slice"
     viewBox="0 0 1200 320"
@@ -89,12 +89,6 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
   backgroundWhiteTint = false,
   imagePosition,
 }) => {
-  const hasCustomPhoto = Boolean(
-    backgroundImageUrl &&
-    backgroundImageUrl.trim() !== '' &&
-    backgroundImageUrl !== '/assets/gedung-mi-al-ahmad.jpg'
-  );
-
   return (
     <section className="relative bg-slate-950 text-white py-10 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 border-b-4 border-amber-400 overflow-hidden">
       {/* Background Architectural Silhouette or Custom Photo */}
@@ -104,30 +98,29 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
           alt=""
           aria-hidden="true"
           className={`w-full h-full object-cover transition-all duration-700 ${
-            hasCustomPhoto
+            backgroundImageUrl
               ? `${imagePosition || "object-[center_50%]"} opacity-90 brightness-95 contrast-105`
               : "object-center filter grayscale contrast-150 brightness-90 opacity-20 mix-blend-luminosity scale-105"
           }`}
         />
         {/* Soft vignette and readability depth overlays */}
-        {hasCustomPhoto ? (
+        {backgroundImageUrl ? (
           <>
-            {/* Dark gradient on the left for text readability, clear on right to show custom photo */}
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/92 via-slate-950/60 to-black/30" />
-            {/* Subtle emerald/white ambient glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.2),transparent_65%)]" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/30" />
+            {/* Dark gradient on the left for text readability, clear on right to show teachers */}
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/50 to-black/20" />
+            {/* Subtle white/light ambient glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.18),transparent_65%)]" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-slate-950/30" />
           </>
         ) : (
           <>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#065F46] via-[#047857] to-[#064E3B]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.25),transparent_70%)]" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#065F46]/90 via-[#047857]/80 to-[#064E3B]/90" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.2),transparent_70%)]" />
           </>
         )}
       </div>
 
-      {!hasCustomPhoto && <IslamicSilhouette />}
+      {!backgroundImageUrl && <IslamicSilhouette />}
       <div className="relative z-10 max-w-7xl mx-auto space-y-3.5 sm:space-y-4 text-left">
         <nav aria-label="Breadcrumb" className="pb-1">
           <ol className="flex flex-wrap items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-lg bg-black/20 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-medium text-emerald-100">

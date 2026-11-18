@@ -336,7 +336,7 @@ export const DEFAULT_CMS_SETTINGS: Record<string, string> = {
   alumni_banner_image: '/assets/gedung-mi-al-ahmad.jpg',
   alumni_form_banner_title: 'Formulir Pendataan Alumni',
   alumni_form_banner_subtitle: 'Silakan perbarui data diri Anda untuk mempererat silaturahmi dan memperluas jejaring alumni MI AL-AHMAD.',
-  alumni_form_banner_image: '',
+  alumni_form_banner_image: '/assets/gedung-mi-al-ahmad.jpg',
   alumni_cta_text: 'Isi Formulir Pendataan Alumni',
   alumni_stat_graduates: '3,500+',
   alumni_stat_graduates_label: 'Lulusan Tersebar',
@@ -370,7 +370,7 @@ export const DEFAULT_CMS_SETTINGS: Record<string, string> = {
   // Halaman PPDB Alur & Tahapan
   ppdb_banner_title: 'Penerimaan Peserta Didik Baru (PPDB)',
   ppdb_banner_subtitle: 'Mari bergabung bersama keluarga besar madrasah berprestasi dengan kurikulum integrasi Kemenag, pembinaan tahfidz Al-Qur\'an terpadu, dan pembinaan sains berstandar internasional.',
-  ppdb_banner_image: '',
+  ppdb_banner_image: '/assets/gedung-mi-al-ahmad.jpg',
   ppdb_step_1_title: 'Pendaftaran Online',
   ppdb_step_1_desc: 'Lengkapi biodata calon santri dan kontak wali secara daring melalui formulir resmi.',
   ppdb_step_2_title: 'Penerbitan Bukti Registrasi',
