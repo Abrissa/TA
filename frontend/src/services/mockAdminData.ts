@@ -388,13 +388,6 @@ export const DEFAULT_CMS_SETTINGS: Record<string, string> = {
 export const mockAdminStore = {
   getSettings(): Record<string, string> {
     const stored = readStorage<Record<string, string>>('mi_site_settings', {});
-    // Auto-clean any legacy default building image that caused muddy display
-    if (stored.alumni_form_banner_image === '/assets/gedung-mi-al-ahmad.jpg') {
-      delete stored.alumni_form_banner_image;
-    }
-    if (stored.ppdb_banner_image === '/assets/gedung-mi-al-ahmad.jpg') {
-      delete stored.ppdb_banner_image;
-    }
     return {
       ...DEFAULT_CMS_SETTINGS,
       ...stored,

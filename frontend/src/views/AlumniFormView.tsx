@@ -188,7 +188,7 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
           'Silakan perbarui data diri Anda untuk mempererat silaturahmi dan memperluas jejaring alumni MI AL-AHMAD.'
         }
         backgroundImageUrl={
-          settings?.alumni_form_banner_image
+          settings?.alumni_form_banner_image && settings.alumni_form_banner_image !== '/assets/gedung-mi-al-ahmad.jpg'
             ? resolveImageUrl(settings.alumni_form_banner_image)
             : undefined
         }

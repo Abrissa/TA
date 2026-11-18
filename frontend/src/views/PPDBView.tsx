@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api, MasterPpdbPath, resolveImageUrl } from '../services/api';
+import { IslamicSilhouette } from '../components/ui/PageHeroBanner';
 import { PPDBFormData } from '../types';
 import {
   GraduationCap,
@@ -148,29 +149,46 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
   const hours = siteSettings.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB';
   const logoUrl = siteSettings.school_logo_url || '/assets/logo-mi-al-ahmad.png';
 
+  const hasCustomPhoto = Boolean(
+    siteSettings.ppdb_banner_image &&
+    siteSettings.ppdb_banner_image.trim() !== '' &&
+    siteSettings.ppdb_banner_image !== '/assets/gedung-mi-al-ahmad.jpg'
+  );
+
   return (
     <div className="bg-slate-50 min-h-screen pb-24">
       <section className="relative bg-slate-950 text-white py-16 sm:py-20 lg:py-24 overflow-hidden border-b-4 border-amber-400">
-        {/* Background Image / Gradient */}
-        {siteSettings.ppdb_banner_image ? (
-          <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
-            <img
-              src={resolveImageUrl(siteSettings.ppdb_banner_image)}
-              alt=""
-              aria-hidden="true"
-              className="w-full h-full object-cover object-center opacity-90 brightness-95 contrast-105"
-            />
-            {/* Crisp dark readability gradient */}
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/60 to-black/25" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.18),transparent_65%)]" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/30" />
-          </div>
-        ) : (
-          <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#064e3b] via-[#047857] to-[#0f766e]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/15 via-transparent to-black/20" />
-          </div>
-        )}
+        {/* Background Architectural Watermark or Custom Photo */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+          <img
+            src={resolveImageUrl(siteSettings.ppdb_banner_image) || "/assets/gedung-mi-al-ahmad.jpg"}
+            alt=""
+            aria-hidden="true"
+            className={`w-full h-full object-cover object-center transition-all duration-700 ${
+              hasCustomPhoto
+                ? 'opacity-90 brightness-95 contrast-105'
+                : 'filter grayscale contrast-150 brightness-90 opacity-20 mix-blend-luminosity scale-105'
+            }`}
+            onError={(e) => {
+              e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+            }}
+          />
+          {hasCustomPhoto ? (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/92 via-slate-950/60 to-black/30" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.2),transparent_65%)]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/30" />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#065F46] via-[#047857] to-[#064E3B]" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.25),transparent_70%)]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+            </>
+          )}
+        </div>
+
+        {!hasCustomPhoto && <IslamicSilhouette />}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-6">
