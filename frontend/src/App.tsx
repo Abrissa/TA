@@ -17,21 +17,34 @@ import { PPDBView } from './views/PPDBView';
 import { AdminLogin } from './admin/AdminLogin';
 import { AdminLayout } from './admin/AdminLayout';
 
+const normalizePath = (p: string) => {
+  return p.toLowerCase().replace(/[\/\\]+$/, '') || '/';
+};
+
 export default function App() {
   const checkIsAdmin = (): boolean => {
-    const pathname = window.location.pathname.toLowerCase();
-    if (pathname.startsWith('/portal-admin') || pathname.startsWith('/admin')) {
+    const hostname = window.location.hostname.toLowerCase();
+    // Subdomain support (e.g. admin.mialahmad.sch.id or admin.localhost)
+    if (hostname.startsWith('admin.') || hostname === 'admin') {
       return true;
     }
-    if (window.location.hash === '#admin') {
-      window.history.replaceState(null, '', '/portal-admin');
-      return true;
-    }
-    return false;
-  };
 
-  const normalizePath = (p: string) => {
-    return p.toLowerCase().replace(/[\/\\]+$/, '') || '/';
+    const pathname = normalizePath(window.location.pathname);
+    if (
+      pathname === '/admin' ||
+      pathname.startsWith('/admin/') ||
+      pathname === '/portal-admin' ||
+      pathname.startsWith('/portal-admin/')
+    ) {
+      return true;
+    }
+
+    if (window.location.hash.toLowerCase() === '#admin') {
+      window.history.replaceState(null, '', '/admin');
+      return true;
+    }
+
+    return false;
   };
 
   const getInitialTab = (): PageTab => {
@@ -157,12 +170,19 @@ export default function App() {
   };
 
   const handleExitAdmin = () => {
+    const hostname = window.location.hostname.toLowerCase();
+    // If running under a subdomain (e.g. admin.domain.com), redirect to root domain
+    if (hostname.startsWith('admin.')) {
+      const mainHost = window.location.host.replace(/^admin\./i, '');
+      window.location.href = `${window.location.protocol}//${mainHost}/`;
+      return;
+    }
     window.history.pushState(null, '', '/');
     setIsAdminRoute(false);
   };
 
   const handleOpenAdmin = () => {
-    window.history.pushState(null, '', '/portal-admin');
+    window.history.pushState(null, '', '/admin');
     setIsAdminRoute(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
