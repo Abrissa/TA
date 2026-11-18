@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { api, MasterPpdbPath } from '../services/api';
+import { api, MasterPpdbPath, resolveImageUrl } from '../services/api';
 import { PPDBFormData } from '../types';
 import {
   GraduationCap,
@@ -150,8 +150,23 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
 
   return (
     <div className="bg-slate-50 min-h-screen pb-24">
-      <section className="relative bg-gradient-to-br from-[#064e3b] via-[#047857] to-[#0f766e] text-white py-16 sm:py-20 lg:py-24 overflow-hidden border-b-4 border-amber-400">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/10 via-transparent to-black/20 pointer-events-none" />
+      <section className="relative bg-slate-950 text-white py-16 sm:py-20 lg:py-24 overflow-hidden border-b-4 border-amber-400">
+        {/* Background Image & Architectural Overlays */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+          <img
+            src={resolveImageUrl(siteSettings.ppdb_banner_image) || "/assets/gedung-mi-al-ahmad.jpg"}
+            alt=""
+            aria-hidden="true"
+            className="w-full h-full object-cover object-center opacity-85 brightness-95 contrast-105"
+            onError={(e) => {
+              e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+            }}
+          />
+          {/* Islamic emerald depth gradient & ambient glow */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-[#064e3b]/85 to-[#047857]/70" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.25),transparent_65%)]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-slate-950/40" />
+        </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-6">

@@ -175,8 +175,29 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
     <div className="space-y-12 pb-16">
       
       {/* HEADER BANNER */}
-      <section className="bg-gradient-to-r from-[#059669] via-[#10b981] to-[#047857] text-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-b-4 border-amber-400">
-        <div className="max-w-7xl mx-auto space-y-4 text-left">
+      <section className="relative bg-slate-950 text-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-b-4 border-amber-400 overflow-hidden">
+        {/* Background Image & Vignette Overlays */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+          <img
+            src={
+              resolveImageUrl(settings?.alumni_form_banner_image) ||
+              resolveImageUrl(settings?.alumni_banner_image) ||
+              '/assets/gedung-mi-al-ahmad.jpg'
+            }
+            alt=""
+            aria-hidden="true"
+            className="w-full h-full object-cover object-center opacity-85 brightness-95 contrast-105"
+            onError={(e) => {
+              e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+            }}
+          />
+          {/* Emerald green depth gradients & ambient glow */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-[#059669]/85 to-[#047857]/70" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.25),transparent_65%)]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-slate-950/40" />
+        </div>
+
+        <div className="max-w-7xl mx-auto space-y-4 text-left relative z-10">
           {/* Breadcrumb Navigation */}
           <nav aria-label="Breadcrumb" className="pb-1">
             <ol className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-black/20 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-medium text-emerald-100">
@@ -208,11 +229,12 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
           </nav>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-heading text-white tracking-tight leading-tight max-w-4xl">
-            Formulir Pendataan Alumni
+            {settings?.alumni_form_banner_title || 'Formulir Pendataan Alumni'}
           </h1>
 
           <p className="text-emerald-100 text-base sm:text-lg leading-relaxed max-w-3xl">
-            Silakan perbarui data diri Anda untuk mempererat silaturahmi dan memperluas jejaring alumni MI AL-AHMAD.
+            {settings?.alumni_form_banner_subtitle ||
+              'Silakan perbarui data diri Anda untuk mempererat silaturahmi dan memperluas jejaring alumni MI AL-AHMAD.'}
           </p>
         </div>
       </section>

@@ -1758,6 +1758,107 @@ export const AdminPageControlTab: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* BANNER FORMULIR PENDATAAN ALUMNI */}
+            <div className="pt-6 border-t border-slate-200 space-y-4">
+              <h4 className="font-bold text-slate-800 text-sm flex items-center gap-2">
+                <FileText className="w-4 h-4 text-emerald-600" />
+                <span>Banner Khusus Formulir Pendataan Alumni (/form-alumni)</span>
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Judul Banner Formulir Alumni
+                  </label>
+                  <input
+                    type="text"
+                    value={settings['alumni_form_banner_title'] ?? ''}
+                    onChange={(e) => handleTextChange('alumni_form_banner_title', e.target.value)}
+                    placeholder="Formulir Pendataan Alumni"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Subjudul / Deskripsi Banner Formulir Alumni
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={settings['alumni_form_banner_subtitle'] ?? ''}
+                    onChange={(e) => handleTextChange('alumni_form_banner_subtitle', e.target.value)}
+                    placeholder="Silakan perbarui data diri Anda untuk mempererat silaturahmi..."
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Foto Latar Belakang Banner Formulir Alumni
+                  </label>
+                  <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
+                      <img
+                        src={
+                          resolveImageUrl(settings['alumni_form_banner_image']) ||
+                          resolveImageUrl(settings['alumni_banner_image']) ||
+                          '/assets/gedung-mi-al-ahmad.jpg'
+                        }
+                        alt="Preview Banner Form Alumni"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                        }}
+                      />
+                      {settings['alumni_form_banner_image'] && (
+                        <button
+                          type="button"
+                          onClick={() => handleTextChange('alumni_form_banner_image', '')}
+                          className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors cursor-pointer"
+                          title="Hapus / Reset Foto"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="flex-1 w-full space-y-2">
+                      <label className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 hover:border-emerald-600 text-slate-700 hover:text-emerald-700 text-xs font-semibold rounded-xl cursor-pointer shadow-xs transition-colors">
+                        {uploadingField === 'alumni_form_banner_image' ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+                            <span>Mengunggah Foto...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4 text-emerald-600" />
+                            <span>Unggah Foto Banner Formulir Alumni</span>
+                          </>
+                        )}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleFileUpload(e, 'alumni_form_banner_image', 'alumni')}
+                          disabled={uploadingField !== null}
+                          className="hidden"
+                        />
+                      </label>
+                      <input
+                        type="text"
+                        value={settings['alumni_form_banner_image'] ?? ''}
+                        onChange={(e) => handleTextChange('alumni_form_banner_image', e.target.value)}
+                        placeholder="Atau masukkan tautan URL foto (/storage/...)"
+                        className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-600 focus:outline-none focus:border-emerald-600"
+                      />
+                      <p className="text-[11px] text-slate-400">
+                        Foto latar belakang khusus untuk header formulir pendataan alumni. Jika dikosongkan, otomatis menggunakan banner utama alumni.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* STATISTIK & COUNTER ALUMNI */}
@@ -1985,6 +2086,68 @@ export const AdminPageControlTab: React.FC = () => {
                 placeholder="Mari bergabung bersama keluarga besar madrasah berprestasi..."
                 className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:bg-white focus:outline-none focus:border-emerald-600"
               />
+            </div>
+
+            {/* Foto Latar Banner PPDB */}
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                Foto Latar Banner Halaman PPDB
+              </label>
+              <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
+                  <img
+                    src={resolveImageUrl(settings['ppdb_banner_image']) || '/assets/gedung-mi-al-ahmad.jpg'}
+                    alt="Preview Banner PPDB"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                    }}
+                  />
+                  {settings['ppdb_banner_image'] && (
+                    <button
+                      type="button"
+                      onClick={() => handleTextChange('ppdb_banner_image', '')}
+                      className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/80 text-white hover:bg-rose-600 transition-colors cursor-pointer"
+                      title="Hapus / Reset Foto"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex-1 w-full space-y-2">
+                  <label className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 hover:border-emerald-600 text-slate-700 hover:text-emerald-700 text-xs font-semibold rounded-xl cursor-pointer shadow-xs transition-colors">
+                    {uploadingField === 'ppdb_banner_image' ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+                        <span>Mengunggah Foto...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4 text-emerald-600" />
+                        <span>Unggah Foto Banner PPDB</span>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileUpload(e, 'ppdb_banner_image', 'ppdb')}
+                      disabled={uploadingField !== null}
+                      className="hidden"
+                    />
+                  </label>
+                  <input
+                    type="text"
+                    value={settings['ppdb_banner_image'] ?? ''}
+                    onChange={(e) => handleTextChange('ppdb_banner_image', e.target.value)}
+                    placeholder="Atau masukkan tautan URL foto (/storage/...)"
+                    className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-600 focus:outline-none focus:border-emerald-600"
+                  />
+                  <p className="text-[11px] text-slate-400">
+                    Foto latar belakang untuk header halaman PPDB (/ppdb). Otomatis dipadukan dengan overlay gradien hijau Islami untuk keterbacaan teks maksimal.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div>
