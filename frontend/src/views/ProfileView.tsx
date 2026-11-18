@@ -181,7 +181,8 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenPPDB }) => {
                       </span>
                     </div>
                   </div>
-                ))}
+                );
+              })}
               </div>
             )}
 
