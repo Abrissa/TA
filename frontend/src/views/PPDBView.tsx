@@ -37,7 +37,7 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
     if (!propSettings || Object.keys(propSettings).length === 0) {
       api.getSettings().then((res) => {
         if (res) setSiteSettings(res);
-      }).catch(() => {});
+      }).catch(() => { });
     } else {
       setSiteSettings(propSettings);
     }
@@ -240,25 +240,25 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { 
-              phase: 'Tahap 1', 
-              title: siteSettings.ppdb_step_1_title || 'Pendaftaran Online', 
-              desc: siteSettings.ppdb_step_1_desc || 'Lengkapi biodata calon santri dan kontak wali secara daring melalui formulir di bawah ini.' 
+            {
+              phase: 'Tahap 1',
+              title: siteSettings.ppdb_step_1_title || 'Pendaftaran Online',
+              desc: siteSettings.ppdb_step_1_desc || 'Lengkapi biodata calon santri dan kontak wali secara daring melalui formulir di bawah ini.'
             },
-            { 
-              phase: 'Tahap 2', 
-              title: siteSettings.ppdb_step_2_title || 'Penerbitan Bukti Registrasi', 
-              desc: siteSettings.ppdb_step_2_desc || 'Simpan nomor registrasi resmi yang diterbitkan sistem untuk konfirmasi berkas panitia.' 
+            {
+              phase: 'Tahap 2',
+              title: siteSettings.ppdb_step_2_title || 'Penerbitan Bukti Registrasi',
+              desc: siteSettings.ppdb_step_2_desc || 'Simpan nomor registrasi resmi yang diterbitkan sistem untuk konfirmasi berkas panitia.'
             },
-            { 
-              phase: 'Tahap 3', 
-              title: siteSettings.ppdb_step_3_title || 'Observasi Ramah Anak', 
-              desc: siteSettings.ppdb_step_3_desc || 'Ananda diundang mengikuti observasi kesiapan belajar dan penyerahan berkas fisik.' 
+            {
+              phase: 'Tahap 3',
+              title: siteSettings.ppdb_step_3_title || 'Observasi Ramah Anak',
+              desc: siteSettings.ppdb_step_3_desc || 'Ananda diundang mengikuti observasi kesiapan belajar dan penyerahan berkas fisik.'
             },
-            { 
-              phase: 'Tahap 4', 
-              title: siteSettings.ppdb_step_4_title || 'Daftar Ulang & Orientasi', 
-              desc: siteSettings.ppdb_step_4_desc || 'Pemberitahuan hasil seleksi resmi melalui portal website dan kontak WhatsApp terdaftar.' 
+            {
+              phase: 'Tahap 4',
+              title: siteSettings.ppdb_step_4_title || 'Daftar Ulang & Orientasi',
+              desc: siteSettings.ppdb_step_4_desc || 'Pemberitahuan hasil seleksi resmi melalui portal website dan kontak WhatsApp terdaftar.'
             },
           ].map((item, idx) => (
             <div key={idx} className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-xs relative overflow-hidden group hover:border-emerald-400 transition-all">
@@ -282,10 +282,10 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
           <div className="bg-gradient-to-r from-[#064e3b] via-[#047857] to-[#059669] p-6 sm:p-8 text-white border-b-4 border-amber-400">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-white p-1.5 flex items-center justify-center shrink-0 shadow-md">
-                <img 
-                  src={logoUrl || '/assets/logo-mi-al-ahmad.png'} 
-                  alt="Logo" 
-                  className="w-full h-full object-contain" 
+                <img
+                  src={logoUrl || '/assets/logo-mi-al-ahmad.png'}
+                  alt="Logo"
+                  className="w-full h-full object-contain"
                   onError={(e) => {
                     e.currentTarget.src = '/assets/logo-mi-al-ahmad.png';
                   }}

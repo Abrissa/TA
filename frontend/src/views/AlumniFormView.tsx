@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { AlumniFormData, AlumniProfile, PageTab } from '../types';
 import { api, resolveImageUrl } from '../services/api';
-import { 
-  User, 
-  GraduationCap, 
-  Briefcase, 
-  Link as LinkIcon, 
-  MessageSquare, 
-  Upload, 
-  Image as ImageIcon, 
-  Send, 
+import { PageHeroBanner } from '../components/ui/PageHeroBanner';
+import {
+  User,
+  GraduationCap,
+  Briefcase,
+  Link as LinkIcon,
+  MessageSquare,
+  Upload,
+  Image as ImageIcon,
+  Send,
   CheckCircle2,
   Globe,
   Instagram,
@@ -173,7 +174,7 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
 
   return (
     <div className="space-y-12 pb-16">
-      
+
       {/* HEADER BANNER */}
       <PageHeroBanner
         breadcrumbs={[
@@ -208,10 +209,10 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
       {/* FORM & SIDEBAR LAYOUT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* LEFT FORM (8 COLS) */}
           <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
-            
+
             <div>
               <div className="flex items-center gap-2 text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">
                 <GraduationCap className="w-4 h-4" />
@@ -251,7 +252,7 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              
+
               {/* Nama Lengkap & Tahun Lulus */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
@@ -321,18 +322,16 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
                     <button
                       type="button"
                       onClick={() => setUseUrlInput(false)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
-                        !useUrlInput ? 'bg-[#059669] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      }`}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition-colors ${!useUrlInput ? 'bg-[#059669] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
                     >
                       Unggah Berkas
                     </button>
                     <button
                       type="button"
                       onClick={() => setUseUrlInput(true)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
-                        useUrlInput ? 'bg-[#059669] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      }`}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition-colors ${useUrlInput ? 'bg-[#059669] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
                     >
                       URL Foto
                     </button>
@@ -461,7 +460,7 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
 
           {/* RIGHT SIDEBAR (4 COLS) */}
           <div className="lg:col-span-4 space-y-6">
-            
+
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
               <div className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-emerald-700">
                 <ShieldCheck className="w-4 h-4" />
@@ -597,13 +596,12 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
                         href={socialInfo.url}
                         target="_blank"
                         rel="noreferrer"
-                        className={`inline-flex items-center gap-1.5 text-xs font-semibold hover:underline transition-colors max-w-[150px] sm:max-w-[180px] truncate ${
-                          socialInfo.isInstagram
-                            ? 'text-pink-600 hover:text-pink-700'
-                            : socialInfo.isLinkedIn
+                        className={`inline-flex items-center gap-1.5 text-xs font-semibold hover:underline transition-colors max-w-[150px] sm:max-w-[180px] truncate ${socialInfo.isInstagram
+                          ? 'text-pink-600 hover:text-pink-700'
+                          : socialInfo.isLinkedIn
                             ? 'text-sky-700 hover:text-sky-800'
                             : 'text-[#059669] hover:text-[#047857]'
-                        }`}
+                          }`}
                         title={socialInfo.display}
                       >
                         {socialInfo.isInstagram ? (
