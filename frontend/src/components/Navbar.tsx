@@ -196,7 +196,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-2 lg:space-x-4">
+          <nav className="hidden lg:flex items-center space-x-2 lg:space-x-4">
 
             {/* Beranda */}
             <button
@@ -347,7 +347,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Action Buttons */}
-          <div className="hidden md:flex items-center gap-2.5">
+          <div className="hidden lg:flex items-center gap-2.5">
             <button
               onClick={onOpenContact}
               className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 transition-colors border border-slate-200 cursor-pointer"
@@ -367,8 +367,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
 
-          {/* Mobile menu button & quick indicators */}
-          <div className="md:hidden flex items-center gap-2">
+          {/* Mobile menu button & quick indicators (PPDB moved to sidebar for spacious mobile header) */}
+          <div className="lg:hidden flex items-center gap-2">
             <span
               className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold shadow-xs ${
                 isSchoolOpen
@@ -380,18 +380,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className={`w-1.5 h-1.5 rounded-full ${isSchoolOpen ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
               <span>{isSchoolOpen ? 'BUKA' : 'TUTUP'}</span>
             </span>
-
-            <button
-              onClick={() => handleNavClick('ppdb')}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-xs transition-colors cursor-pointer ${
-                activeTab === 'ppdb'
-                  ? 'bg-amber-400 text-slate-950 font-extrabold'
-                  : 'bg-emerald-600 text-white hover:bg-emerald-700'
-              }`}
-            >
-              <FileText className="w-3.5 h-3.5 text-amber-300" />
-              <span>PPDB</span>
-            </button>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -407,7 +395,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-3 shadow-md">
+        <div className="lg:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-3 shadow-md">
           <div className="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200 text-sm flex items-center justify-between">
             <div>
               <p className="font-bold text-[#059669]">NPSN: {npsn} | NSM: {nsm}</p>
@@ -523,6 +511,28 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
               )}
             </div>
+
+            {/* Mobile PPDB Item */}
+            <button
+              onClick={() => handleNavClick('ppdb')}
+              className={`w-full text-left px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center justify-between cursor-pointer transition-colors ${
+                activeTab === 'ppdb'
+                  ? 'bg-gradient-to-r from-[#059669] to-[#047857] text-white'
+                  : 'text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <FileText className="w-4 h-4 text-emerald-600" />
+                <span>Penerimaan Santri Baru (PPDB)</span>
+              </div>
+              <span
+                className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider ${
+                  activeTab === 'ppdb' ? 'bg-amber-400 text-slate-950' : 'bg-emerald-100 text-emerald-800'
+                }`}
+              >
+                Buka
+              </span>
+            </button>
           </div>
 
           <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
