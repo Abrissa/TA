@@ -74,43 +74,6 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
         imagePosition="object-[center_62%]"
       />
 
-      {/* STATS BAR */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-xs">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
-            
-            <div className="space-y-1">
-              <p className="text-2xl sm:text-4xl font-extrabold text-[#059669] font-heading">
-                {teachers.length > 0 ? teachers.length : '32'}
-              </p>
-              <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">Guru & Staf</p>
-            </div>
-
-            <div className="space-y-1 border-l border-slate-100">
-              <p className="text-2xl sm:text-4xl font-extrabold text-[#059669] font-heading">
-                {settings?.teachers_stat_degree || '100%'}
-              </p>
-              <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">Lulusan S1 / S2</p>
-            </div>
-
-            <div className="space-y-1 border-l-0 md:border-l border-slate-100 pt-3 md:pt-0 border-t md:border-t-0">
-              <p className="text-2xl sm:text-4xl font-extrabold text-[#059669] font-heading">
-                {settings?.teachers_stat_ratio || '15:1'}
-              </p>
-              <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">Rasio Guru:Siswa</p>
-            </div>
-
-            <div className="space-y-1 border-l border-slate-100 pt-3 md:pt-0 border-t md:border-t-0">
-              <p className="text-2xl sm:text-4xl font-extrabold text-amber-600 font-heading">Sertifikasi</p>
-              <p className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider">
-                {settings?.teachers_stat_cert || 'Kemenag & Kemdikbud'}
-              </p>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
       {/* TEACHERS GRID */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
         <div className="text-center max-w-2xl mx-auto space-y-1.5 sm:space-y-2">
