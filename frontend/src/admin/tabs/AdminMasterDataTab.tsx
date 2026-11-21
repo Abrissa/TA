@@ -156,7 +156,7 @@ export const AdminMasterDataTab: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('mi_admin_token')}`,
+          'Authorization': `Bearer ${sessionStorage.getItem('mi_admin_token') || localStorage.getItem('mi_admin_token') || ''}`,
         },
         body: JSON.stringify({
           name: newCatName.trim(),

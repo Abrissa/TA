@@ -158,8 +158,18 @@ export const resolveImageUrl = (url?: string | null): string => {
   return trimmed;
 };
 
+// Clean up any legacy persistent token so direct links always enforce login
+try {
+  localStorage.removeItem('mi_admin_token');
+  localStorage.removeItem('mi_admin_user');
+} catch {}
+
+export function getAdminToken(): string | null {
+  return sessionStorage.getItem('mi_admin_token') || null;
+}
+
 function getAuthHeaders(): HeadersInit {
-  const token = localStorage.getItem('mi_admin_token');
+  const token = getAdminToken();
   return {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -462,15 +472,23 @@ export const api = {
         body: JSON.stringify({ email, password }),
       });
       const json = await handleResponse<{ success: boolean; data: { token: string; user: AdminUser } }>(res);
-      localStorage.setItem('mi_admin_token', json.data.token);
-      localStorage.setItem('mi_admin_user', JSON.stringify(json.data.user));
+      sessionStorage.setItem('mi_admin_token', json.data.token);
+      sessionStorage.setItem('mi_admin_user', JSON.stringify(json.data.user));
+      try {
+        localStorage.removeItem('mi_admin_token');
+        localStorage.removeItem('mi_admin_user');
+      } catch {}
       return json.data;
     } catch (err: any) {
       if (isNetworkError(err)) {
         const mockAuth = mockAdminStore.login(email, password);
         if (mockAuth) {
-          localStorage.setItem('mi_admin_token', mockAuth.token);
-          localStorage.setItem('mi_admin_user', JSON.stringify(mockAuth.user));
+          sessionStorage.setItem('mi_admin_token', mockAuth.token);
+          sessionStorage.setItem('mi_admin_user', JSON.stringify(mockAuth.user));
+          try {
+            localStorage.removeItem('mi_admin_token');
+            localStorage.removeItem('mi_admin_user');
+          } catch {}
           return mockAuth;
         }
         throw new Error('Email atau kata sandi tidak cocok. Gunakan kredensial pengujian yang tertera di bawah.');
@@ -497,7 +515,7 @@ export const api = {
 
   getStoredUser(): AdminUser | null {
     try {
-      const data = localStorage.getItem('mi_admin_user');
+      const data = sessionStorage.getItem('mi_admin_user');
       return data ? JSON.parse(data) : null;
     } catch {
       return null;
@@ -505,7 +523,7 @@ export const api = {
   },
 
   hasToken(): boolean {
-    return Boolean(localStorage.getItem('mi_admin_token'));
+    return Boolean(sessionStorage.getItem('mi_admin_token'));
   },
 
   async logout(): Promise<void> {
@@ -517,8 +535,12 @@ export const api = {
     } catch {
       // Ignore network errors on logout
     } finally {
-      localStorage.removeItem('mi_admin_token');
-      localStorage.removeItem('mi_admin_user');
+      sessionStorage.removeItem('mi_admin_token');
+      sessionStorage.removeItem('mi_admin_user');
+      try {
+        localStorage.removeItem('mi_admin_token');
+        localStorage.removeItem('mi_admin_user');
+      } catch {}
     }
   },
 
@@ -1064,7 +1086,7 @@ export const api = {
     formData.append('file', file);
     formData.append('folder', folder);
 
-    const token = localStorage.getItem('mi_admin_token');
+    const token = getAdminToken();
     try {
       const res = await fetch(`${BASE_URL}/api/admin/media/upload`, {
         method: 'POST',

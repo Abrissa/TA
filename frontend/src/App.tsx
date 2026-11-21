@@ -169,13 +169,19 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // If visiting /portal-admin route
+  // If visiting /portal-admin or /login route
   if (isAdminRoute) {
-    if (currentUser && api.hasToken()) {
+    const isExplicitLoginRoute = () => {
+      const p = normalizePath(window.location.pathname);
+      return p === '/login' || window.location.hash === '#login';
+    };
+
+    if (!isExplicitLoginRoute() && currentUser && api.hasToken()) {
       return (
         <AdminLayout
           currentUser={currentUser}
           onLogout={() => {
+            api.logout();
             setCurrentUser(null);
             handleExitAdmin();
           }}
@@ -187,6 +193,7 @@ export default function App() {
       <AdminLogin
         onLoginSuccess={(user) => {
           setCurrentUser(user);
+          window.history.replaceState(null, '', '/portal-admin');
         }}
         onCancel={handleExitAdmin}
       />
