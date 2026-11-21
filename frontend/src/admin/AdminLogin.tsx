@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { api, AdminUser } from '../services/api';
-import { Lock, Mail, ShieldAlert, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
+import { Lock, Mail, ShieldAlert, ArrowRight, Loader2 } from 'lucide-react';
 
 interface AdminLoginProps {
   onLoginSuccess: (user: AdminUser) => void;
@@ -26,12 +26,6 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onCancel
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleQuickFill = (demoEmail: string, demoPass: string) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setError(null);
   };
 
   return (
@@ -123,35 +117,8 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onCancel
           </button>
         </form>
 
-        {/* Demo Quick Fills for immediate verification */}
-        <div className="mt-8 pt-6 border-t border-slate-800/80">
-          <p className="text-xs text-slate-400 mb-3 text-center">Akun Terdaftar Sistem (Kredensial Pengujian):</p>
-          <div className="flex flex-col gap-2">
-            <button
-              type="button"
-              onClick={() => handleQuickFill('admin@mialahmad.sch.id', 'admin123')}
-              className="text-left px-3 py-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 text-xs text-slate-300 flex items-center justify-between transition-colors cursor-pointer"
-            >
-              <div>
-                <span className="font-semibold text-emerald-400">Superadmin:</span> admin@mialahmad.sch.id
-              </div>
-              <span className="text-[10px] text-slate-400 font-mono">admin123</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickFill('humas@mialahmad.sch.id', 'humas123')}
-              className="text-left px-3 py-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 text-xs text-slate-300 flex items-center justify-between transition-colors cursor-pointer"
-            >
-              <div>
-                <span className="font-semibold text-amber-400">Admin Humas:</span> humas@mialahmad.sch.id
-              </div>
-              <span className="text-[10px] text-slate-400 font-mono">humas123</span>
-            </button>
-          </div>
-        </div>
-
         {onCancel && (
-          <div className="mt-6 text-center">
+          <div className="mt-8 text-center pt-6 border-t border-slate-800/80">
             <button
               type="button"
               onClick={onCancel}
