@@ -20,11 +20,11 @@ import { AdminLayout } from './admin/AdminLayout';
 export default function App() {
   const checkIsAdmin = (): boolean => {
     const pathname = window.location.pathname.toLowerCase();
-    if (pathname.startsWith('/portal-admin') || pathname.startsWith('/admin')) {
+    if (pathname.startsWith('/portal-admin') || pathname.startsWith('/admin') || pathname.startsWith('/login')) {
       return true;
     }
-    if (window.location.hash === '#admin') {
-      window.history.replaceState(null, '', '/portal-admin');
+    if (window.location.hash === '#admin' || window.location.hash === '#login') {
+      window.history.replaceState(null, '', '/login');
       return true;
     }
     return false;
@@ -123,7 +123,9 @@ export default function App() {
     const schoolTag = settings.school_tagline || "Membentuk Generasi Qur'ani & Berprestasi";
 
     if (isAdminRoute) {
-      document.title = `Dashboard Admin | ${schoolTitle} Krian Sidoarjo`;
+      document.title = currentUser
+        ? `Dashboard Admin | ${schoolTitle} Krian Sidoarjo`
+        : `Login Admin | ${schoolTitle} Krian Sidoarjo`;
       return;
     }
 

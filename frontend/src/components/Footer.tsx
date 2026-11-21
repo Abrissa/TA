@@ -10,7 +10,6 @@ import {
   Youtube,
   ExternalLink,
   Share2,
-  Lock,
   Clock,
 } from 'lucide-react';
 
@@ -463,22 +462,6 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
           <div className="space-y-0.5 text-center sm:text-left">
             <p className="font-medium text-slate-600">Copyright © 2026 All right reserved | MI AL-AHMAD Sidoarjo</p>
             <p className="text-slate-400">Supported by RPL SMK Krian 1 Sidoarjo</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => {
-                if (onOpenAdmin) {
-                  onOpenAdmin();
-                } else {
-                  window.history.pushState(null, '', '/portal-admin');
-                  window.dispatchEvent(new PopStateEvent('popstate'));
-                }
-              }}
-              className="text-slate-400 hover:text-emerald-700 transition-colors flex items-center gap-1.5 font-medium cursor-pointer"
-            >
-              <Lock className="w-3.5 h-3.5 text-slate-400" />
-              <span>Portal Administrator</span>
-            </button>
           </div>
         </div>
       </div>
