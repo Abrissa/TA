@@ -374,36 +374,11 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
               </motion.div>
             </AnimatePresence>
 
-            {/* Pagination & Next Tab Controls */}
+            {/* Pagination Controls */}
             {totalPages > 1 && (
-              <div className="space-y-6 pt-4">
-                {/* Banner jika sudah 3 baris dan ada tab selanjutnya */}
-                {currentPage < totalPages && (
-                  <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50/70 border-2 border-emerald-200/90 rounded-2xl p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
-                    <div className="space-y-1 text-center sm:text-left">
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-700 text-white text-xs font-black uppercase tracking-wider shadow-xs">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                        3 Baris Selesai
-                      </div>
-                      <h3 className="text-lg sm:text-xl font-black text-slate-900">
-                        Masih ada {filteredArticles.length - endIndex} artikel lainnya di tab berikutnya
-                      </h3>
-                      <p className="text-sm text-slate-600">
-                        Klik tombol di samping untuk melanjutkan membaca artikel di tab selanjutnya.
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg active:scale-95 cursor-pointer shrink-0"
-                    >
-                      <span>Buka Tab Selanjutnya (Tab {currentPage + 1})</span>
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </div>
-                )}
-
+              <div className="pt-6 border-t border-slate-200">
                 {/* Bar Tombol Halaman & Sebelumnya/Selanjutnya */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="text-sm text-slate-600 font-medium text-center sm:text-left">
                     Menampilkan <span className="font-bold text-slate-900">{startIndex + 1}–{endIndex}</span> dari{' '}
                     <span className="font-bold text-slate-900">{filteredArticles.length}</span> artikel
