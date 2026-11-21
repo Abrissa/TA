@@ -49,40 +49,38 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
 
   return (
     <article className="pb-20 bg-slate-50/50 min-h-screen">
-      {/* Top Breadcrumb & Navigation */}
-      <div className="bg-white border-b border-slate-200 sticky top-20 z-20 backdrop-blur-md bg-white/90">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-          <button
-            onClick={onBack}
-            className="inline-flex items-center gap-2 text-sm sm:text-base font-bold text-slate-700 hover:text-emerald-700 transition-colors cursor-pointer"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Kembali ke Berita</span>
-          </button>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleCopyLink}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white text-sm font-bold text-slate-700 hover:border-emerald-500 hover:text-emerald-700 transition-all cursor-pointer shadow-2xs"
-              title="Salin Tautan Berita"
-            >
-              {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
-              <span>{copied ? 'Tersalin!' : 'Bagikan'}</span>
-            </button>
-            <button
-              onClick={handleShareWA}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition-all cursor-pointer shadow-xs"
-              title="Bagikan ke WhatsApp"
-            >
-              WhatsApp
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Article Header Banner */}
-      <section className="bg-gradient-to-b from-slate-900 via-emerald-950 to-slate-900 text-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-b-4 border-amber-400">
-        <div className="max-w-4xl mx-auto space-y-5">
+      <section className="bg-gradient-to-b from-slate-900 via-emerald-950 to-slate-900 text-white py-10 sm:py-14 px-4 sm:px-6 lg:px-8 border-b-4 border-amber-400">
+        <div className="max-w-4xl mx-auto space-y-6">
+          {/* Top Breadcrumb & Share Actions (integrated inside banner, non-sticky) */}
+          <div className="flex items-center justify-between pb-4 border-b border-white/10 text-sm">
+            <button
+              onClick={onBack}
+              className="inline-flex items-center gap-2 font-bold text-emerald-200 hover:text-white transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Kembali ke Berita</span>
+            </button>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleCopyLink}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20 text-xs sm:text-sm font-bold text-white transition-all cursor-pointer backdrop-blur-xs"
+                title="Salin Tautan Berita"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
+                <span>{copied ? 'Tersalin!' : 'Bagikan'}</span>
+              </button>
+              <button
+                onClick={handleShareWA}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-xs"
+                title="Bagikan ke WhatsApp"
+              >
+                WhatsApp
+              </button>
+            </div>
+          </div>
+
           <div className="flex flex-wrap items-center gap-2.5 text-sm font-medium">
             <span className="px-3.5 py-1 rounded-full bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">
               {article.category}
