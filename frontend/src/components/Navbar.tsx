@@ -85,8 +85,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   const profileSubItems: { id: PageTab; label: string; desc: string; icon: React.ReactNode }[] = [
     {
       id: 'visi-misi',
-      label: 'Visi & Misi',
-      desc: 'Landasan Nilai & Haluan Pendidikan Madrasah',
+      label: 'Sejarah, Visi & Misi',
+      desc: 'Rekam Jejak Historis & Landasan Nilai Pendidikan',
       icon: <Target className="w-4 h-4 text-[#059669]" />
     },
     {

@@ -132,7 +132,7 @@ export default function App() {
     const titles: Record<PageTab, string> = {
       beranda: `${schoolTitle} | ${schoolTag}`,
       profil: `Profil Sekolah | ${schoolTitle}`,
-      'visi-misi': `Visi, Misi & Landasan | ${schoolTitle}`,
+      'visi-misi': `Sejarah, Visi & Misi | ${schoolTitle}`,
       guru: `Dewan Guru & Staf | ${schoolTitle}`,
       prestasi: `Prestasi Siswa | ${schoolTitle}`,
       artikel: `Berita & Pengumuman | ${schoolTitle}`,
