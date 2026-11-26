@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api, PpdbRecord } from '../../services/api';
-import { SCHOOL_INFO } from '../../data/mockData';
+import { api, PpdbRecord, SchoolProfileData } from '../../services/api';
 import { 
   Users, 
   Search, 
@@ -29,6 +28,7 @@ export const AdminPpdbTab: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
+  const [schoolProfile, setSchoolProfile] = useState<SchoolProfileData | null>(null);
 
   // Detail Modal
   const [selectedRecord, setSelectedRecord] = useState<PpdbRecord | null>(null);
@@ -44,6 +44,18 @@ export const AdminPpdbTab: React.FC = () => {
   useEffect(() => {
     loadPpdb();
   }, [selectedStatus]);
+
+  useEffect(() => {
+    const loadSchoolProfile = async () => {
+      try {
+        const profile = await api.getAdminSchoolProfile();
+        setSchoolProfile(profile);
+      } catch (err) {
+        console.error('Failed to load school profile:', err);
+      }
+    };
+    loadSchoolProfile();
+  }, []);
 
   const loadPpdb = async () => {
     try {
@@ -237,7 +249,7 @@ export const AdminPpdbTab: React.FC = () => {
         <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
       </head>
       <body>
-        <h2 style="font-family: Arial, sans-serif; color: #047857; margin-bottom: 4px;">DATA PENDAFTARAN SANTRI BARU (PPDB) - ${SCHOOL_INFO.name}</h2>
+        <h2 style="font-family: Arial, sans-serif; color: #047857; margin-bottom: 4px;">DATA PENDAFTARAN SANTRI BARU (PPDB) - ${schoolProfile?.name || 'MI AL-AHMAD'}</h2>
         <p style="font-family: Arial, sans-serif; font-size: 12px; color: #64748b; margin-top: 0;">Diekspor pada: ${dateStr} | Filter Status: ${getFilterStatusName()} | Total: ${records.length} Santri</p>
         <table style="border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11px; width: 100%;">
           <thead>
@@ -320,7 +332,7 @@ export const AdminPpdbTab: React.FC = () => {
             Verifikasi & Seleksi Pendaftar PPDB
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Data masuk dari formulir pendaftaran santri baru portal web {SCHOOL_INFO.name}.
+            Data masuk dari formulir pendaftaran santri baru portal web {schoolProfile?.name || 'MI AL-AHMAD'}.
           </p>
         </div>
 
@@ -677,16 +689,16 @@ export const AdminPpdbTab: React.FC = () => {
                   LEMBAGA PENDIDIKAN MA'ARIF NU
                 </div>
                 <h1 className="text-xl sm:text-2xl font-black text-slate-950 tracking-wide uppercase font-serif">
-                  {SCHOOL_INFO.fullName}
+                  {schoolProfile?.name || 'MI AL-AHMAD'}
                 </h1>
                 <p className="text-xs text-slate-600 mt-0.5">
-                  NSM: <span className="font-mono font-semibold">{SCHOOL_INFO.nsm}</span> | NPSN: <span className="font-mono font-semibold">{SCHOOL_INFO.npsn}</span> | Akreditasi: <span className="font-bold">{SCHOOL_INFO.accreditation}</span>
+                  NSM: <span className="font-mono font-semibold">-</span> | NPSN: <span className="font-mono font-semibold">{schoolProfile?.npsn || '-'}</span> | Akreditasi: <span className="font-bold">{schoolProfile?.accreditation || '-'}</span>
                 </p>
                 <p className="text-xs text-slate-600">
-                  {SCHOOL_INFO.address}
+                  {schoolProfile?.address || 'Jl. Setiabudi No. 12, Krian, Sidoarjo'}
                 </p>
                 <p className="text-xs text-slate-500 font-mono">
-                  Telp: {SCHOOL_INFO.phone} | WA: {SCHOOL_INFO.whatsapp} | Website: {SCHOOL_INFO.website}
+                  Telp: {schoolProfile?.phone || '-'} | WA: {schoolProfile?.whatsapp || '-'} | Email: {schoolProfile?.email || '-'}
                 </p>
               </div>
 
@@ -805,9 +817,9 @@ export const AdminPpdbTab: React.FC = () => {
                   <p className="text-slate-600 mb-1">
                     Sidoarjo, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                   </p>
-                  <p className="text-slate-600 mb-14">Panitia PPDB {SCHOOL_INFO.name},</p>
+                  <p className="text-slate-600 mb-14">Panitia PPDB {schoolProfile?.name || 'MI AL-AHMAD'},</p>
                   <p className="font-bold underline decoration-slate-900 text-slate-900 uppercase">
-                    ( {SCHOOL_INFO.principalName} )
+                    ( {schoolProfile?.principal_name || 'Kepala Madrasah'} )
                   </p>
                   <p className="text-[10px] text-slate-500 font-mono">Kepala Madrasah</p>
                 </div>
@@ -856,13 +868,13 @@ export const AdminPpdbTab: React.FC = () => {
                   LEMBAGA PENDIDIKAN MA'ARIF NU
                 </div>
                 <h1 className="text-xl font-black text-slate-950 tracking-wide uppercase font-serif">
-                  {SCHOOL_INFO.fullName}
+                  {schoolProfile?.name || 'MI AL-AHMAD'}
                 </h1>
                 <p className="text-xs text-slate-600 mt-0.5">
-                  NSM: {SCHOOL_INFO.nsm} | NPSN: {SCHOOL_INFO.npsn} | Akreditasi: {SCHOOL_INFO.accreditation}
+                  NSM: - | NPSN: {schoolProfile?.npsn || '-'} | Akreditasi: {schoolProfile?.accreditation || '-'}
                 </p>
                 <p className="text-[11px] text-slate-600">
-                  {SCHOOL_INFO.address} | Telp: {SCHOOL_INFO.phone} | Website: {SCHOOL_INFO.website}
+                  {schoolProfile?.address || 'Jl. Setiabudi No. 12, Krian, Sidoarjo'} | Telp: {schoolProfile?.phone || '-'} | Email: {schoolProfile?.email || '-'}
                 </p>
               </div>
 
@@ -918,9 +930,9 @@ export const AdminPpdbTab: React.FC = () => {
                   <p className="text-slate-600 mb-1">
                     Sidoarjo, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                   </p>
-                  <p className="text-slate-600 mb-16">Kepala Madrasah {SCHOOL_INFO.name},</p>
+                  <p className="text-slate-600 mb-16">Kepala Madrasah {schoolProfile?.name || 'MI AL-AHMAD'},</p>
                   <p className="font-bold underline decoration-slate-900 text-slate-900 uppercase">
-                    {SCHOOL_INFO.principalName}
+                    {schoolProfile?.principal_name || 'Kepala Madrasah'}
                   </p>
                   <p className="text-[10px] text-slate-500 font-mono">NIP: 197508122003122001</p>
                 </div>
