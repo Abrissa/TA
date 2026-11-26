@@ -93,6 +93,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     Route::delete('/alumni/profiles/{id}', [AdminAlumniController::class, 'destroyProfile']);
 
     // PPDB Admissions Management
+    Route::get('/ppdb/export', [AdminPpdbController::class, 'export']);
     Route::get('/ppdb', [AdminPpdbController::class, 'index']);
     Route::get('/ppdb/registrations', [AdminPpdbController::class, 'index']);
     Route::get('/ppdb/registrations/{id}', [AdminPpdbController::class, 'show']);
