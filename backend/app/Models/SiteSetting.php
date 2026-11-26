@@ -21,7 +21,7 @@ class SiteSetting extends Model
     public static function get(string $key, $default = null)
     {
         $setting = static::where('key', $key)->first();
-        if (!$setting) {
+        if (! $setting) {
             return $default;
         }
 
@@ -38,7 +38,7 @@ class SiteSetting extends Model
 
     public static function set(string $key, $value, string $type = 'text', string $group = 'general', ?string $label = null): self
     {
-        $serializedValue = is_array($value) ? json_encode($value) : (string)$value;
+        $serializedValue = is_array($value) ? json_encode($value) : (string) $value;
 
         return static::updateOrCreate(
             ['key' => $key],

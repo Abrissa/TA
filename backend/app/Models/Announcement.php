@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Announcement extends Model
 {
@@ -25,7 +26,7 @@ class Announcement extends Model
         ];
     }
 
-    public function masterCategory(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function masterCategory(): BelongsTo
     {
         return $this->belongsTo(MasterCategory::class, 'category_id');
     }

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\SchoolProfileController as AdminSchoolProfileCont
 use App\Http\Controllers\Admin\SiteSettingController as AdminSiteSettingController;
 use App\Http\Controllers\Admin\TeacherController as AdminTeacherController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CaptchaController;
 use App\Http\Controllers\PublicApiController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,16 @@ Route::prefix('v1')->group(function () {
         Route::post('/alumni/submit', [PublicApiController::class, 'submitAlumni']);
         Route::post('/ppdb/register', [PublicApiController::class, 'submitPpdb']);
     });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Captcha Routes (No Auth Required)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('captcha')->group(function () {
+    Route::get('/generate', [CaptchaController::class, 'generate']);
+    Route::post('/verify', [CaptchaController::class, 'verify']);
 });
 
 /*

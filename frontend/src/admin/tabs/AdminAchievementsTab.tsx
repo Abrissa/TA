@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../../services/api';
+import { api, resolveImageUrl } from '../../services/api';
 import { Achievement } from '../../types';
 import { 
   Trophy, 
@@ -65,7 +65,7 @@ export const AdminAchievementsTab: React.FC = () => {
       year: new Date().getFullYear().toString(),
       date: `Tahun ${new Date().getFullYear()}`,
       description: '',
-      imageUrl: '/assets/prestasi-iksc-2025.jpg',
+      imageUrl: '/storage/achievements/prestasi-iksc-2025.jpg',
       highlight: '',
       details: ['Piagam & Medali Kejuaraan'],
       isHighlighted: false,
@@ -249,11 +249,11 @@ export const AdminAchievementsTab: React.FC = () => {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <img
-                          src={item.imageUrl || '/assets/prestasi-iksc-2025.jpg'}
+                          src={item.imageUrl || '/storage/achievements/prestasi-iksc-2025.jpg'}
                           alt={item.title}
                           className="w-14 h-14 rounded-xl object-cover border border-slate-200 shrink-0 shadow-xs"
                           onError={(e) => {
-                            (e.currentTarget as HTMLImageElement).src = '/assets/gedung-mi-al-ahmad.jpg';
+                            (e.currentTarget as HTMLImageElement).src = resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg');
                           }}
                         />
                         <div className="min-w-0 max-w-md">
@@ -475,11 +475,11 @@ export const AdminAchievementsTab: React.FC = () => {
                 </label>
                 <div className="flex items-center gap-4">
                   <img
-                    src={editingItem.imageUrl || '/assets/prestasi-iksc-2025.jpg'}
+                    src={editingItem.imageUrl || '/storage/achievements/prestasi-iksc-2025.jpg'}
                     alt="Preview"
                     className="w-16 h-16 rounded-xl object-cover border border-slate-200 shrink-0"
                     onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = '/assets/gedung-mi-al-ahmad.jpg';
+                      (e.currentTarget as HTMLImageElement).src = resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg');
                     }}
                   />
                   <div className="flex-1">
@@ -487,7 +487,7 @@ export const AdminAchievementsTab: React.FC = () => {
                       type="text"
                       value={editingItem.imageUrl || ''}
                       onChange={(e) => setEditingItem({ ...editingItem, imageUrl: e.target.value })}
-                      placeholder="/assets/prestasi-iksc-2025.jpg"
+                      placeholder="/storage/achievements/prestasi-iksc-2025.jpg"
                       className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-emerald-500 focus:bg-white mb-2"
                     />
                     <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium cursor-pointer transition-colors">

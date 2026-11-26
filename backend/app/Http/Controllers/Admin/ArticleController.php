@@ -42,22 +42,22 @@ class ArticleController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        if ($request->has('imageUrl') && !$request->has('image_url')) {
+        if ($request->has('imageUrl') && ! $request->has('image_url')) {
             $request->merge(['image_url' => $request->input('imageUrl')]);
         }
-        if ($request->has('authorRole') && !$request->has('author_role')) {
+        if ($request->has('authorRole') && ! $request->has('author_role')) {
             $request->merge(['author_role' => $request->input('authorRole')]);
         }
-        if ($request->has('isFeatured') && !$request->has('is_featured')) {
+        if ($request->has('isFeatured') && ! $request->has('is_featured')) {
             $request->merge(['is_featured' => $request->input('isFeatured')]);
         }
-        if ($request->has('readTime') && !$request->has('read_time')) {
+        if ($request->has('readTime') && ! $request->has('read_time')) {
             $request->merge(['read_time' => $request->input('readTime')]);
         }
-        if ($request->has('sourceUrl') && !$request->has('source_url')) {
+        if ($request->has('sourceUrl') && ! $request->has('source_url')) {
             $request->merge(['source_url' => $request->input('sourceUrl')]);
         }
-        if ($request->has('sourceName') && !$request->has('source_name')) {
+        if ($request->has('sourceName') && ! $request->has('source_name')) {
             $request->merge(['source_name' => $request->input('sourceName')]);
         }
 
@@ -79,7 +79,7 @@ class ArticleController extends Controller
         ]);
 
         if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['title']) . '-' . Str::lower(Str::random(5));
+            $validated['slug'] = Str::slug($validated['title']).'-'.Str::lower(Str::random(5));
         }
 
         if ($validated['status'] === 'published') {
@@ -109,28 +109,28 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
 
-        if ($request->has('imageUrl') && !$request->has('image_url')) {
+        if ($request->has('imageUrl') && ! $request->has('image_url')) {
             $request->merge(['image_url' => $request->input('imageUrl')]);
         }
-        if ($request->has('authorRole') && !$request->has('author_role')) {
+        if ($request->has('authorRole') && ! $request->has('author_role')) {
             $request->merge(['author_role' => $request->input('authorRole')]);
         }
-        if ($request->has('isFeatured') && !$request->has('is_featured')) {
+        if ($request->has('isFeatured') && ! $request->has('is_featured')) {
             $request->merge(['is_featured' => $request->input('isFeatured')]);
         }
-        if ($request->has('readTime') && !$request->has('read_time')) {
+        if ($request->has('readTime') && ! $request->has('read_time')) {
             $request->merge(['read_time' => $request->input('readTime')]);
         }
-        if ($request->has('sourceUrl') && !$request->has('source_url')) {
+        if ($request->has('sourceUrl') && ! $request->has('source_url')) {
             $request->merge(['source_url' => $request->input('sourceUrl')]);
         }
-        if ($request->has('sourceName') && !$request->has('source_name')) {
+        if ($request->has('sourceName') && ! $request->has('source_name')) {
             $request->merge(['source_name' => $request->input('sourceName')]);
         }
 
         $validated = $request->validate([
             'title' => 'sometimes|required|string|max:255',
-            'slug' => 'sometimes|nullable|string|max:255|unique:articles,slug,' . $id,
+            'slug' => 'sometimes|nullable|string|max:255|unique:articles,slug,'.$id,
             'category' => 'sometimes|required|in:Kegiatan,Prestasi,Informasi,Edukasi',
             'excerpt' => 'sometimes|required|string',
             'content' => 'sometimes|required|string',
@@ -145,7 +145,7 @@ class ArticleController extends Controller
             'status' => 'sometimes|required|in:published,draft,archived',
         ]);
 
-        if (isset($validated['status']) && $validated['status'] === 'published' && !$article->published_at) {
+        if (isset($validated['status']) && $validated['status'] === 'published' && ! $article->published_at) {
             $validated['published_at'] = now();
         }
 

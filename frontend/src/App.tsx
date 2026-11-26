@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PageTab, Article } from './types';
 import { MainLayout } from './components/layouts/MainLayout';
 import { api, AdminUser } from './services/api';
-import { mockAdminStore } from './services/mockAdminData';
+
 
 import { HomeView } from './views/HomeView';
 import { ArticleDetailView } from './views/ArticleDetailView';
@@ -62,19 +62,50 @@ export default function App() {
       }
     }
   };
-  const [settings, setSettings] = useState<Record<string, string>>(() => {
-    return mockAdminStore.getSettings();
-  });
+  const [settings, setSettings] = useState<Record<string, string>>({});
   const [currentUser, setCurrentUser] = useState<AdminUser | null>(() => {
     return api.getStoredUser();
   });
+  const [isVerifyingAdminSession, setIsVerifyingAdminSession] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      api.logout();
+      setCurrentUser(null);
+    };
+
+    window.addEventListener('mi_auth_expired', handleAuthExpired);
+    return () => window.removeEventListener('mi_auth_expired', handleAuthExpired);
+  }, []);
+
+  useEffect(() => {
+    if (isAdminRoute) {
+      if (!api.hasToken()) {
+        setCurrentUser(null);
+        return;
+      }
+
+      setIsVerifyingAdminSession(true);
+      api.getMe()
+        .then((user) => {
+          setCurrentUser(user);
+        })
+        .catch(() => {
+          api.logout();
+          setCurrentUser(null);
+        })
+        .finally(() => {
+          setIsVerifyingAdminSession(false);
+        });
+    }
+  }, [isAdminRoute]);
 
   useEffect(() => {
     const handleSettingsChanged = (e?: any) => {
       if (e?.detail && typeof e.detail === 'object') {
         setSettings((prev) => ({ ...prev, ...e.detail }));
       } else {
-        setSettings(mockAdminStore.getSettings());
+        api.getSettings().then(setSettings).catch(() => {});
       }
     };
 
@@ -171,6 +202,15 @@ export default function App() {
 
   // If visiting /portal-admin or /login route
   if (isAdminRoute) {
+    if (isVerifyingAdminSession) {
+      return (
+        <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-3 text-white">
+          <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+          <span className="text-xs text-slate-400 font-medium">Memverifikasi sesi administrator...</span>
+        </div>
+      );
+    }
+
     const isExplicitLoginRoute = () => {
       const p = normalizePath(window.location.pathname);
       return p === '/login' || window.location.hash === '#login';

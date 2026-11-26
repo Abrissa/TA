@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowUpRight, Award } from 'lucide-react';
 import { motion } from 'motion/react';
 import { PageTab, Article } from '../../types';
-import { SCHOOL_INFO, ARTICLES_DATA } from '../../data/mockData';
+
 import { StackedArticleSlider } from '../cards/StackedArticleSlider';
 import { ScrollFadeUp } from '../ui/ScrollReveal';
 
@@ -21,9 +21,9 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
   settings,
   articles,
 }) => {
-  const principalName = settings?.principal_name || SCHOOL_INFO.principalName;
+  const principalName = settings?.principal_name || 'Khoirur Rofiq, S.Pd.I';
   const principalRole = settings?.principal_role || 'Kepala Madrasah MI AL-AHMAD';
-  const principalPhoto = resolveImageUrl(settings?.principal_image_url) || '/assets/principal.png';
+  const principalPhoto = resolveImageUrl(settings?.principal_image_url || '/storage/school/principal.png');
   const principalGreeting = settings?.principal_greeting || 
     "Yuk, jelajahi serunya dunia sekolah di MI AL-AHMAD Sidoarjo! 🎓 ✨ Temukan informasi tentang program keunggulan Tahfidz, fasilitas modern, kegiatan siswa, dan prestasi terbaru. Klik tombol di bawah ini untuk tahu lebih banyak.";
 
@@ -101,7 +101,7 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
                 alt={principalName}
                 className="relative z-10 h-auto max-h-[300px] sm:max-h-[420px] w-[220px] sm:w-[330px] object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-[1.02]"
                 onError={(e) => {
-                  e.currentTarget.src = '/assets/principal.png';
+                  e.currentTarget.src = resolveImageUrl('/storage/school/principal.png');
                 }}
               />
             </div>
@@ -114,7 +114,7 @@ export const PrincipalSection: React.FC<PrincipalSectionProps> = ({
             duration={0.7}
             className="space-y-4 lg:col-span-4"
           >
-            <StackedArticleSlider articles={articles && articles.length > 0 ? articles : ARTICLES_DATA} onSelectArticle={onSelectArticle} />
+            <StackedArticleSlider articles={articles && articles.length > 0 ? articles : []} onSelectArticle={onSelectArticle} />
           </ScrollFadeUp>
         </div>
       </div>

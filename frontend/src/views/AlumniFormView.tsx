@@ -54,7 +54,7 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
     fullName: '',
     graduationYear: '2015',
     jobRole: '',
-    photoUrl: '/assets/alumni/alumni-1.svg',
+    photoUrl: '/storage/alumni/alumni-1.svg',
     socialMedia: '',
     message: '',
   });
@@ -155,7 +155,7 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
         fullName: '',
         graduationYear: '2018',
         jobRole: '',
-        photoUrl: '/assets/alumni/alumni-1.svg',
+        photoUrl: '/storage/alumni/alumni-1.svg',
         socialMedia: '',
         message: '',
       });
@@ -201,7 +201,7 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
         backgroundImageUrl={
           resolveImageUrl(settings?.alumni_form_banner_image) ||
           resolveImageUrl(settings?.alumni_banner_image) ||
-          '/assets/gedung-mi-al-ahmad.jpg'
+          resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg')
         }
         imagePosition="object-[center_50%]"
       />
@@ -362,7 +362,7 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
                       <ImageIcon className="w-5 h-5 text-slate-400 absolute left-3.5 top-3" />
                       <input
                         type="text"
-                        placeholder="https://... atau /assets/alumni/... (URL foto)"
+                        placeholder="https://... atau /storage/alumni/... (URL foto)"
                         value={formData.photoUrl}
                         onChange={(e) => {
                           setFormData({ ...formData, photoUrl: e.target.value });
@@ -378,11 +378,11 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
                 {(formData.photoUrl || customPhotoPreview) && (
                   <div className="flex items-center gap-3.5 p-3 bg-slate-50 rounded-xl border border-slate-200">
                     <img
-                      src={resolveImageUrl(customPhotoPreview || formData.photoUrl) || '/assets/alumni/alumni-1.svg'}
+                      src={resolveImageUrl(customPhotoPreview || formData.photoUrl || '/storage/alumni/alumni-1.svg')}
                       alt="Preview Foto Alumni"
                       className="w-12 h-12 rounded-full object-cover border-2 border-[#059669]"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/assets/alumni/alumni-1.svg';
+                        (e.target as HTMLImageElement).src = resolveImageUrl('/storage/alumni/alumni-1.svg');
                       }}
                     />
                     <div className="text-xs min-w-0 flex-1">
@@ -545,7 +545,7 @@ export const AlumniFormView: React.FC<AlumniFormViewProps> = ({ setActiveTab, se
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {approvedAlumni.map((alm, idx) => {
-              const fallbackAvatar = `/assets/alumni/alumni-${(idx % 3) + 1}.svg`;
+              const fallbackAvatar = resolveImageUrl(`/storage/alumni/alumni-${(idx % 3) + 1}.svg`);
               const imageSrc = resolveImageUrl(alm.imageUrl) || fallbackAvatar;
               const socialInfo = parseSocialLink(alm.socialUrl);
 

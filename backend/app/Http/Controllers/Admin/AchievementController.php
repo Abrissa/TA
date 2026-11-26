@@ -25,8 +25,8 @@ class AchievementController extends Controller
             $search = $request->query('search');
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('winner', 'like', "%{$search}%")
-                  ->orWhere('event', 'like', "%{$search}%");
+                    ->orWhere('winner', 'like', "%{$search}%")
+                    ->orWhere('event', 'like', "%{$search}%");
             });
         }
 

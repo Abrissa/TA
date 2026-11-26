@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { api, resolveImageUrl } from '../../services/api';
-import { DEFAULT_CMS_SETTINGS, mockAdminStore } from '../../services/mockAdminData';
 import { 
   Sliders, 
   CheckCircle2, 
@@ -47,9 +46,7 @@ type CmsSection =
 
 export const AdminPageControlTab: React.FC = () => {
   const [activeSubTab, setActiveSubTab] = useState<CmsSection>('branding');
-  const [settings, setSettings] = useState<Record<string, string>>(() => {
-    return mockAdminStore.getSettings();
-  });
+  const [settings, setSettings] = useState<Record<string, string>>(() => ({}));
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [uploadingField, setUploadingField] = useState<string | null>(null);
@@ -65,7 +62,7 @@ export const AdminPageControlTab: React.FC = () => {
     try {
       setIsLoading(true);
       const res = await api.getSettings();
-      const initial: Record<string, string> = { ...mockAdminStore.getSettings() };
+      const initial: Record<string, string> = {};
       if (res) {
         Object.entries(res).forEach(([k, v]) => {
           if (v !== undefined && v !== null) {
@@ -262,17 +259,17 @@ export const AdminPageControlTab: React.FC = () => {
                   <span className="font-bold text-slate-800 text-sm block">Logo Resmi Madrasah</span>
                   <span className="text-xs text-slate-500">Ditampilkan pada navbar, footer, banner admisi, dan dokumen resmi.</span>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">/assets/logo-mi-al-ahmad.png</span>
+                <span className="text-xs text-slate-400 font-mono">/storage/school/logo-mi-al-ahmad.png</span>
               </div>
 
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="w-24 h-24 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group flex items-center justify-center p-2 shadow-xs">
                   <img
-                    src={resolveImageUrl(settings['school_logo_url']) || '/assets/logo-mi-al-ahmad.png'}
+                    src={resolveImageUrl(settings['school_logo_url'] || '/storage/school/logo-mi-al-ahmad.png')}
                     alt="Preview Logo"
                     className="max-w-full max-h-full object-contain"
                     onError={(e) => {
-                      e.currentTarget.src = '/assets/logo-mi-al-ahmad.png';
+                      e.currentTarget.src = resolveImageUrl('/storage/school/logo-mi-al-ahmad.png');
                     }}
                   />
                   {settings['school_logo_url'] && (
@@ -525,17 +522,17 @@ export const AdminPageControlTab: React.FC = () => {
                   <span className="font-bold text-slate-800 text-sm block">Foto Latar Belakang Gedung Madrasah</span>
                   <span className="text-xs text-slate-500">Ditampilkan sebagai latar belakang dengan soft white overlay.</span>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">/assets/gedung-mi-al-ahmad.jpg</span>
+                <span className="text-xs text-slate-400 font-mono">/storage/school/gedung-mi-al-ahmad.jpg</span>
               </div>
 
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="w-36 h-24 rounded-lg overflow-hidden border border-slate-300 bg-slate-200 shrink-0 relative group">
                   <img
-                    src={resolveImageUrl(settings['hero_image_url']) || '/assets/gedung-mi-al-ahmad.jpg'}
+                    src={resolveImageUrl(settings['hero_image_url']) || resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg')}
                     alt="Preview Gedung"
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                      e.currentTarget.src = resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg');
                     }}
                   />
                   {settings['hero_image_url'] && (
@@ -589,17 +586,17 @@ export const AdminPageControlTab: React.FC = () => {
                   <span className="font-bold text-slate-800 text-sm block">Foto Siswa Pop-out Berprestasi</span>
                   <span className="text-xs text-slate-500">Foto transparan santri berprestasi di bagian depan kartu banner.</span>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">/assets/hero-students.png</span>
+                <span className="text-xs text-slate-400 font-mono">/storage/school/hero-students.png</span>
               </div>
 
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="w-36 h-24 rounded-lg overflow-hidden border border-slate-300 bg-emerald-950/20 shrink-0 relative group flex items-center justify-center">
                   <img
-                    src={resolveImageUrl(settings['hero_students_image_url']) || '/assets/hero-students.png'}
+                    src={resolveImageUrl(settings['hero_students_image_url'] || '/storage/school/hero-students.png')}
                     alt="Preview Siswa"
                     className="h-full object-contain"
                     onError={(e) => {
-                      e.currentTarget.src = '/assets/hero-students.png';
+                      e.currentTarget.src = resolveImageUrl('/storage/school/hero-students.png');
                     }}
                   />
                   {settings['hero_students_image_url'] && (
@@ -738,11 +735,11 @@ export const AdminPageControlTab: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-center gap-4">
               <div className="w-24 h-28 rounded-lg overflow-hidden border border-slate-300 bg-slate-200 shrink-0 relative group flex items-center justify-center">
                 <img
-                  src={resolveImageUrl(settings['principal_image_url']) || '/assets/principal.png'}
+                  src={resolveImageUrl(settings['principal_image_url'] || '/storage/school/principal.png')}
                   alt="Kepala Madrasah"
                   className="w-full h-full object-cover object-top"
                   onError={(e) => {
-                    e.currentTarget.src = '/assets/principal.png';
+                    e.currentTarget.src = resolveImageUrl('/storage/school/principal.png');
                   }}
                 />
                 {settings['principal_image_url'] && (
@@ -848,11 +845,11 @@ export const AdminPageControlTab: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
                   <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
                     <img
-                      src={resolveImageUrl(settings['visimisi_banner_image']) || '/assets/plang-mi-al-ahmad.jpg'}
+                      src={resolveImageUrl(settings['visimisi_banner_image'] || '/storage/school/plang-mi-al-ahmad.jpg')}
                       alt="Preview Banner Visi Misi"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        e.currentTarget.src = '/assets/plang-mi-al-ahmad.jpg';
+                        e.currentTarget.src = resolveImageUrl('/storage/school/plang-mi-al-ahmad.jpg');
                       }}
                     />
                     {settings['visimisi_banner_image'] && (
@@ -926,11 +923,11 @@ export const AdminPageControlTab: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="w-36 h-24 rounded-lg overflow-hidden border border-slate-300 bg-slate-200 shrink-0 relative group">
                   <img
-                    src={resolveImageUrl(settings['vision_image_url']) || '/assets/gedung-mi-al-ahmad.jpg'}
+                    src={resolveImageUrl(settings['vision_image_url'] || '/storage/school/gedung-mi-al-ahmad.jpg')}
                     alt="Preview Kegiatan"
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                      e.currentTarget.src = resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg');
                     }}
                   />
                   {settings['vision_image_url'] && (
@@ -1169,11 +1166,11 @@ export const AdminPageControlTab: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
                   <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
                     <img
-                      src={resolveImageUrl(settings['achievements_banner_image']) || '/assets/trofi-prestasi-mi-al-ahmad.jpg'}
+                      src={resolveImageUrl(settings['achievements_banner_image'] || '/storage/school/trofi-prestasi-mi-al-ahmad.jpg')}
                       alt="Preview Banner Prestasi"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        e.currentTarget.src = '/assets/trofi-prestasi-mi-al-ahmad.jpg';
+                        e.currentTarget.src = resolveImageUrl('/storage/school/trofi-prestasi-mi-al-ahmad.jpg');
                       }}
                     />
                     {settings['achievements_banner_image'] && (
@@ -1360,11 +1357,11 @@ export const AdminPageControlTab: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
                   <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
                     <img
-                      src={resolveImageUrl(settings['news_banner_image']) || '/assets/gedung-berita-mi-al-ahmad.jpg'}
+                      src={resolveImageUrl(settings['news_banner_image'] || '/storage/school/gedung-berita-mi-al-ahmad.jpg')}
                       alt="Preview Banner Berita"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        e.currentTarget.src = '/assets/gedung-berita-mi-al-ahmad.jpg';
+                        e.currentTarget.src = resolveImageUrl('/storage/school/gedung-berita-mi-al-ahmad.jpg');
                       }}
                     />
                     {settings['news_banner_image'] && (
@@ -1532,11 +1529,11 @@ export const AdminPageControlTab: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
                   <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
                     <img
-                      src={resolveImageUrl(settings['teachers_banner_image']) || '/assets/dewan-guru-mi-al-ahmad.jpg'}
+                      src={resolveImageUrl(settings['teachers_banner_image'] || '/storage/school/dewan-guru-mi-al-ahmad.jpg')}
                       alt="Preview Banner Guru"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        e.currentTarget.src = '/assets/dewan-guru-mi-al-ahmad.jpg';
+                        e.currentTarget.src = resolveImageUrl('/storage/school/dewan-guru-mi-al-ahmad.jpg');
                       }}
                     />
                     {settings['teachers_banner_image'] && (
@@ -1707,11 +1704,11 @@ export const AdminPageControlTab: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
                   <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
                     <img
-                      src={resolveImageUrl(settings['alumni_banner_image']) || '/assets/gedung-mi-al-ahmad.jpg'}
+                      src={resolveImageUrl(settings['alumni_banner_image']) || resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg')}
                       alt="Preview Banner Alumni"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                        e.currentTarget.src = resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg');
                       }}
                     />
                     {settings['alumni_banner_image'] && (
@@ -1803,12 +1800,12 @@ export const AdminPageControlTab: React.FC = () => {
                         src={
                           resolveImageUrl(settings['alumni_form_banner_image']) ||
                           resolveImageUrl(settings['alumni_banner_image']) ||
-                          '/assets/gedung-mi-al-ahmad.jpg'
+                          resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg')
                         }
                         alt="Preview Banner Form Alumni"
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                          e.currentTarget.src = resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg');
                         }}
                       />
                       {settings['alumni_form_banner_image'] && (
@@ -2096,11 +2093,11 @@ export const AdminPageControlTab: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
                 <div className="w-28 h-20 rounded-xl overflow-hidden border border-slate-300 bg-white shrink-0 relative group">
                   <img
-                    src={resolveImageUrl(settings['ppdb_banner_image']) || '/assets/gedung-mi-al-ahmad.jpg'}
+                    src={resolveImageUrl(settings['ppdb_banner_image']) || resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg')}
                     alt="Preview Banner PPDB"
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                      e.currentTarget.src = resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg');
                     }}
                   />
                   {settings['ppdb_banner_image'] && (
@@ -2673,4 +2670,4 @@ export const AdminPageControlTab: React.FC = () => {
       )}
     </div>
   );
-};
+}

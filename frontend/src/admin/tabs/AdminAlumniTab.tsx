@@ -291,11 +291,11 @@ export const AdminAlumniTab: React.FC = () => {
                   <div>
                     <div className="flex items-center gap-3 mb-3">
                       <img 
-                        src={resolveImageUrl(profile.imageUrl) || '/assets/alumni/alumni-1.svg'} 
+                        src={resolveImageUrl(profile.imageUrl || '/storage/alumni/alumni-1.svg')} 
                         alt={profile.name} 
                         className="w-12 h-12 rounded-full object-cover border border-slate-200 shrink-0" 
                         onError={(e) => {
-                          e.currentTarget.src = '/assets/alumni/alumni-1.svg';
+                          e.currentTarget.src = resolveImageUrl('/storage/alumni/alumni-1.svg');
                         }}
                       />
                       <div className="min-w-0 flex-1">

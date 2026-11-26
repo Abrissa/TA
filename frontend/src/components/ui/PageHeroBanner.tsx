@@ -1,5 +1,6 @@
 import React from "react";
 import { Home, ChevronRight } from "lucide-react";
+import { resolveImageUrl } from "../../services/api";
 
 interface BreadcrumbItem {
   label: string;
@@ -94,7 +95,7 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
       {/* Background Architectural Silhouette or Custom Photo */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
         <img
-          src={backgroundImageUrl || "/assets/gedung-mi-al-ahmad.jpg"}
+          src={backgroundImageUrl || resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg')}
           alt=""
           aria-hidden="true"
           className={`w-full h-full object-cover transition-all duration-700 ${

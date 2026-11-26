@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { PageTab } from '../../types';
-import { SCHOOL_INFO } from '../../data/mockData';
+
 import { AnimatedCounter } from '../ui/AnimatedCounter';
 import { resolveImageUrl } from '../../services/api';
 
@@ -26,12 +26,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     }
   };
 
-  const bgImage = resolveImageUrl(settings?.hero_image_url) || '/assets/gedung-mi-al-ahmad.jpg';
-  const studentsImage = resolveImageUrl(settings?.hero_students_image_url) || '/assets/hero-students.png';
+  const bgImage = resolveImageUrl(settings?.hero_image_url || '/storage/school/gedung-mi-al-ahmad.jpg');
+  const studentsImage = resolveImageUrl(settings?.hero_students_image_url || '/storage/school/hero-students.png');
   const subtitle = settings?.hero_subtitle || 'Selamat Datang di MI AL-AHMAD';
   const headline = settings?.hero_headline || 'Berkarakter, Peduli & Berprestasi di Era Teknologi';
   const ctaText = settings?.hero_cta_text || 'Jelajahi';
-  const statStudents = parseInt(settings?.hero_stat_students || '') || SCHOOL_INFO.stats.students;
+  const statStudents = parseInt(settings?.hero_stat_students || '') || 480;
   const statAlumni = parseInt(settings?.hero_stat_alumni || '') || 1000;
   const statAchievements = parseInt(settings?.hero_stat_achievements || '') || 500;
 
@@ -44,7 +44,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           className="w-full h-full object-cover object-center filter brightness-[1.04] saturate-[0.82] contrast-[0.96]"
           src={bgImage}
           onError={(e) => {
-            e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+            e.currentTarget.src = resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg');
           }}
         />
         {/* Soft daylight white overlay persis seperti gambar referensi */}
@@ -83,7 +83,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   alt="Siswa Berprestasi MI AL-AHMAD"
                   className="w-full h-auto max-h-[260px] sm:max-h-[350px] lg:max-h-[430px] xl:max-h-[450px] object-contain object-bottom drop-shadow-[0_20px_25px_rgba(0,0,0,0.35)] lg:-mt-4"
                   onError={(e) => {
-                    e.currentTarget.src = '/assets/hero-students.png';
+                    e.currentTarget.src = resolveImageUrl('/storage/school/hero-students.png');
                   }}
                 />
               </motion.div>

@@ -19,7 +19,6 @@ use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -78,7 +77,7 @@ class DatabaseSeeder extends Seeder
         $categoryMap = [];
         foreach ($masterCategories as $cat) {
             $created = MasterCategory::updateOrCreate(['type' => $cat['type'], 'slug' => $cat['slug']], $cat);
-            $categoryMap[$cat['type'] . ':' . $cat['slug']] = $created->id;
+            $categoryMap[$cat['type'].':'.$cat['slug']] = $created->id;
         }
 
         // Master PPDB Paths
@@ -143,24 +142,24 @@ class DatabaseSeeder extends Seeder
                 'accreditation' => 'A (Unggul)',
                 'tagline' => "Membentuk Generasi Qur'ani, Berakhlak Mulia & Berprestasi Unggul",
                 'description' => "Madrasah Ibtidaiyah AL-AHMAD Krian Sidoarjo adalah lembaga pendidikan dasar Islam terpadu yang memadukan kurikulum Kemenag, kurikulum nasional, pendalaman tahfidz Al-Qur'an, dan pembinaan sains berstandar internasional.",
-                'vision' => "Terwujudnya Generasi yang Beriman, Bertaqwa, Berakhlaqul Karimah, Unggul dalam Prestasi Akademik dan Non-Akademik, serta Berwawasan Lingkungan Global.",
+                'vision' => 'Terwujudnya Generasi yang Beriman, Bertaqwa, Berakhlaqul Karimah, Unggul dalam Prestasi Akademik dan Non-Akademik, serta Berwawasan Lingkungan Global.',
                 'mission' => [
                     "Menyelenggarakan pendidikan dasar Islam yang mengintegrasikan nilai-nilai Al-Qur'an dan As-Sunnah dalam kehidupan sehari-hari.",
-                    "Mengembangkan potensi kecerdasan intelektual siswa melalui penguatan kurikulum sains, matematika, dan literasi teknologi.",
+                    'Mengembangkan potensi kecerdasan intelektual siswa melalui penguatan kurikulum sains, matematika, dan literasi teknologi.',
                     "Melaksanakan pembinaan tahfidz Al-Qur'an secara intensif dengan target hafalan terukur dan mutqin.",
-                    "Menumbuhkan semangat kompetitif, percaya diri, dan kepemimpinan santri melalui berbagai ajang olimpiade dan ekstrakurikuler unggulan.",
-                    "Menciptakan lingkungan madrasah yang asri, bersih, berbudaya Adiwiyata, dan ramah anak.",
+                    'Menumbuhkan semangat kompetitif, percaya diri, dan kepemimpinan santri melalui berbagai ajang olimpiade dan ekstrakurikuler unggulan.',
+                    'Menciptakan lingkungan madrasah yang asri, bersih, berbudaya Adiwiyata, dan ramah anak.',
                 ],
                 'objectives' => [
-                    "Mencapai kelulusan 100% dengan standar kompetensi lulusan bernilai tinggi.",
+                    'Mencapai kelulusan 100% dengan standar kompetensi lulusan bernilai tinggi.',
                     "Menghasilkan lulusan yang hafal minimal Juz 30 dan mampu membaca Al-Qur'an dengan tartil.",
-                    "Meraih prestasi dalam kompetisi sains (KSM, OSN, IKSC), keagamaan, dan seni olahraga di tingkat Kabupaten, Provinsi, hingga Internasional.",
+                    'Meraih prestasi dalam kompetisi sains (KSM, OSN, IKSC), keagamaan, dan seni olahraga di tingkat Kabupaten, Provinsi, hingga Internasional.',
                 ],
                 'principal_name' => 'Drs. H. Ahmad Fauzi, M.Pd',
                 'principal_greeting' => "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nSelamat datang di portal informasi resmi MI AL-AHMAD Krian Sidoarjo. Sebagai madrasah yang mengedepankan kualitas pendidikan dan penanaman karakter Qur'ani, kami berikhtiar mendampingi setiap ananda agar tumbuh menjadi pribadi yang berilmu, beradab, mandiri, dan siap menjawab tantangan masa depan. Terima kasih atas kepercayaan para orang tua dan masyarakat.",
-                'principal_image_url' => '/assets/principal.png',
-                'logo_url' => '/assets/logo-mi-al-ahmad.png',
-                'hero_image_url' => '/assets/gedung-mi-al-ahmad.jpg',
+                'principal_image_url' => '/storage/school/principal.png',
+                'logo_url' => '/storage/school/logo-mi-al-ahmad.png',
+                'hero_image_url' => '/storage/school/gedung-mi-al-ahmad.jpg',
                 'phone' => '(031) 8971234',
                 'whatsapp' => '6281234567890',
                 'email' => 'info@mialahmad.sch.id',
@@ -199,13 +198,13 @@ class DatabaseSeeder extends Seeder
         // 5. DEWAN GURU & FASILITAS
         // -------------------------------------------------------------
         $teachers = [
-            ['name' => 'Drs. H. Ahmad Fauzi, M.Pd', 'degree' => 'M.Pd', 'role' => "Kepala Sekolah & Guru Tahfidz", 'subjects' => "Kepemimpinan & Al-Qur'an", 'image_url' => '/assets/teachers/guru-1.svg', 'order' => 1],
-            ['name' => 'Siti Aminah, S.Pd.I', 'degree' => 'S.Pd.I', 'role' => 'Guru Bahasa Arab', 'subjects' => 'Bahasa Arab & Adab', 'image_url' => '/assets/teachers/guru-2.svg', 'order' => 2],
-            ['name' => 'Rahmat Hidayat, M.Sc', 'degree' => 'M.Sc', 'role' => 'Guru Matematika & IPA', 'subjects' => 'Sains Eksperimental', 'image_url' => '/assets/teachers/guru-3.svg', 'order' => 3],
-            ['name' => 'Hj. Nurul Jannah, S.Pd', 'degree' => 'S.Pd', 'role' => 'Guru Bahasa Inggris', 'subjects' => 'English Literacy', 'image_url' => '/assets/teachers/guru-4.svg', 'order' => 4],
-            ['name' => 'Ustadz Mansur, S.Th.I', 'degree' => 'S.Th.I', 'role' => 'Guru Fiqih & Akidah', 'subjects' => 'Fiqih Ibadah & Akidah', 'image_url' => '/assets/teachers/guru-5.svg', 'order' => 5],
-            ['name' => 'Indah Permata, S.E', 'degree' => 'S.E', 'role' => 'Guru SBdP & Prakarya', 'subjects' => 'Seni Budaya & Kewirausahaan', 'image_url' => '/assets/teachers/guru-6.svg', 'order' => 6],
-            ['name' => 'Yusuf Mahendra, S.Pd', 'degree' => 'S.Pd', 'role' => 'Guru PJOK', 'subjects' => 'Pendidikan Jasmani & Olahraga', 'image_url' => '/assets/teachers/guru-7.svg', 'order' => 7],
+            ['name' => 'Drs. H. Ahmad Fauzi, M.Pd', 'degree' => 'M.Pd', 'role' => 'Kepala Sekolah & Guru Tahfidz', 'subjects' => "Kepemimpinan & Al-Qur'an", 'image_url' => '/storage/teachers/guru-1.svg', 'order' => 1],
+            ['name' => 'Siti Aminah, S.Pd.I', 'degree' => 'S.Pd.I', 'role' => 'Guru Bahasa Arab', 'subjects' => 'Bahasa Arab & Adab', 'image_url' => '/storage/teachers/guru-2.svg', 'order' => 2],
+            ['name' => 'Rahmat Hidayat, M.Sc', 'degree' => 'M.Sc', 'role' => 'Guru Matematika & IPA', 'subjects' => 'Sains Eksperimental', 'image_url' => '/storage/teachers/guru-3.svg', 'order' => 3],
+            ['name' => 'Hj. Nurul Jannah, S.Pd', 'degree' => 'S.Pd', 'role' => 'Guru Bahasa Inggris', 'subjects' => 'English Literacy', 'image_url' => '/storage/teachers/guru-4.svg', 'order' => 4],
+            ['name' => 'Ustadz Mansur, S.Th.I', 'degree' => 'S.Th.I', 'role' => 'Guru Fiqih & Akidah', 'subjects' => 'Fiqih Ibadah & Akidah', 'image_url' => '/storage/teachers/guru-5.svg', 'order' => 5],
+            ['name' => 'Indah Permata, S.E', 'degree' => 'S.E', 'role' => 'Guru SBdP & Prakarya', 'subjects' => 'Seni Budaya & Kewirausahaan', 'image_url' => '/storage/teachers/guru-6.svg', 'order' => 6],
+            ['name' => 'Yusuf Mahendra, S.Pd', 'degree' => 'S.Pd', 'role' => 'Guru PJOK', 'subjects' => 'Pendidikan Jasmani & Olahraga', 'image_url' => '/storage/teachers/guru-7.svg', 'order' => 7],
         ];
         foreach ($teachers as $teacher) {
             Teacher::updateOrCreate(['name' => $teacher['name']], $teacher);
@@ -239,7 +238,7 @@ class DatabaseSeeder extends Seeder
                 'winner' => 'Siswa - Siswi MI AL-AHMAD',
                 'winner_role' => 'Delegasi Sains Internasional',
                 'description' => 'Selamat atas prestasi gemilang yang diraih oleh siswa-siswi MI AL-AHMAD dalam ajang kompetisi sains bertaraf internasional IKSC 18th 2025 dengan memborong total 301 medali: 9 Gold, 74 Silver, dan 218 Bronze. #JAWARA Jaya Istimewa Berkah!',
-                'image_url' => '/assets/prestasi-iksc-2025.jpg',
+                'image_url' => '/storage/achievements/prestasi-iksc-2025.jpg',
                 'highlight' => '#JAWARA (Jaya Istimewa Berkah)',
                 'is_highlighted' => true,
                 'medals' => ['gold' => 9, 'silver' => 74, 'bronze' => 218, 'total' => 301],
@@ -257,7 +256,7 @@ class DatabaseSeeder extends Seeder
                 'winner' => 'Tim Paskibra MI AL AHMAD (KOPASMILAD)',
                 'winner_role' => 'Regu Paskibra Tingkat SD/MI',
                 'description' => 'Selamat & Sukses atas torehan gemilang Tim Paskibra MI AL AHMAD (KOPASMILAD) di ajang LKBB SANCAKA S3 2025 Tingkat SD/MI Se-Pulau Jawa dengan memborong 6 piala kejuaraan bergengsi.',
-                'image_url' => '/assets/prestasi-paskibra-kopasmilad.jpg',
+                'image_url' => '/storage/achievements/prestasi-paskibra-kopasmilad.jpg',
                 'highlight' => 'Tingkat SD/MI Se-Pulau Jawa',
                 'is_highlighted' => true,
                 'details' => ['Juara 2 Utama + Medali 16', 'Best Kostum 2', 'Best Danton 1', 'Best PBB 2', 'Best Formasi 2', 'Best Parade Danton 3'],
@@ -274,7 +273,7 @@ class DatabaseSeeder extends Seeder
                 'winner' => 'Azka Haidar Amirudin',
                 'winner_role' => 'Siswa Berprestasi Cabang Akuatik/Renang',
                 'description' => 'Selamat dan sukses atas keberhasilan ananda Azka Haidar Amirudin meraih Juara 3 Lomba Renang Tingkat SD/MI Kecamatan Krian dalam rangka memperingati Pekan Olahraga HUT RI ke-80.',
-                'image_url' => '/assets/prestasi-azka-haidar.jpg',
+                'image_url' => '/storage/achievements/prestasi-azka-haidar.jpg',
                 'highlight' => 'Juara 3 Kecamatan (Piala & Piagam)',
                 'is_highlighted' => false,
                 'details' => ['Juara 3 Lomba Renang SD/MI', 'Pekan Olahraga HUT RI ke-80', 'Tingkat Kecamatan Krian'],
@@ -291,7 +290,7 @@ class DatabaseSeeder extends Seeder
                 'winner' => 'Arkadewi Laras Maulida',
                 'winner_role' => 'Atlet Karate Pelajar Putri (Kumite -30 Kg)',
                 'description' => 'Selamat dan sukses atas prestasi membanggakan yang diraih oleh ananda Arkadewi Laras Maulida meraih Juara 1 Medali Emas Kumite -30 Kg SD 3-4 Putri pada ajang bergengsi International Karate Championship Yogyakarta Open Tournament VI memperebutkan Piala Kemenpora RI di GOR Universitas Negeri Yogyakarta.',
-                'image_url' => '/assets/prestasi-arkadewi-karate.jpg',
+                'image_url' => '/storage/achievements/prestasi-arkadewi-karate.jpg',
                 'highlight' => 'Piala Kemenpora RI - Juara 1 Internasional',
                 'is_highlighted' => true,
                 'medals' => ['gold' => 1, 'silver' => 0, 'bronze' => 0, 'total' => 1],
@@ -314,7 +313,7 @@ class DatabaseSeeder extends Seeder
                 'winner' => 'Zafar Mirza Wahyudin & Azka Haidar Amirudin',
                 'winner_role' => 'Siswa Berprestasi Cabang Akuatik/Renang Pelajar',
                 'description' => 'Torehan prestasi gemilang diraih oleh santri MI AL-AHMAD dalam ajang Dolphin Fun Swimming Championship 2024 di Kolam Renang UNESA Surabaya. Ananda Zafar Mirza Wahyudin sukses meraih Juara 1 (Medali Emas) dan ananda Azka Haidar Amirudin meraih Juara 2 (Medali Perak).',
-                'image_url' => '/assets/prestasi-renang-zafar-azka.jpg',
+                'image_url' => '/storage/achievements/prestasi-renang-zafar-azka.jpg',
                 'highlight' => 'Borong Juara 1 & 2 Renang Pelajar',
                 'is_highlighted' => false,
                 'medals' => ['gold' => 1, 'silver' => 1, 'bronze' => 0, 'total' => 2],
@@ -337,7 +336,7 @@ class DatabaseSeeder extends Seeder
                 'winner' => 'Ghina Arsyila',
                 'winner_role' => 'Siswi Berprestasi Cabang Catur Pelajar Putri',
                 'description' => 'Selamat dan bangga atas capaian ananda Ghina Arsyila yang berhasil menorehkan prestasi sebagai Juara 3 Lomba Catur Tingkat SD/MI Bawah Putri dalam rangka Peringatan Hari Besar Nasional HUT Kemerdekaan RI ke-79 di Kecamatan Krian yang diselenggarakan bersama PERCASI.',
-                'image_url' => '/assets/prestasi-catur-ghina.jpg',
+                'image_url' => '/storage/achievements/prestasi-catur-ghina.jpg',
                 'highlight' => 'Juara 3 Catur Putri Kecamatan Krian',
                 'is_highlighted' => false,
                 'details' => [
@@ -366,7 +365,7 @@ class DatabaseSeeder extends Seeder
                 'author_role' => 'Jurnalis Medcom.id / Liputan Khusus',
                 'source_name' => 'Medcom.id & nu.or.id',
                 'source_url' => 'https://www.medcom.id/pendidikan/news-pendidikan/4KZ92W6k-maulana-siswa-mi-dari-kabupaten-sidoarjo-tembus-kompetisi-sains-madrasah-tingkat-provinsi',
-                'image_url' => '/assets/berita-maulana-ksm.jpg',
+                'image_url' => '/storage/articles/berita-maulana-ksm.jpg',
                 'read_time' => '3 menit baca',
                 'tags' => ['KSM Sidoarjo', 'Olimpiade Matematika', 'Prestasi Santri', 'Kemenag', 'Provinsi Jatim'],
                 'is_featured' => true,
@@ -379,10 +378,10 @@ class DatabaseSeeder extends Seeder
                 'category' => 'Prestasi',
                 'category_id' => $categoryMap['article:prestasi'] ?? null,
                 'excerpt' => 'Delegasi sains MI AL-AHMAD membuktikan kualitas pendidikan global dengan memborong total 301 medali (9 Emas, 74 Perak, dan 218 Perunggu) pada International Kangaroo Science Contest ke-18.',
-                'content' => "Krian: Prestasi membanggakan di panggung internasional kembali diukir oleh santri-santri MI AL-AHMAD Krian. Dalam ajang bergengsi International Kangaroo Science Contest (IKSC) ke-18 tahun 2025, delegasi madrasah sukses memborong total 301 medali kejuaraan yang terdiri dari 9 Medali Emas (Gold), 74 Medali Perak (Silver), dan 218 Medali Perunggu (Bronze).",
+                'content' => 'Krian: Prestasi membanggakan di panggung internasional kembali diukir oleh santri-santri MI AL-AHMAD Krian. Dalam ajang bergengsi International Kangaroo Science Contest (IKSC) ke-18 tahun 2025, delegasi madrasah sukses memborong total 301 medali kejuaraan yang terdiri dari 9 Medali Emas (Gold), 74 Medali Perak (Silver), dan 218 Medali Perunggu (Bronze).',
                 'author' => 'Tim Humas Madrasah',
                 'author_role' => 'Humas & Informasi Publik',
-                'image_url' => '/assets/prestasi-iksc-2025.jpg',
+                'image_url' => '/storage/achievements/prestasi-iksc-2025.jpg',
                 'read_time' => '3 menit baca',
                 'tags' => ['IKSC 2025', 'Sains Internasional', '301 Medali', '#JAWARA'],
                 'is_featured' => false,
@@ -405,7 +404,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Senior Researcher & Innovator',
                 'current_role' => 'Peneliti Senior di Pusat Inovasi Teknologi Global',
                 'bio' => 'Fokus pada riset pengembangan energi terbarukan ramah lingkungan dan teknologi material.',
-                'image_url' => '/assets/alumni/alumni-1.svg',
+                'image_url' => '/storage/alumni/alumni-1.svg',
                 'category_badge' => '50+ Dokter & Peneliti',
                 'order' => 1,
             ],
@@ -416,7 +415,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Creative Director',
                 'current_role' => 'Creative Director di Agency ternama di Jakarta',
                 'bio' => 'Memimpin kampanye sosial kreatif dan komunikasi visual berdampak tinggi bagi organisasi nirlaba.',
-                'image_url' => '/assets/alumni/alumni-2.svg',
+                'image_url' => '/storage/alumni/alumni-2.svg',
                 'category_badge' => '120+ Insinyur & Kreatif',
                 'order' => 2,
             ],
@@ -427,7 +426,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Founder Startup Edutech',
                 'current_role' => 'CEO & Founder EduNusantara',
                 'bio' => 'Memberdayakan ribuan guru dan santri di pelosok daerah melalui integrasi teknologi digital.',
-                'image_url' => '/assets/alumni/alumni-3.svg',
+                'image_url' => '/storage/alumni/alumni-3.svg',
                 'category_badge' => '30+ Praktisi Hukum & Tech',
                 'order' => 3,
             ],

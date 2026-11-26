@@ -28,7 +28,7 @@ interface VisiMisiViewProps {
 export const VisiMisiView: React.FC<VisiMisiViewProps> = ({ onOpenContact, setActiveTab, settings }) => {
   const schoolName = settings?.school_name || 'MI AL-AHMAD';
   const visionText = settings?.vision_text || "Terwujudnya Generasi Qur'ani yang Unggul dalam Prestasi, Berakhlakul Karimah, dan Memiliki Kecerdasan Sains serta Teknologi.";
-  const visionImage = resolveImageUrl(settings?.vision_image_url) || '/assets/plang-mi-al-ahmad.jpg';
+  const visionImage = resolveImageUrl(settings?.vision_image_url || '/storage/school/plang-mi-al-ahmad.jpg');
 
   const historyMilestones = [
     {
@@ -112,7 +112,7 @@ export const VisiMisiView: React.FC<VisiMisiViewProps> = ({ onOpenContact, setAc
         ]}
         title={settings?.visimisi_banner_title || "Sejarah, Visi & Landasan Pendidikan"}
         subtitle={settings?.visimisi_banner_subtitle || "Mengenal rekam jejak historis berdirinya MI AL-AHMAD Krian serta komitmen luhur membangun generasi Qur'ani yang berakhlak mulia."}
-        backgroundImageUrl={resolveImageUrl(settings?.visimisi_banner_image) || "/assets/plang-mi-al-ahmad.jpg"}
+        backgroundImageUrl={resolveImageUrl(settings?.visimisi_banner_image || '/storage/school/plang-mi-al-ahmad.jpg')}
         imagePosition="object-[center_60%]"
       />
 
@@ -268,11 +268,11 @@ export const VisiMisiView: React.FC<VisiMisiViewProps> = ({ onOpenContact, setAc
           <div className="lg:col-span-6">
             <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
               <img
-                src={visionImage || '/assets/plang-mi-al-ahmad.jpg'}
+                src={visionImage || resolveImageUrl('/storage/school/plang-mi-al-ahmad.jpg')}
                 alt={`Papan Nama Resmi ${schoolName} Gedung Abu Yazid`}
                 className="w-full h-[380px] object-cover rounded-xl"
                 onError={(e) => {
-                  e.currentTarget.src = '/assets/plang-mi-al-ahmad.jpg';
+                  e.currentTarget.src = resolveImageUrl('/storage/school/plang-mi-al-ahmad.jpg');
                 }}
               />
             </div>

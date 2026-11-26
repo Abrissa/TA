@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { PageTab } from '../types';
-import { SCHOOL_INFO } from '../data/mockData';
+
 import {
   Menu,
   X,
@@ -38,16 +38,16 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAdmin,
   settings,
 }) => {
-  const schoolName = settings?.school_name || 'MI AL-AHMAD';
+  const schoolName = settings?.school_name || 'MI AL-AHMAD Krian Sidoarjo';
   const schoolTagline = settings?.school_tagline || 'Madrasah Ibtidaiyah Sidoarjo';
-  const logoUrl = resolveImageUrl(settings?.school_logo_url) || '/assets/logo-mi-al-ahmad.png';
-  const accreditation = settings?.school_accreditation || SCHOOL_INFO.accreditation;
-  const npsn = settings?.school_npsn || SCHOOL_INFO.npsn;
-  const nsm = settings?.school_nsm || SCHOOL_INFO.nsm;
+  const logoUrl = resolveImageUrl(settings?.school_logo_url || '/storage/school/logo-mi-al-ahmad.png');
+  const accreditation = settings?.school_accreditation || 'A (Unggul)';
+  const npsn = settings?.school_npsn || '69781234';
+  const nsm = settings?.school_nsm || '111235150001';
   const officeHours = settings?.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB';
   const isSchoolOpen = settings?.school_is_open !== 'false';
   const schoolStatusNote = settings?.school_status_note || '';
-  const phone = settings?.school_phone || SCHOOL_INFO.phone;
+  const phone = settings?.school_phone || '(031) 8971234';
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -113,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
+    <header className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-slate-200 shadow-xs">
       {/* Top Utility Header Bar */}
       <div className="bg-gradient-to-r from-[#059669] via-[#10b981] to-[#047857] text-white text-xs sm:text-sm py-2 px-4 border-b border-emerald-900/40 hidden md:block">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -141,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
                 title={isSchoolOpen ? 'Madrasah sedang beroperasi / buka' : 'Madrasah sedang tutup / libur'}
               >
-                <span className={`w-2 h-2 rounded-full ${isSchoolOpen ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`}></span>
+                {/* <span className={`w-2 h-2 rounded-full ${isSchoolOpen ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`}></span> */}
                 <span>{isSchoolOpen ? 'BUKA' : 'TUTUP'}</span>
               </span>
 
@@ -179,9 +179,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               <img
                 alt={`Logo ${schoolName}`}
                 className="w-full h-full object-contain"
-                src={logoUrl || '/assets/logo-mi-al-ahmad.png'}
+                src={logoUrl || resolveImageUrl('/storage/school/logo-mi-al-ahmad.png')}
                 onError={(e) => {
-                  e.currentTarget.src = '/assets/logo-mi-al-ahmad.png';
+                  e.currentTarget.src = resolveImageUrl('/storage/school/logo-mi-al-ahmad.png');
                 }}
               />
             </div>
@@ -369,7 +369,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Mobile menu button & quick indicators (PPDB moved to sidebar for spacious mobile header) */}
           <div className="lg:hidden flex items-center gap-2">
-            <span
+            {/* <span
               className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold shadow-xs ${
                 isSchoolOpen
                   ? 'bg-emerald-50 text-emerald-700 border border-emerald-300'
@@ -379,7 +379,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <span className={`w-1.5 h-1.5 rounded-full ${isSchoolOpen ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
               <span>{isSchoolOpen ? 'BUKA' : 'TUTUP'}</span>
-            </span>
+            </span> */}
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

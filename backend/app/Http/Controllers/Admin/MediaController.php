@@ -20,7 +20,7 @@ class MediaController extends Controller
         $file = $request->file('file');
         $rawFolder = (string) $request->input('folder', 'general');
         $folder = preg_replace('/[^a-zA-Z0-9_\-]/', '', $rawFolder) ?: 'general';
-        $filename = date('Ymd_His') . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
+        $filename = date('Ymd_His').'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
 
         $path = $file->storeAs("uploads/{$folder}", $filename, 'public');
         $storageUrl = Storage::url($path);

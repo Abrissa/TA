@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class Article extends Model
@@ -44,7 +45,7 @@ class Article extends Model
     {
         static::creating(function ($article) {
             if (empty($article->slug)) {
-                $article->slug = Str::slug($article->title) . '-' . Str::random(5);
+                $article->slug = Str::slug($article->title).'-'.Str::random(5);
             }
             if (empty($article->published_at) && $article->status === 'published') {
                 $article->published_at = now();
@@ -77,7 +78,7 @@ class Article extends Model
 
     public function getIsFeaturedAttribute($value = null): bool
     {
-        return !empty($value ?? ($this->attributes['is_featured'] ?? false));
+        return ! empty($value ?? ($this->attributes['is_featured'] ?? false));
     }
 
     public function getReadTimeAttribute($value = null): ?string
@@ -90,7 +91,7 @@ class Article extends Model
         return $this->published_at ? $this->published_at->format('d M Y') : ($this->created_at ? $this->created_at->format('d M Y') : '');
     }
 
-    public function masterCategory(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function masterCategory(): BelongsTo
     {
         return $this->belongsTo(MasterCategory::class, 'category_id');
     }

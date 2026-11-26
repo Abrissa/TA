@@ -2,10 +2,15 @@
 
 namespace Tests\Feature;
 
+use App\Models\Achievement;
+use App\Models\AlumniSubmission;
+use App\Models\Announcement;
 use App\Models\Article;
-use App\Models\SchoolProfile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class SchoolApiTest extends TestCase
@@ -87,9 +92,13 @@ class SchoolApiTest extends TestCase
 
     public function test_admin_can_login_with_valid_credentials(): void
     {
+        Cache::put('captcha:test-key', 'ABCDE', now()->addMinutes(5));
+
         $response = $this->postJson('/api/auth/login', [
             'email' => 'admin@mialahmad.sch.id',
             'password' => 'admin123',
+            'captcha_key' => 'test-key',
+            'captcha' => 'ABCDE',
         ]);
 
         $response->assertStatus(200)
@@ -101,12 +110,31 @@ class SchoolApiTest extends TestCase
 
     public function test_login_fails_with_invalid_password(): void
     {
+        Cache::put('captcha:test-key', 'ABCDE', now()->addMinutes(5));
+
         $response = $this->postJson('/api/auth/login', [
             'email' => 'admin@mialahmad.sch.id',
             'password' => 'wrongpassword',
+            'captcha_key' => 'test-key',
+            'captcha' => 'ABCDE',
         ]);
 
         $response->assertStatus(422);
+    }
+
+    public function test_login_fails_with_invalid_captcha(): void
+    {
+        Cache::put('captcha:test-key', 'ABCDE', now()->addMinutes(5));
+
+        $response = $this->postJson('/api/auth/login', [
+            'email' => 'admin@mialahmad.sch.id',
+            'password' => 'admin123',
+            'captcha_key' => 'test-key',
+            'captcha' => 'WRONG',
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonPath('success', false);
     }
 
     public function test_unauthenticated_user_cannot_access_admin_endpoints(): void
@@ -195,25 +223,25 @@ class SchoolApiTest extends TestCase
         $this->assertNotNull($admin->masterRole);
         $this->assertEquals('superadmin', $admin->masterRole->code);
 
-        $article = \App\Models\Article::whereNotNull('category_id')->first();
+        $article = Article::whereNotNull('category_id')->first();
         $this->assertNotNull($article);
         $this->assertNotNull($article->masterCategory);
 
-        $achievement = \App\Models\Achievement::whereNotNull('category_id')->first();
+        $achievement = Achievement::whereNotNull('category_id')->first();
         $this->assertNotNull($achievement);
         $this->assertNotNull($achievement->masterCategory);
 
-        $announcement = \App\Models\Announcement::whereNotNull('category_id')->first();
+        $announcement = Announcement::whereNotNull('category_id')->first();
         $this->assertNotNull($announcement);
         $this->assertNotNull($announcement->masterCategory);
     }
 
     public function test_admin_can_upload_media_image_to_storage(): void
     {
-        \Illuminate\Support\Facades\Storage::fake('public');
+        Storage::fake('public');
 
         $admin = User::where('email', 'admin@mialahmad.sch.id')->first();
-        $file = \Illuminate\Http\UploadedFile::fake()->image('prestasi-santri.jpg', 640, 480);
+        $file = UploadedFile::fake()->image('prestasi-santri.jpg', 640, 480);
 
         $response = $this->actingAs($admin, 'sanctum')->post('/api/admin/media/upload', [
             'file' => $file,
@@ -227,13 +255,13 @@ class SchoolApiTest extends TestCase
             ]);
 
         $path = $response->json('data.path');
-        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($path);
+        Storage::disk('public')->assertExists($path);
     }
 
     public function test_admin_can_delete_alumni_submission(): void
     {
         $admin = User::where('email', 'admin@mialahmad.sch.id')->first();
-        $submission = \App\Models\AlumniSubmission::create([
+        $submission = AlumniSubmission::create([
             'full_name' => 'Fulan bin Fulan',
             'graduation_year' => '2019',
             'job_role' => 'Data Analyst',
