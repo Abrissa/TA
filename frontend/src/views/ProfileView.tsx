@@ -143,11 +143,11 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenPPDB }) => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {teachers.map((teacher, idx) => {
-                  const fallbackAvatar = `/assets/teachers/guru-${(idx % 7) + 1}.svg`;
+                  const fallbackAvatar = resolveImageUrl(`/storage/teachers/guru-${(idx % 7) + 1}.svg`);
                   const imageSrc = resolveImageUrl(teacher.imageUrl) || fallbackAvatar;
                   const isSvgAvatar =
                     typeof imageSrc === 'string' &&
-                    (imageSrc.includes('.svg') || imageSrc.includes('/assets/teachers/guru-'));
+                    (imageSrc.includes('.svg') || imageSrc.includes('guru-'));
 
                   return (
                     <div
@@ -318,11 +318,11 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenPPDB }) => {
             <div className="lg:col-span-6">
               <div className="relative rounded-3xl overflow-hidden border-4 border-white shadow-xl">
                 <img
-                  src="/assets/gedung-mi-al-ahmad.jpg"
+                  src={resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg')}
                   alt="Gedung dan Aktivitas Siswa MI AL-AHMAD"
                   className="w-full h-[400px] object-cover"
                   onError={(e) => {
-                    e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                    e.currentTarget.src = resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg');
                   }}
                 />
                 <div className="absolute bottom-4 left-4 bg-[#006C47] text-white px-5 py-2.5 rounded-2xl shadow-lg flex items-center gap-2.5">

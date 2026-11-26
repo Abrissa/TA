@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../../services/api';
+import { api, resolveImageUrl } from '../../services/api';
 import { Article } from '../../types';
 import { 
   FileText, 
@@ -237,11 +237,11 @@ export const AdminArticlesTab: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
                           <img
-                            src={art.imageUrl || '/assets/berita-maulana-ksm.jpg'}
+                            src={art.imageUrl || resolveImageUrl('/storage/articles/berita-maulana-ksm.jpg')}
                             alt={art.title}
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              e.currentTarget.src = '/assets/berita-maulana-ksm.jpg';
+                              e.currentTarget.src = resolveImageUrl('/storage/articles/berita-maulana-ksm.jpg');
                             }}
                           />
                         </div>
@@ -381,7 +381,7 @@ export const AdminArticlesTab: React.FC = () => {
                         alt="Preview"
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.currentTarget.src = '/assets/berita-maulana-ksm.jpg';
+                          e.currentTarget.src = resolveImageUrl('/storage/articles/berita-maulana-ksm.jpg');
                         }}
                       />
                       <button

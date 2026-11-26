@@ -25,7 +25,7 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onOpenAdmin, settings }) => {
   const schoolName = settings?.school_name || 'MI AL-AHMAD';
   const schoolTagline = settings?.school_tagline || 'Sidoarjo - Jawa Timur';
-  const logoUrl = resolveImageUrl(settings?.school_logo_url) || '/assets/logo-mi-al-ahmad.png';
+  const logoUrl = resolveImageUrl(settings?.school_logo_url || '/storage/school/logo-mi-al-ahmad.png');
   const footerDesc = settings?.footer_description || "Bersama MI AL-AHMAD, Berkarakter, Peduli & Berprestasi di Era Teknologi & Qur'ani.";
   const address = settings?.school_address || 'Jl. Setiabudi No. 12, Krian, Sidoarjo, Jawa Timur';
   const phone = settings?.school_phone || '(031) 8971234';
@@ -86,11 +86,11 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
             {/* Logo */}
             <div className="flex items-center gap-3">
               <img
-                src={logoUrl || '/assets/logo-mi-al-ahmad.png'}
+                src={logoUrl || resolveImageUrl('/storage/school/logo-mi-al-ahmad.png')}
                 alt={`Logo ${schoolName}`}
                 className="w-14 h-14 object-contain"
                 onError={(e) => {
-                  e.currentTarget.src = '/assets/logo-mi-al-ahmad.png';
+                  e.currentTarget.src = resolveImageUrl('/storage/school/logo-mi-al-ahmad.png');
                 }}
               />
               <div>
@@ -419,11 +419,11 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenContact, onO
               {/* Maps Card Image Preview */}
               <div className="relative h-44 w-full">
                 <img
-                  src="/assets/gedung-mi-al-ahmad.jpg"
+                  src={resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg')}
                   alt="Lokasi Peta MI AL-AHMAD"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   onError={(e) => {
-                    e.currentTarget.src = '/assets/gedung-mi-al-ahmad.jpg';
+                    e.currentTarget.src = resolveImageUrl('/storage/school/gedung-mi-al-ahmad.jpg');
                   }}
                 />
                 <div className="absolute inset-0 bg-slate-900/30 group-hover:bg-slate-900/20 transition-colors" />

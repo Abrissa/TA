@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { PageTab, Article, Achievement, AlumniProfile } from '../types';
+import { PageTab, Article, Achievement, AlumniProfile, Facility } from '../types';
 import { api } from '../services/api';
-import { mockAdminStore } from '../services/mockAdminData';
-import {
-  FACILITIES_DATA,
-  ARTICLES_DATA,
-  ACHIEVEMENTS_DATA,
-} from '../data/mockData';
 import {
   BookOpen,
   Building2,
@@ -45,18 +39,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
   settings: propSettings,
 }) => {
   const [settings, setSettings] = useState<Record<string, string>>(() => {
-    return {
-      ...mockAdminStore.getSettings(),
-      ...(propSettings || {}),
-    };
+    return { ...(propSettings || {}) };
   });
 
-  const [articles, setArticles] = useState<Article[]>(() => {
-    return mockAdminStore.getArticles();
-  });
-  const [achievements, setAchievements] = useState<Achievement[]>(() => {
-    return mockAdminStore.getAchievements();
-  });
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [facilities, setFacilities] = useState<Facility[]>([]);
   const [alumniList, setAlumniList] = useState<AlumniProfile[]>([]);
 
   useEffect(() => {
@@ -70,14 +58,20 @@ export const HomeView: React.FC<HomeViewProps> = ({
       if (e?.detail && typeof e.detail === 'object') {
         setSettings((prev) => ({ ...prev, ...e.detail }));
       } else {
-        setSettings(mockAdminStore.getSettings());
+        api.getSettings().then((res) => {
+          if (res) setSettings((prev) => ({ ...prev, ...res }));
+        }).catch(() => {});
       }
     };
     const handleArticlesChanged = () => {
-      setArticles(mockAdminStore.getArticles());
+      api.getArticles().then((res) => {
+        if (res && res.length > 0) setArticles(res);
+      }).catch(() => {});
     };
     const handleAchievementsChanged = () => {
-      setAchievements(mockAdminStore.getAchievements());
+      api.getAchievements().then((res) => {
+        if (res && res.length > 0) setAchievements(res);
+      }).catch(() => {});
     };
     const handleAlumniChanged = () => {
       api.getAlumni().then((data) => {
@@ -101,6 +95,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
     api.getAchievements().then((res) => {
       if (res && res.length > 0) setAchievements(res);
+    }).catch(() => {});
+
+    api.getFacilities().then((res) => {
+      if (res && res.length > 0) setFacilities(res);
     }).catch(() => {});
 
     api.getAlumni().then((res) => {
@@ -224,7 +222,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               staggerDelay={0.08}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {FACILITIES_DATA.map((fac, idx) => (
+              {facilities.map((fac) => (
                 <StaggerItem key={fac.id}>
                   <motion.div
                     whileHover={{ y: -6, transition: { duration: 0.2 } }}
@@ -307,11 +305,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   <div>
                     <div className="relative aspect-square w-full bg-slate-100 overflow-hidden">
                       <img
-                        src={ach.imageUrl || '/assets/prestasi-iksc-2025.jpg'}
+                        src={ach.imageUrl || resolveImageUrl('/storage/achievements/prestasi-iksc-2025.jpg')}
                         alt={ach.title}
                         className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500"
                         onError={(e) => {
-                          e.currentTarget.src = '/assets/prestasi-iksc-2025.jpg';
+                          e.currentTarget.src = resolveImageUrl('/storage/achievements/prestasi-iksc-2025.jpg');
                         }}
                       />
                       <div className="absolute top-3 left-3">

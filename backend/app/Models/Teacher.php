@@ -36,7 +36,6 @@ class Teacher extends Model
 
     public function getIsActiveAttribute($value = null): bool
     {
-        return !empty($value ?? ($this->attributes['is_active'] ?? false));
+        return ! empty($value ?? ($this->attributes['is_active'] ?? false));
     }
 }
-

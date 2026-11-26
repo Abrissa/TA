@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { AdminUser, api } from '../services/api';
-import { mockAdminStore } from '../services/mockAdminData';
+import { AdminUser, api, resolveImageUrl } from '../services/api';
+
 import { AdminOverviewTab } from './tabs/AdminOverviewTab';
 import { AdminPageControlTab } from './tabs/AdminPageControlTab';
 import { AdminTeachersTab } from './tabs/AdminTeachersTab';
@@ -39,7 +39,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [isSidebarOpenMobile, setIsSidebarOpenMobile] = useState<boolean>(false);
-  const [settings, setSettings] = useState<Record<string, string>>(() => mockAdminStore.getSettings());
+  const [settings, setSettings] = useState<Record<string, string>>({});
   const [isTogglingSchool, setIsTogglingSchool] = useState(false);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       if (e?.detail && typeof e.detail === 'object') {
         setSettings(prev => ({ ...prev, ...e.detail }));
       } else {
-        setSettings(mockAdminStore.getSettings());
+        api.getSettings().then(setSettings).catch(() => {});
       }
     };
     window.addEventListener('mi_settings_changed', handleSettingsChanged);
@@ -56,11 +56,43 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       if (res) setSettings(prev => ({ ...prev, ...res }));
     }).catch(() => {});
 
+    // Session expiration watchdog
+    const handleAuthExpired = () => {
+      onLogout();
+    };
+    window.addEventListener('mi_auth_expired', handleAuthExpired);
+
+    const verifySession = async () => {
+      if (!api.hasToken()) {
+        onLogout();
+        return;
+      }
+      try {
+        await api.getMe();
+      } catch {
+        onLogout();
+      }
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        verifySession();
+      }
+    };
+    window.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('focus', handleVisibility);
+
+    const interval = setInterval(verifySession, 30000);
+
     return () => {
       window.removeEventListener('mi_settings_changed', handleSettingsChanged);
       window.removeEventListener('storage', handleSettingsChanged);
+      window.removeEventListener('mi_auth_expired', handleAuthExpired);
+      window.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('focus', handleVisibility);
+      clearInterval(interval);
     };
-  }, []);
+  }, [onLogout]);
 
   const isSchoolOpen = settings.school_is_open !== 'false';
 
@@ -117,7 +149,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-white p-1 border border-emerald-500/30 flex items-center justify-center shrink-0 shadow-xs">
                 <img
-                  src="/assets/logo-mi-al-ahmad.png"
+                  src={resolveImageUrl('/storage/school/logo-mi-al-ahmad.png')}
                   alt="Logo MI AL-AHMAD"
                   className="w-full h-full object-contain"
                 />
@@ -219,9 +251,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {/* Quick School Open/Closed Switch */}
-            <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-50 border border-slate-200/90 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl shadow-2xs">
-              <span className="text-xs font-semibold text-slate-600 hidden md:inline">Sekolah:</span>
-              <button
+            {/* <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-50 border border-slate-200/90 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl shadow-2xs"> */}
+              {/* <span className="text-xs font-semibold text-slate-600 hidden md:inline">Sekolah:</span> */}
+              {/* <button
                 type="button"
                 role="switch"
                 aria-checked={isSchoolOpen}
@@ -242,8 +274,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
               </button>
               <span className={`text-[10px] sm:text-xs font-extrabold ${isSchoolOpen ? 'text-emerald-700' : 'text-rose-700'}`}>
                 {isSchoolOpen ? 'BUKA' : 'TUTUP'}
-              </span>
-            </div>
+              </span> */}
+            {/* </div> */}
 
             <button
               onClick={onBackToPublicSite}

@@ -57,7 +57,7 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
   const thirdArticle = visibleArticles[(activeIndex + 2) % visibleArticles.length] || nextArticle;
 
   const renderStackCard = (article: Article) => {
-    const imgSrc = resolveImageUrl(article.imageUrl) || '/assets/berita-maulana-ksm.jpg';
+    const imgSrc = resolveImageUrl(article.imageUrl || '/storage/articles/berita-maulana-ksm.jpg');
 
     return (
       <div className="p-4 sm:p-5 space-y-3 sm:space-y-3.5 flex flex-col justify-between h-full bg-white rounded-3xl">
@@ -81,7 +81,7 @@ export const StackedArticleSlider: React.FC<StackedArticleSliderProps> = ({
               alt={article.title}
               className="relative z-10 max-h-full max-w-full object-contain p-1 transition-transform duration-300 group-hover/img:scale-[1.03]"
               onError={(e) => {
-                e.currentTarget.src = '/assets/berita-maulana-ksm.jpg';
+                e.currentTarget.src = resolveImageUrl('/storage/articles/berita-maulana-ksm.jpg');
               }}
             />
             {/* Subtle click-to-view hint overlay on hover */}

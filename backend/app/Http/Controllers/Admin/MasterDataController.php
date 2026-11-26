@@ -92,7 +92,7 @@ class MasterDataController extends Controller
             'end_date' => 'nullable|date',
         ]);
 
-        if (!empty($validated['is_active'])) {
+        if (! empty($validated['is_active'])) {
             MasterAcademicYear::query()->update(['is_active' => false]);
         }
 

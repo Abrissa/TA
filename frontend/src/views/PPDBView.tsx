@@ -147,7 +147,7 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
   const contactPerson = siteSettings.ppdb_contact_person || '0812-3456-7890 (Ust. Ridwan)';
   const phone = siteSettings.school_phone || '(031) 8971234';
   const hours = siteSettings.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB';
-  const logoUrl = siteSettings.school_logo_url || '/assets/logo-mi-al-ahmad.png';
+  const logoUrl = resolveImageUrl(siteSettings.school_logo_url || '/storage/school/logo-mi-al-ahmad.png');
 
   return (
     <div className="bg-slate-50 min-h-screen pb-24">
@@ -169,7 +169,7 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
           )
         }
         subtitle={siteSettings.ppdb_banner_subtitle || introText}
-        backgroundImageUrl={resolveImageUrl(siteSettings.ppdb_banner_image) || "/assets/gedung-mi-al-ahmad.jpg"}
+        backgroundImageUrl={resolveImageUrl(siteSettings.ppdb_banner_image || '/storage/school/gedung-mi-al-ahmad.jpg')}
         imagePosition="object-[center_40%]"
       >
         <div className="pt-2 flex flex-wrap items-center gap-4 text-xs sm:text-sm font-medium text-emerald-100">
@@ -283,11 +283,11 @@ export const PPDBView: React.FC<PPDBViewProps> = ({ settings: propSettings }) =>
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-white p-1.5 flex items-center justify-center shrink-0 shadow-md">
                 <img
-                  src={logoUrl || '/assets/logo-mi-al-ahmad.png'}
+                  src={logoUrl || resolveImageUrl('/storage/school/logo-mi-al-ahmad.png')}
                   alt="Logo"
                   className="w-full h-full object-contain"
                   onError={(e) => {
-                    e.currentTarget.src = '/assets/logo-mi-al-ahmad.png';
+                    e.currentTarget.src = resolveImageUrl('/storage/school/logo-mi-al-ahmad.png');
                   }}
                 />
               </div>

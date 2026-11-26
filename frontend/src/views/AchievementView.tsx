@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Achievement, PageTab } from '../types';
 import { api, resolveImageUrl } from '../services/api';
-import { mockAdminStore } from '../services/mockAdminData';
-import { ACHIEVEMENTS_DATA } from '../data/mockData';
 import {
   Trophy,
   Award,
@@ -38,9 +36,7 @@ interface AchievementViewProps {
 }
 
 export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact, setActiveTab, settings }) => {
-  const [achievements, setAchievements] = useState<Achievement[]>(() => {
-    return mockAdminStore.getAchievements();
-  });
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -57,7 +53,7 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
 
   useEffect(() => {
     const handleAchievementsChanged = () => {
-      setAchievements(mockAdminStore.getAchievements());
+      api.getAchievements().then(setAchievements).catch(() => {});
     };
 
     window.addEventListener('mi_achievements_changed', handleAchievementsChanged);
@@ -181,7 +177,7 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
           )
         }
         subtitle={settings?.achievements_banner_subtitle || "Bukti nyata dedikasi, kedisiplinan, dan ikhtiar santri bersama para pembimbing dalam mengharumkan nama madrasah dari tingkat kecamatan hingga kancah internasional."}
-        backgroundImageUrl={resolveImageUrl(settings?.achievements_banner_image) || "/assets/trofi-prestasi-mi-al-ahmad.jpg"}
+        backgroundImageUrl={resolveImageUrl(settings?.achievements_banner_image || '/storage/school/trofi-prestasi-mi-al-ahmad.jpg')}
         imagePosition="object-[center_65%]"
       />
 
@@ -424,11 +420,11 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
                     <div>
                       <div className="relative rounded-xl overflow-hidden bg-slate-50 border border-slate-100 h-64 sm:h-72 flex items-center justify-center p-2 mb-4">
                         <img
-                          src={resolveImageUrl(ach.imageUrl) || '/assets/prestasi-iksc-2025.jpg'}
+                          src={resolveImageUrl(ach.imageUrl || '/storage/achievements/prestasi-iksc-2025.jpg')}
                           alt={ach.title}
                           className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                           onError={(e) => {
-                            e.currentTarget.src = '/assets/prestasi-iksc-2025.jpg';
+                            e.currentTarget.src = resolveImageUrl('/storage/achievements/prestasi-iksc-2025.jpg');
                           }}
                         />
                         <span className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-xs ${getCategoryBadgeStyle(ach.category)}`}>
@@ -602,11 +598,11 @@ export const AchievementView: React.FC<AchievementViewProps> = ({ onOpenContact,
               {/* Poster Preview Section */}
               <div className="md:w-1/2 bg-slate-900 flex items-center justify-center p-4 sm:p-6 relative min-h-[300px]">
                 <img
-                  src={resolveImageUrl(activeModalItem.imageUrl) || '/assets/prestasi-iksc-2025.jpg'}
+                  src={resolveImageUrl(activeModalItem.imageUrl || '/storage/achievements/prestasi-iksc-2025.jpg')}
                   alt={activeModalItem.title}
                   className="max-h-[75vh] w-auto object-contain rounded-xl shadow-lg"
                   onError={(e) => {
-                    e.currentTarget.src = '/assets/prestasi-iksc-2025.jpg';
+                    e.currentTarget.src = resolveImageUrl('/storage/achievements/prestasi-iksc-2025.jpg');
                   }}
                 />
               </div>

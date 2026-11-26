@@ -56,7 +56,7 @@ export const StackedAchievementSlider: React.FC<StackedAchievementSliderProps> =
   const thirdAch = visibleAchievements[(activeIndex + 2) % visibleAchievements.length] || nextAch;
 
   const renderStackCard = (item: Achievement) => {
-    const imgSrc = resolveImageUrl(item.imageUrl) || '/assets/prestasi-iksc-2025.jpg';
+    const imgSrc = resolveImageUrl(item.imageUrl || '/storage/achievements/prestasi-iksc-2025.jpg');
 
     return (
       <div className="p-4 sm:p-5 space-y-3 sm:space-y-3.5 flex flex-col justify-between h-full bg-white rounded-3xl">
@@ -80,7 +80,7 @@ export const StackedAchievementSlider: React.FC<StackedAchievementSliderProps> =
               alt={item.title}
               className="relative z-10 max-h-full max-w-full object-contain p-1.5 transition-transform duration-300 group-hover/img:scale-[1.03]"
               onError={(e) => {
-                e.currentTarget.src = '/assets/prestasi-iksc-2025.jpg';
+                e.currentTarget.src = resolveImageUrl('/storage/achievements/prestasi-iksc-2025.jpg');
               }}
             />
             {/* Subtle click-to-view hint overlay on hover */}

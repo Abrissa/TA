@@ -43,7 +43,7 @@ class PpdbRegistration extends Model
         static::creating(function ($reg) {
             if (empty($reg->registration_number)) {
                 $count = static::whereYear('created_at', now()->year)->count() + 1;
-                $reg->registration_number = 'PPDB-' . date('Y') . '-' . str_pad((string)$count, 4, '0', STR_PAD_LEFT);
+                $reg->registration_number = 'PPDB-'.date('Y').'-'.str_pad((string) $count, 4, '0', STR_PAD_LEFT);
             }
             if (empty($reg->registered_at)) {
                 $reg->registered_at = now();

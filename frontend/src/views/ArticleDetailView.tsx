@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft,
   Calendar,
@@ -12,7 +12,7 @@ import {
   Quote,
 } from 'lucide-react';
 import { Article } from '../types';
-import { ARTICLES_DATA, SCHOOL_INFO } from '../data/mockData';
+import { api, resolveImageUrl } from '../services/api';
 
 interface ArticleDetailViewProps {
   article: Article;
@@ -26,8 +26,17 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
   onSelectArticle,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [allArticles, setAllArticles] = useState<Article[]>([]);
 
-  const relatedArticles = ARTICLES_DATA.filter((item) => item.id !== article.id).slice(0, 4);
+  useEffect(() => {
+    api.getArticles()
+      .then((data) => {
+        if (data && data.length > 0) setAllArticles(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  const relatedArticles = allArticles.filter((item) => item.id !== article.id).slice(0, 4);
 
   const paragraphs = article.content
     .split(/\n\s*\n/)
@@ -130,11 +139,11 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
             {/* Featured Image */}
             <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-lg bg-slate-950">
               <img
-                src={article.imageUrl || '/assets/berita-maulana-ksm.jpg'}
+                src={article.imageUrl || resolveImageUrl('/storage/articles/berita-maulana-ksm.jpg')}
                 alt={article.title}
                 className="w-full max-h-[480px] object-cover object-center"
                 onError={(e) => {
-                  e.currentTarget.src = '/assets/berita-maulana-ksm.jpg';
+                  e.currentTarget.src = resolveImageUrl('/storage/articles/berita-maulana-ksm.jpg');
                 }}
               />
             </div>
@@ -261,11 +270,11 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
                     className="flex items-center gap-3.5 p-2.5 rounded-xl hover:bg-emerald-50/60 transition-colors cursor-pointer group"
                   >
                     <img
-                      src={rel.imageUrl || '/assets/berita-maulana-ksm.jpg'}
+                      src={rel.imageUrl || resolveImageUrl('/storage/articles/berita-maulana-ksm.jpg')}
                       alt={rel.title}
                       className="w-16 h-16 rounded-lg object-cover shrink-0 group-hover:scale-105 transition-transform"
                       onError={(e) => {
-                        e.currentTarget.src = '/assets/berita-maulana-ksm.jpg';
+                        e.currentTarget.src = resolveImageUrl('/storage/articles/berita-maulana-ksm.jpg');
                       }}
                     />
                     <div className="min-w-0 flex-1 space-y-1">

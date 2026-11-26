@@ -23,13 +23,13 @@ import {
 } from 'lucide-react';
 
 const PRESET_AVATARS = [
-  '/assets/teachers/guru-1.svg',
-  '/assets/teachers/guru-2.svg',
-  '/assets/teachers/guru-3.svg',
-  '/assets/teachers/guru-4.svg',
-  '/assets/teachers/guru-5.svg',
-  '/assets/teachers/guru-6.svg',
-  '/assets/teachers/guru-7.svg',
+  resolveImageUrl('/storage/teachers/guru-1.svg'),
+  resolveImageUrl('/storage/teachers/guru-2.svg'),
+  resolveImageUrl('/storage/teachers/guru-3.svg'),
+  resolveImageUrl('/storage/teachers/guru-4.svg'),
+  resolveImageUrl('/storage/teachers/guru-5.svg'),
+  resolveImageUrl('/storage/teachers/guru-6.svg'),
+  resolveImageUrl('/storage/teachers/guru-7.svg'),
 ];
 
 export const AdminTeachersTab: React.FC = () => {
@@ -200,7 +200,7 @@ export const AdminTeachersTab: React.FC = () => {
     }
 
     // Default to preset avatar 1 if no image was provided
-    const finalImageUrl = editingItem.imageUrl?.trim() || '/assets/teachers/guru-1.svg';
+    const finalImageUrl = editingItem.imageUrl?.trim() || resolveImageUrl('/storage/teachers/guru-1.svg');
 
     setIsSaving(true);
     try {
@@ -363,11 +363,11 @@ export const AdminTeachersTab: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-5">
           {filteredTeachers.map((t, idx) => {
-            const fallbackAvatar = `/assets/teachers/guru-${(idx % 7) + 1}.svg`;
+            const fallbackAvatar = resolveImageUrl(`/storage/teachers/guru-${(idx % 7) + 1}.svg`);
             const imageSrc = resolveImageUrl(t.imageUrl) || fallbackAvatar;
             const isSvgAvatar =
               typeof imageSrc === 'string' &&
-              (imageSrc.includes('.svg') || imageSrc.includes('/assets/teachers/guru-'));
+              (imageSrc.includes('.svg') || imageSrc.includes('guru-'));
 
             return (
               <div
@@ -589,7 +589,7 @@ export const AdminTeachersTab: React.FC = () => {
                   <div className="space-y-3">
                     {editingItem.imageUrl &&
                     !editingItem.imageUrl.includes('.svg') &&
-                    !PRESET_AVATARS.includes(editingItem.imageUrl) ? (
+                    !editingItem.imageUrl.includes('guru-') ? (
                       /* Preview Box with Change/Remove Actions */
                       <div className="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
                         <div className="relative w-24 h-32 sm:w-28 sm:h-36 shrink-0 rounded-xl overflow-hidden bg-white shadow-md border-2 border-emerald-500/40 group">
@@ -753,7 +753,7 @@ export const AdminTeachersTab: React.FC = () => {
                         setEditingItem({ ...editingItem, imageUrl: e.target.value });
                         setPreviewFileInfo(null);
                       }}
-                      placeholder="https://... atau /assets/teachers/..."
+                      placeholder="https://... atau /storage/teachers/..."
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 bg-white"
                     />
                     <p className="text-[10px] sm:text-[11px] text-slate-400">
@@ -767,11 +767,11 @@ export const AdminTeachersTab: React.FC = () => {
                   <div className="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl bg-white border border-slate-200 shadow-2xs">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-slate-50 border border-slate-200 flex items-center justify-center p-1 shrink-0">
                       <img
-                        src={resolveImageUrl(editingItem.imageUrl) || '/assets/teachers/guru-1.svg'}
+                        src={resolveImageUrl(editingItem.imageUrl) || resolveImageUrl('/storage/teachers/guru-1.svg')}
                         alt="Preview"
                         className="w-full h-full object-contain"
                         onError={(e) => {
-                          e.currentTarget.src = '/assets/teachers/guru-1.svg';
+                          e.currentTarget.src = resolveImageUrl('/storage/teachers/guru-1.svg');
                         }}
                       />
                     </div>

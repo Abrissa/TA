@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChevronRight, Calendar, Clock, User } from 'lucide-react';
 import { Article } from '../../types';
+import { resolveImageUrl } from '../../services/api';
 
 interface ArticleCardProps {
   article: Article;
@@ -32,11 +33,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article, onSelect }) =
         {/* Image Container with Hover Scale */}
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
           <img
-            src={article.imageUrl || '/assets/berita-maulana-ksm.jpg'}
+            src={article.imageUrl || resolveImageUrl('/storage/articles/berita-maulana-ksm.jpg')}
             alt={article.title}
             className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
             onError={(e) => {
-              e.currentTarget.src = '/assets/berita-maulana-ksm.jpg';
+              e.currentTarget.src = resolveImageUrl('/storage/articles/berita-maulana-ksm.jpg');
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -15,24 +16,42 @@ class AuthController extends Controller
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
+            'captcha_key' => 'required|string',
+            'captcha' => 'required|string|size:5',
         ]);
+
+        // Verify captcha from Cache
+        $cached = Cache::pull("captcha:{$validated['captcha_key']}");
+        if (! $cached) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode captcha sudah kadaluarsa atau telah digunakan. Kode baru telah dimuat.',
+            ], 422);
+        }
+
+        if (! hash_equals($cached, strtoupper(trim($validated['captcha'])))) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode captcha salah. Silakan masukkan kode baru yang muncul pada gambar.',
+            ], 422);
+        }
 
         $user = User::where('email', $validated['email'])->first();
 
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
+        if (! $user || ! Hash::check($validated['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['Kombinasi email dan kata sandi tidak cocok.'],
             ]);
         }
 
-        if (!$user->isActive()) {
+        if (! $user->isActive()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Akun administrator Anda telah dinonaktifkan.',
             ], 403);
         }
 
-        if (!$user->isAdmin()) {
+        if (! $user->isAdmin()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki hak akses administrator.',
@@ -41,7 +60,8 @@ class AuthController extends Controller
 
         $user->update(['last_login_at' => now()]);
 
-        // Revoke previous tokens to enforce single or clean sessions
+        // Revoke previous tokens to enforce single session
+        $user->tokens()->delete();
         $token = $user->createToken('admin-token', [$user->role])->plainTextToken;
 
         return response()->json([
@@ -97,7 +117,7 @@ class AuthController extends Controller
 
         $user = $request->user();
 
-        if (!Hash::check($validated['current_password'], $user->password)) {
+        if (! Hash::check($validated['current_password'], $user->password)) {
             throw ValidationException::withMessages([
                 'current_password' => ['Kata sandi saat ini tidak sesuai.'],
             ]);

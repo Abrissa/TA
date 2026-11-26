@@ -50,12 +50,12 @@ class AlumniController extends Controller
         ]);
 
         // If approved and requested to publish to public directory
-        if ($validated['status'] === 'approved' && !empty($validated['publish_to_directory'])) {
+        if ($validated['status'] === 'approved' && ! empty($validated['publish_to_directory'])) {
             AlumniProfile::updateOrCreate(
                 ['submission_id' => $submission->id],
                 [
                     'name' => $submission->full_name,
-                    'graduation_year' => 'Lulusan ' . $submission->graduation_year,
+                    'graduation_year' => 'Lulusan '.$submission->graduation_year,
                     'title' => $submission->job_role,
                     'current_role' => $submission->job_role,
                     'bio' => $submission->message,

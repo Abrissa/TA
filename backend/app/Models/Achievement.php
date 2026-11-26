@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Achievement extends Model
 {
@@ -52,17 +53,16 @@ class Achievement extends Model
 
     public function getIsHighlightedAttribute($value = null): bool
     {
-        return !empty($value ?? ($this->attributes['is_highlighted'] ?? false));
+        return ! empty($value ?? ($this->attributes['is_highlighted'] ?? false));
     }
 
-    public function masterCategory(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function masterCategory(): BelongsTo
     {
         return $this->belongsTo(MasterCategory::class, 'category_id');
     }
 
-    public function masterAcademicYear(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function masterAcademicYear(): BelongsTo
     {
         return $this->belongsTo(MasterAcademicYear::class, 'academic_year_id');
     }
 }
-

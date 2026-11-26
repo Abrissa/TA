@@ -10,3 +10,9 @@ playwright-report/
 test-results/
 .vite/
 *.local
+.agents/
+.claude/
+.mcp.json
+boost.json
+opencode.json
+

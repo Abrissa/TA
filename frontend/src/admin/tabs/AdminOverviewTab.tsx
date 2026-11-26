@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { api, AdminStats, PpdbRecord, AlumniSubmissionRecord } from '../../services/api';
-import { mockAdminStore } from '../../services/mockAdminData';
 import { 
   Users, 
   FileText, 
@@ -29,7 +28,7 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
   const [recentPpdb, setRecentPpdb] = useState<PpdbRecord[]>([]);
   const [recentAlumni, setRecentAlumni] = useState<AlumniSubmissionRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [settings, setSettings] = useState<Record<string, string>>(() => mockAdminStore.getSettings());
+  const [settings, setSettings] = useState<Record<string, string>>(() => ({}));
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [statusFeedback, setStatusFeedback] = useState<string | null>(null);
 
@@ -45,7 +44,7 @@ export const AdminOverviewTab: React.FC<AdminOverviewTabProps> = ({ onNavigateTa
       if (e?.detail && typeof e.detail === 'object') {
         setSettings(prev => ({ ...prev, ...e.detail }));
       } else {
-        setSettings(mockAdminStore.getSettings());
+        api.getSettings().then(setSettings).catch(() => {});
       }
     };
     window.addEventListener('mi_settings_changed', handleSettingsChanged);

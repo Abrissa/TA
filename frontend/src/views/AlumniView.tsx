@@ -77,7 +77,7 @@ export const AlumniView: React.FC<AlumniViewProps> = ({ setActiveTab, settings }
           )
         }
         subtitle={settings?.alumni_banner_subtitle || "Mencetak generasi Qur'ani dan cendekia berakhlak mulia yang berkiprah di berbagai penjuru nusantara dan dunia."}
-        backgroundImageUrl={resolveImageUrl(settings?.alumni_banner_image) || "/assets/gedung-mi-al-ahmad.jpg"}
+        backgroundImageUrl={resolveImageUrl(settings?.alumni_banner_image || '/storage/school/gedung-mi-al-ahmad.jpg')}
       >
         <div className="pt-2">
           <button
@@ -140,7 +140,7 @@ export const AlumniView: React.FC<AlumniViewProps> = ({ setActiveTab, settings }
         ) : profiles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {profiles.map((p, idx) => {
-              const fallbackAvatar = `/assets/alumni/alumni-${(idx % 3) + 1}.svg`;
+              const fallbackAvatar = resolveImageUrl(`/storage/alumni/alumni-${(idx % 3) + 1}.svg`);
               const imageSrc = resolveImageUrl(p.imageUrl) || fallbackAvatar;
               const socialInfo = parseSocialLink(p.socialUrl);
 

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -44,7 +44,7 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return in_array($this->role, ['superadmin', 'admin']);
+        return in_array($this->role, ['superadmin', 'admin', 'admin_humas', 'operator_ppdb', 'admin_kesiswaan']);
     }
 
     public function isActive(): bool
@@ -52,7 +52,7 @@ class User extends Authenticatable
         return $this->status === 'active';
     }
 
-    public function masterRole(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function masterRole(): BelongsTo
     {
         return $this->belongsTo(MasterRole::class, 'role_id');
     }

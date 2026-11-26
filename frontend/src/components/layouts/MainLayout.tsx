@@ -29,7 +29,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-slate-900 font-body selection:bg-emerald-200 selection:text-emerald-950 overflow-x-hidden w-full">
+    <div className="min-h-screen flex flex-col bg-white text-slate-900 font-body selection:bg-emerald-200 selection:text-emerald-950 overflow-x-hidden w-full pt-20 md:pt-[116px]">
       {/* Top Header Navigation Bar */}
       <Navbar
         activeTab={activeTab}

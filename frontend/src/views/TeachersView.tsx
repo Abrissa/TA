@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Teacher, PageTab } from '../types';
 import { api, resolveImageUrl } from '../services/api';
-import { TEACHERS_DATA } from '../data/mockData';
+
 import { 
   GraduationCap,
   Users,
@@ -18,8 +18,8 @@ interface TeachersViewProps {
 }
 
 export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setActiveTab, settings }) => {
-  const [teachers, setTeachers] = useState<Teacher[]>(TEACHERS_DATA);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const handleTeachersChanged = (e?: any) => {
@@ -70,7 +70,7 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
           )
         }
         subtitle={settings?.teachers_banner_subtitle || "Tenaga pendidik profesional berijazah sarjana & magister yang siap mendidik murid dengan keikhlasan, ilmu, dan kearifan akhlak Qur'ani."}
-        backgroundImageUrl={resolveImageUrl(settings?.teachers_banner_image) || "/assets/dewan-guru-mi-al-ahmad.jpg"}
+        backgroundImageUrl={resolveImageUrl(settings?.teachers_banner_image || '/storage/school/dewan-guru-mi-al-ahmad.jpg')}
         imagePosition="object-[center_62%]"
       />
 
@@ -99,11 +99,11 @@ export const TeachersView: React.FC<TeachersViewProps> = ({ onOpenContact, setAc
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {teachers.map((t, idx) => {
-              const fallbackAvatar = `/assets/teachers/guru-${(idx % 7) + 1}.svg`;
+              const fallbackAvatar = resolveImageUrl(`/storage/teachers/guru-${(idx % 7) + 1}.svg`);
               const imageSrc = resolveImageUrl(t.imageUrl) || fallbackAvatar;
               const isSvgAvatar =
                 typeof imageSrc === 'string' &&
-                (imageSrc.includes('.svg') || imageSrc.includes('/assets/teachers/guru-'));
+                (imageSrc.includes('.svg') || imageSrc.includes('guru-'));
 
               return (
                 <div 

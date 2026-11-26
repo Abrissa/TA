@@ -26,9 +26,9 @@ class PpdbController extends Controller
             $search = $request->query('search');
             $query->where(function ($q) use ($search) {
                 $q->where('registration_number', 'like', "%{$search}%")
-                  ->orWhere('child_full_name', 'like', "%{$search}%")
-                  ->orWhere('parent_name', 'like', "%{$search}%")
-                  ->orWhere('whatsapp', 'like', "%{$search}%");
+                    ->orWhere('child_full_name', 'like', "%{$search}%")
+                    ->orWhere('parent_name', 'like', "%{$search}%")
+                    ->orWhere('whatsapp', 'like', "%{$search}%");
             });
         }
 

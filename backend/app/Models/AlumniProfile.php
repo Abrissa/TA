@@ -49,7 +49,8 @@ class AlumniProfile extends Model
     public function getGraduationYearAttribute($value = null): ?string
     {
         $raw = $value ?? ($this->attributes['graduation_year'] ?? '');
-        return preg_replace('/^[^\d]*/', '', (string)$raw);
+
+        return preg_replace('/^[^\d]*/', '', (string) $raw);
     }
 
     public function getProfessionAttribute($value = null): ?string
@@ -74,7 +75,7 @@ class AlumniProfile extends Model
 
     public function getIsActiveAttribute($value = null): bool
     {
-        return !empty($value ?? ($this->attributes['is_active'] ?? false));
+        return ! empty($value ?? ($this->attributes['is_active'] ?? false));
     }
 
     public function submission(): BelongsTo
@@ -87,4 +88,3 @@ class AlumniProfile extends Model
         return $this->belongsTo(MasterAlumniCohort::class, 'cohort_id');
     }
 }
-

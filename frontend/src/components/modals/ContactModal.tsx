@@ -1,5 +1,5 @@
 import React from 'react';
-import { SCHOOL_INFO } from '../../data/mockData';
+
 import { X, MapPin, Phone, Mail, Clock, MessageSquare } from 'lucide-react';
 
 interface ContactModalProps {
@@ -11,11 +11,11 @@ interface ContactModalProps {
 export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose, settings }) => {
   if (!isOpen) return null;
 
-  const schoolName = settings?.school_name || 'MI AL-AHMAD';
-  const phone = settings?.school_phone || SCHOOL_INFO.phone;
-  const whatsapp = settings?.school_whatsapp || '6281234567890';
-  const email = settings?.school_email || SCHOOL_INFO.email;
-  const address = settings?.school_address || SCHOOL_INFO.address;
+  const schoolName = settings?.school_name || 'MI AL-AHMAD Krian Sidoarjo';
+  const phone = settings?.school_phone || '(031) 8971234';
+  const whatsapp = settings?.school_whatsapp || '+62 812-3456-7890';
+  const email = settings?.school_email || 'info@mialahmad.sch.id';
+  const address = settings?.school_address || 'Jl. Setiabudi No. 12, Krian, Kec. Krian, Kabupaten Sidoarjo, Jawa Timur 61262';
   const hours = settings?.office_hours || 'Senin - Sabtu: 07.00 - 14.00 WIB';
   const isSchoolOpen = settings?.school_is_open !== 'false';
   const schoolStatusNote = settings?.school_status_note || '';

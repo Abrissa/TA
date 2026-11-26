@@ -19,16 +19,25 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'https://mialahmad.sch.id',
+        'https://www.mialahmad.sch.id',
+        'https://mi-al-ahmad.pages.dev',
+        'https://*.pages.dev',
+    ],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        '/^https:\/\/.*\.pages\.dev$/',
+    ],
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => [],
+    'exposed_headers' => ['X-CSRF-Token', 'Authorization'],
 
-    'max_age' => 0,
+    'max_age' => 3600,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];

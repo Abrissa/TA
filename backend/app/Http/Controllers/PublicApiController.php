@@ -11,7 +11,6 @@ use App\Models\CalendarAgenda;
 use App\Models\Facility;
 use App\Models\MasterAcademicYear;
 use App\Models\MasterAlumniCohort;
-use App\Models\MasterCategory;
 use App\Models\MasterPpdbPath;
 use App\Models\PpdbRegistration;
 use App\Models\SchoolProfile;
@@ -19,6 +18,7 @@ use App\Models\SiteSetting;
 use App\Models\Teacher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PublicApiController extends Controller
 {
@@ -63,7 +63,7 @@ class PublicApiController extends Controller
             ];
 
             foreach ($defaults as $k => $v) {
-                if ((!isset($settings[$k]) || trim((string)$settings[$k]) === '') && !empty($v)) {
+                if ((! isset($settings[$k]) || trim((string) $settings[$k]) === '') && ! empty($v)) {
                     $settings[$k] = (string) $v;
                 }
             }
@@ -91,8 +91,8 @@ class PublicApiController extends Controller
             $search = $request->query('search');
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('excerpt', 'like', "%{$search}%")
-                  ->orWhere('content', 'like', "%{$search}%");
+                    ->orWhere('excerpt', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
             });
         }
 
@@ -114,12 +114,12 @@ class PublicApiController extends Controller
     {
         $article = Article::published()->where('slug', $slug)->first();
 
-        if (!$article) {
+        if (! $article) {
             // Fallback: try by ID if slug not found
             $article = Article::published()->where('id', $slug)->first();
         }
 
-        if (!$article) {
+        if (! $article) {
             return response()->json([
                 'success' => false,
                 'message' => 'Artikel atau berita tidak ditemukan.',
@@ -200,7 +200,7 @@ class PublicApiController extends Controller
             'message' => $request->input('message'),
         ];
 
-        $validator = \Illuminate\Support\Facades\Validator::make($data, [
+        $validator = Validator::make($data, [
             'full_name' => 'required|string|max:150',
             'graduation_year' => 'required|string|max:20',
             'job_role' => 'required|string|max:150',
@@ -257,7 +257,7 @@ class PublicApiController extends Controller
             'previous_school' => $request->input('previous_school') ?? $request->input('previousSchool'),
         ];
 
-        $validator = \Illuminate\Support\Facades\Validator::make($data, [
+        $validator = Validator::make($data, [
             'child_full_name' => 'required|string|max:150',
             'gender' => 'required|in:Laki-laki,Perempuan',
             'birth_place' => 'required|string|max:100',

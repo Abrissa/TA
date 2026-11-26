@@ -23,7 +23,7 @@ class SiteSettingController extends Controller
     public function batchUpdate(Request $request): JsonResponse
     {
         $rawSettings = $request->input('settings', $request->all());
-        if (!is_array($rawSettings)) {
+        if (! is_array($rawSettings)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Format pengaturan tidak valid.',
@@ -53,6 +53,7 @@ class SiteSettingController extends Controller
                     $settingsMap[$sKey] = $sVal;
                     SiteSetting::updateOrCreate(['key' => $sKey], ['value' => $sVal]);
                 }
+
                 continue;
             }
 
@@ -100,7 +101,7 @@ class SiteSettingController extends Controller
             $profileUpdates['missions'] = array_values($lines);
         }
 
-        if (!empty($profileUpdates)) {
+        if (! empty($profileUpdates)) {
             $profile->update($profileUpdates);
         }
 

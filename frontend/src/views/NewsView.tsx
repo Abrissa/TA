@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Article, PageTab } from '../types';
 import { api, resolveImageUrl } from '../services/api';
-import { mockAdminStore } from '../services/mockAdminData';
-import { ARTICLES_DATA } from '../data/mockData';
+
 import {
   Newspaper,
   ChevronRight,
@@ -35,10 +34,8 @@ interface NewsViewProps {
 }
 
 export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTab, settings }) => {
-  const [articles, setArticles] = useState<Article[]>(() => {
-    return mockAdminStore.getArticles();
-  });
-  const [isLoadingArticles, setIsLoadingArticles] = useState(false);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [isLoadingArticles, setIsLoadingArticles] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -51,7 +48,11 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
 
   useEffect(() => {
     const handleArticlesChanged = () => {
-      setArticles(mockAdminStore.getArticles());
+      api.getArticles().then((data) => {
+        if (data && data.length > 0) {
+          setArticles(data);
+        }
+      }).catch(() => {});
     };
 
     window.addEventListener('mi_articles_changed', handleArticlesChanged);
@@ -134,7 +135,7 @@ export const NewsView: React.FC<NewsViewProps> = ({ onSelectArticle, setActiveTa
           )
         }
         subtitle={settings?.news_banner_subtitle || "Ikuti perkembangan terkini seputar prestasi santri, liputan kegiatan sekolah, pengumuman resmi, dan artikel edukasi islami di MI AL-AHMAD."}
-        backgroundImageUrl={resolveImageUrl(settings?.news_banner_image) || "/assets/gedung-berita-mi-al-ahmad.jpg"}
+        backgroundImageUrl={resolveImageUrl(settings?.news_banner_image || '/storage/school/gedung-berita-mi-al-ahmad.jpg')}
         imagePosition="object-[center_45%]"
       />
 

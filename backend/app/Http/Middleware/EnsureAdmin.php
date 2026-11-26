@@ -12,21 +12,21 @@ class EnsureAdmin
     {
         $user = $request->user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Autentikasi diperlukan untuk mengakses resource ini.',
             ], 401);
         }
 
-        if (!$user->isActive()) {
+        if (! $user->isActive()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Akun administrator Anda telah dinonaktifkan. Hubungi superadmin.',
             ], 403);
         }
 
-        if (!$user->isAdmin()) {
+        if (! $user->isAdmin()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Akses ditolak. Peran administrator diperlukan.',
