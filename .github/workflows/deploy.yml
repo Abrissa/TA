@@ -50,6 +50,7 @@ jobs:
   deploy-frontend:
     name: Deploy frontend to Cloudflare
     needs: [test-frontend]
+    if: ${{ vars.CLOUDFLARE_DEPLOY_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
