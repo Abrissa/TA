@@ -9,6 +9,7 @@ import { AdminAchievementsTab } from './tabs/AdminAchievementsTab';
 import { AdminPpdbTab } from './tabs/AdminPpdbTab';
 import { AdminAlumniTab } from './tabs/AdminAlumniTab';
 import { AdminMasterDataTab } from './tabs/AdminMasterDataTab';
+import { AdminChangePasswordTab } from './tabs/AdminChangePasswordTab';
 import { 
   LayoutDashboard, 
   Sliders, 
@@ -23,7 +24,8 @@ import {
   X, 
   ShieldCheck, 
   ChevronRight,
-  UserCheck
+  UserCheck,
+  KeyRound
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -118,6 +120,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     { id: 'ppdb', label: 'Pendaftar PPDB (Santri Baru)', icon: Users },
     { id: 'alumni', label: 'Form & Direktori Alumni', icon: GraduationCap },
     { id: 'master-data', label: 'Master Database & Referensi', icon: Database },
+    { id: 'change-password', label: 'Keamanan & Akun', icon: KeyRound },
   ];
 
   const handleLogout = async () => {
@@ -143,9 +146,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           isSidebarOpenMobile ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        <div>
+        <div className="flex-1 min-h-0 flex flex-col">
           {/* Brand Header */}
-          <div className="p-6 border-b border-slate-800/80 flex items-center justify-between">
+          <div className="shrink-0 p-6 border-b border-slate-800/80 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-white p-1 border border-emerald-500/30 flex items-center justify-center shrink-0 shadow-xs">
                 <img
@@ -169,7 +172,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           </div>
 
           {/* Navigation Links */}
-          <nav className="p-4 space-y-1.5 overflow-y-auto">
+          <nav className="p-4 space-y-1.5 overflow-y-auto flex-1 min-h-0">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -202,8 +205,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-xs font-semibold text-white truncate">{currentUser.name}</div>
-              <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-emerald-400" />
+              <div className="text-[10px] text-slate-400 flex items-center gap-1 uppercase">
                 <span>{currentUser.role}</span>
               </div>
             </div>
@@ -299,6 +301,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           {activeTab === 'ppdb' && <AdminPpdbTab />}
           {activeTab === 'alumni' && <AdminAlumniTab />}
           {activeTab === 'master-data' && <AdminMasterDataTab />}
+          {activeTab === 'change-password' && (
+            <AdminChangePasswordTab
+              currentUser={currentUser}
+              onForceLogout={onLogout}
+            />
+          )}
         </main>
       </div>
     </div>

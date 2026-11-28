@@ -384,6 +384,103 @@ export const api = {
     }
   },
 
+  async updatePassword(currentPassword: string, newPassword: string, newPasswordConfirmation: string, newEmail?: string): Promise<string> {
+    const res = await fetch(`${BASE_URL}/api/auth/update-password`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        current_password: currentPassword,
+        new_password: newPassword,
+        new_password_confirmation: newPasswordConfirmation,
+        ...(newEmail ? { new_email: newEmail } : {}),
+      }),
+    });
+    const json = await handleResponse<{ success: boolean; message: string }>(res);
+    return json.message;
+  },
+
+  async getAdminUsers(): Promise<Array<{
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+    status: string;
+    phone: string | null;
+    last_login_at: string | null;
+    created_at: string;
+  }>> {
+    const res = await fetch(`${BASE_URL}/api/auth/users`, {
+      headers: getAuthHeaders(),
+    });
+    const json = await handleResponse<{ success: boolean; data: any[] }>(res);
+    return json.data || [];
+  },
+
+  async createAdminUser(data: {
+    name: string;
+    email: string;
+    role: string;
+    password: string;
+    passwordConfirmation: string;
+    phone?: string;
+  }): Promise<string> {
+    const res = await fetch(`${BASE_URL}/api/auth/users`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        role: data.role,
+        password: data.password,
+        password_confirmation: data.passwordConfirmation,
+        phone: data.phone,
+      }),
+    });
+    const json = await handleResponse<{ success: boolean; message: string }>(res);
+    return json.message;
+  },
+
+  async updateAdminUser(userId: number, data: { name: string; email: string; role: string; phone?: string }): Promise<string> {
+    const res = await fetch(`${BASE_URL}/api/auth/users/${userId}`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    const json = await handleResponse<{ success: boolean; message: string }>(res);
+    return json.message;
+  },
+
+  async deleteAdminUser(userId: number): Promise<string> {
+    const res = await fetch(`${BASE_URL}/api/auth/users/${userId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    const json = await handleResponse<{ success: boolean; message: string }>(res);
+    return json.message;
+  },
+
+  async resetUserPassword(userId: number, newPassword: string, newPasswordConfirmation: string): Promise<string> {
+    const res = await fetch(`${BASE_URL}/api/auth/users/${userId}/reset-password`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        new_password: newPassword,
+        new_password_confirmation: newPasswordConfirmation,
+      }),
+    });
+    const json = await handleResponse<{ success: boolean; message: string }>(res);
+    return json.message;
+  },
+
+  async forceLogoutUser(userId: number): Promise<string> {
+    const res = await fetch(`${BASE_URL}/api/auth/users/${userId}/force-logout`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    });
+    const json = await handleResponse<{ success: boolean; message: string }>(res);
+    return json.message;
+  },
+
   // -------------------------------------------------------------
   // Admin Dashboard Endpoints
   // -------------------------------------------------------------

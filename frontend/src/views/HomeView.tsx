@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PageTab, Article, Achievement, AlumniProfile, Facility } from '../types';
-import { api } from '../services/api';
+import { api, resolveImageUrl } from '../services/api';
 import {
   BookOpen,
   Building2,

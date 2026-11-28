@@ -278,4 +278,164 @@ class SchoolApiTest extends TestCase
             'id' => $submission->id,
         ]);
     }
+
+    public function test_user_can_update_password_and_token_is_revoked(): void
+    {
+        $admin = User::where('email', 'admin@mialahmad.sch.id')->first();
+        $token = $admin->createToken('test-token')->plainTextToken;
+
+        $response = $this->withHeader('Authorization', "Bearer {$token}")
+            ->postJson('/api/auth/update-password', [
+                'current_password' => 'admin123',
+                'new_password' => 'rahasiaBaru123',
+                'new_password_confirmation' => 'rahasiaBaru123',
+            ]);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('success', true);
+
+        // Tokens must be revoked
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+    }
+
+    public function test_user_can_update_email_without_changing_password(): void
+    {
+        $admin = User::where('email', 'admin@mialahmad.sch.id')->first();
+        $token = $admin->createToken('test-token')->plainTextToken;
+
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->postJson('/api/auth/update-password', [
+                'current_password' => 'admin123',
+                'new_email' => 'superadmin.updated@example.com',
+            ])
+            ->assertOk()
+            ->assertJsonPath('success', true);
+
+        $this->assertDatabaseHas('users', ['id' => $admin->id, 'email' => 'superadmin.updated@example.com']);
+        $this->assertDatabaseMissing('personal_access_tokens', ['tokenable_id' => $admin->id]);
+    }
+
+    public function test_superadmin_can_update_and_delete_admin_accounts(): void
+    {
+        $superadmin = User::where('role', 'superadmin')->first();
+        $admin = User::where('role', 'admin_humas')->first();
+
+        $this->actingAs($superadmin, 'sanctum')
+            ->putJson("/api/auth/users/{$admin->id}", [
+                'name' => 'Humas Baru',
+                'email' => 'humas.updated@example.com',
+                'role' => 'admin_humas',
+            ])
+            ->assertOk()
+            ->assertJsonPath('success', true);
+
+        $this->assertDatabaseHas('users', ['id' => $admin->id, 'email' => 'humas.updated@example.com']);
+
+        $this->actingAs($superadmin, 'sanctum')
+            ->deleteJson("/api/auth/users/{$admin->id}")
+            ->assertOk();
+
+        $this->assertDatabaseMissing('users', ['id' => $admin->id]);
+    }
+
+    public function test_superadmin_can_create_admin_account(): void
+    {
+        $superadmin = User::where('role', 'superadmin')->first();
+
+        $response = $this->actingAs($superadmin, 'sanctum')
+            ->postJson('/api/auth/users', [
+                'name' => 'Operator Baru',
+                'email' => 'operator.baru@example.com',
+                'role' => 'operator_ppdb',
+                'phone' => '081234567890',
+                'password' => 'passwordBaru123',
+                'password_confirmation' => 'passwordBaru123',
+            ]);
+
+        $response->assertCreated()
+            ->assertJsonPath('success', true)
+            ->assertJsonPath('data.role', 'operator_ppdb');
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'operator.baru@example.com',
+            'role' => 'operator_ppdb',
+            'status' => 'active',
+        ]);
+    }
+
+    public function test_non_superadmin_cannot_create_admin_account(): void
+    {
+        $admin = User::where('role', 'admin_humas')->first();
+
+        $this->actingAs($admin, 'sanctum')
+            ->postJson('/api/auth/users', [
+                'name' => 'Operator Baru',
+                'email' => 'operator.baru@example.com',
+                'role' => 'operator_ppdb',
+                'password' => 'passwordBaru123',
+                'password_confirmation' => 'passwordBaru123',
+            ])
+            ->assertForbidden();
+
+        $this->assertDatabaseMissing('users', ['email' => 'operator.baru@example.com']);
+    }
+
+    public function test_superadmin_cannot_create_another_superadmin(): void
+    {
+        $superadmin = User::where('role', 'superadmin')->first();
+
+        $this->actingAs($superadmin, 'sanctum')
+            ->postJson('/api/auth/users', [
+                'name' => 'Another Superadmin',
+                'email' => 'another.superadmin@example.com',
+                'role' => 'superadmin',
+                'password' => 'passwordBaru123',
+                'password_confirmation' => 'passwordBaru123',
+            ])
+            ->assertUnprocessable();
+
+        $this->assertDatabaseMissing('users', ['email' => 'another.superadmin@example.com']);
+    }
+
+    public function test_superadmin_can_reset_another_user_password(): void
+    {
+        $superadmin = User::where('role', 'superadmin')->first();
+        $otherUser = User::where('role', '!=', 'superadmin')->first();
+        $otherUser->createToken('active-token');
+
+        $this->assertDatabaseHas('personal_access_tokens', [
+            'tokenable_id' => $otherUser->id,
+        ]);
+
+        $response = $this->actingAs($superadmin, 'sanctum')
+            ->postJson("/api/auth/users/{$otherUser->id}/reset-password", [
+                'new_password' => 'passwordBaruSuper123',
+                'new_password_confirmation' => 'passwordBaruSuper123',
+            ]);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('success', true);
+
+        // Target user's active session revoked
+        $this->assertDatabaseMissing('personal_access_tokens', [
+            'tokenable_id' => $otherUser->id,
+        ]);
+    }
+
+    public function test_superadmin_can_force_logout_user(): void
+    {
+        $superadmin = User::where('role', 'superadmin')->first();
+        $otherUser = User::where('role', '!=', 'superadmin')->first();
+        $otherUser->createToken('victim-token');
+
+        $response = $this->actingAs($superadmin, 'sanctum')
+            ->postJson("/api/auth/users/{$otherUser->id}/force-logout");
+
+        $response->assertStatus(200)
+            ->assertJsonPath('success', true);
+
+        $this->assertDatabaseMissing('personal_access_tokens', [
+            'tokenable_id' => $otherUser->id,
+        ]);
+    }
 }

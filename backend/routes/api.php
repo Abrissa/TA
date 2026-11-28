@@ -62,6 +62,12 @@ Route::prefix('auth')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/update-password', [AuthController::class, 'updatePassword']);
+        Route::get('/users', [AuthController::class, 'listUsers']);
+        Route::post('/users', [AuthController::class, 'storeUser']);
+        Route::put('/users/{id}', [AuthController::class, 'updateUser']);
+        Route::delete('/users/{id}', [AuthController::class, 'destroyUser']);
+        Route::post('/users/{id}/reset-password', [AuthController::class, 'resetUserPassword']);
+        Route::post('/users/{id}/force-logout', [AuthController::class, 'forceLogoutUser']);
     });
 });
 
