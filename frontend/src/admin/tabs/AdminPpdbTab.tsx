@@ -475,7 +475,7 @@ export const AdminPpdbTab: React.FC = () => {
                         rec.status === 'ditolak' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
                         'bg-amber-50 text-amber-700 border border-amber-200'
                       }`}>
-                        {rec.status === 'menunggu_verifikasi' ? 'Menunggu Verifikasi' :
+                        {rec.status === 'menunggu_verifikasi' || rec.status === 'pending' ? 'Menunggu Verifikasi' :
                          rec.status === 'terverifikasi' ? 'Berkas Valid' :
                          rec.status === 'diterima' ? 'Diterima' : 'Ditolak'}
                       </span>
