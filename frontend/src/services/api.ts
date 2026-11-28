@@ -65,7 +65,7 @@ export interface PpdbRecord {
   whatsapp: string;
   address: string;
   previous_school: string | null;
-  status: 'menunggu_verifikasi' | 'terverifikasi' | 'diterima' | 'ditolak';
+  status: 'menunggu_verifikasi' | 'pending' | 'terverifikasi' | 'diterima' | 'ditolak';
   admin_notes: string | null;
   registered_at: string;
   reviewed_at: string | null;
