@@ -19,14 +19,16 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
+    'allowed_origins' => array_values(array_filter([
         'http://localhost:3000',
         'http://127.0.0.1:3000',
+        env('FRONTEND_URL'),
+        'https://mialahmadkrian.id',
+        'https://www.mialahmadkrian.id',
         'https://mialahmad.sch.id',
         'https://www.mialahmad.sch.id',
         'https://mi-al-ahmad.pages.dev',
-        'https://*.pages.dev',
-    ],
+    ])),
 
     'allowed_origins_patterns' => [
         '/^https:\/\/.*\.pages\.dev$/',

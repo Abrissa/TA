@@ -21,7 +21,7 @@ class SecurityHeaders
             "style-src 'self' 'nonce-{$nonce}' https://fonts.googleapis.com https://cdn.tailwindcss.com https://cdn.jsdelivr.net",
             "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net",
             "img-src 'self' data: https: blob:",
-            "connect-src 'self' https://api.mialahmad.sch.id https://maps.google.com https://maps.googleapis.com",
+            "connect-src 'self' https://api.mialahmadkrian.id https://mialahmadkrian.id https://api.mialahmad.sch.id https://maps.google.com https://maps.googleapis.com",
             "frame-src 'self' https://maps.google.com https://www.google.com",
             "form-action 'self'",
             "base-uri 'self'",
@@ -37,7 +37,7 @@ class SecurityHeaders
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
         $response->headers->set('X-DNS-Prefetch-Control', 'on');
         $response->headers->set('Cross-Origin-Opener-Policy', 'same-origin');
-        $response->headers->set('Cross-Origin-Resource-Policy', 'same-site');
+        $response->headers->set('Cross-Origin-Resource-Policy', 'cross-origin');
 
         if ($request->secure() || $request->header('X-Forwarded-Proto') === 'https') {
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
