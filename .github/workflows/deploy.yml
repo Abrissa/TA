@@ -70,26 +70,3 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-  deploy-backend:
-    name: Deploy backend to cPanel
-    needs: [test-backend]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.CPANEL_HOST }}
-          username: ${{ secrets.CPANEL_USERNAME }}
-          key: ${{ secrets.CPANEL_SSH_PRIVATE_KEY }}
-          port: ${{ secrets.CPANEL_SSH_PORT }}
-          script_stop: true
-          script: |
-            cd ~/apps/TA
-            git fetch origin main
-            git reset --hard origin/main
-            cd backend
-            composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-scripts
-            php artisan migrate --force
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
